@@ -2,6 +2,7 @@ package com.frice.designer;
 
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class JavaFX extends Controller {
 
@@ -32,7 +33,7 @@ public class JavaFX extends Controller {
 		super.onMenuAboutClicked();
 	}
 
-	public void onMainViewClicked(MouseEvent event) {
-		super.onMainViewClicked();
+	public void onMainViewClicked(@NotNull MouseEvent event) {
+		super.onMainViewClicked(event);
 	}
 }

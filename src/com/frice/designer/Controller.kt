@@ -1,5 +1,6 @@
 package com.frice.designer
 
+import javafx.scene.input.MouseEvent
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
 
@@ -25,7 +26,10 @@ abstract class Controller {
 	protected fun onMenuPreference() {
 	}
 
-	protected fun onMainViewClicked() {
+	protected open fun onMainViewClicked(event: MouseEvent) {
+//		if (event.isMetaDown) {
+//			RightClickPopup(this).popup
+//		}
 	}
 
 	protected fun onMenuAboutClicked() {
