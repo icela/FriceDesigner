@@ -42,6 +42,11 @@
                         <MenuItem mnemonicParsing="false" text="Unselect All" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Show code" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#onMenuAboutClicked" text="About Frice Engine" />
@@ -53,13 +58,13 @@
             <items>
                 <AnchorPane>
                     <children>
-                        <ListView fx:id="widgetsList" prefHeight="545.0" prefWidth="221.0" />
+                        <ListView fx:id="widgetsList" prefHeight="545.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
                 <ScrollPane prefHeight="545.0" prefWidth="314.0" />
                 <AnchorPane>
                     <children>
-                        <TextField layoutX="9.0" layoutY="38.0" />
+                        <TextField layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label layoutX="9.0" layoutY="14.0" text="field" />
                     </children>
                 </AnchorPane>

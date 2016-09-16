@@ -1,7 +1,9 @@
 package com.frice.designer
 
 import com.eldath.alerts.InfoAlert
+import javafx.event.EventType
 import javafx.scene.control.ListView
+import javafx.scene.input.DragEvent
 import javafx.scene.input.MouseEvent
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
@@ -16,9 +18,16 @@ abstract class Controller {
 	protected abstract val widgetsList: ListView<String>
 
 	private val shapeObject = "ShapeObject"
+	private val imageObject = "ImageObject"
 
 	protected fun initialize() {
-		widgetsList.items.add(shapeObject)
+		widgetsList.items.addAll(listOf(
+				shapeObject,
+				imageObject
+		))
+		widgetsList.addEventFilter(EventType<DragEvent>(EventType.ROOT), {
+			InfoAlert("Drag detected")
+		})
 	}
 
 	protected fun onMenuExit() {
