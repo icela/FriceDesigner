@@ -1,5 +1,7 @@
 package com.frice.designer
 
+import com.eldath.alerts.InfoAlert
+import javafx.scene.control.ListView
 import javafx.scene.input.MouseEvent
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
@@ -10,6 +12,14 @@ import javax.swing.JOptionPane
  * @author ice1000
  */
 abstract class Controller {
+
+	protected abstract val widgetsList: ListView<String>
+
+	private val shapeObject = "ShapeObject"
+
+	protected fun initialize() {
+		widgetsList.items.add(shapeObject)
+	}
 
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
@@ -27,13 +37,10 @@ abstract class Controller {
 	}
 
 	protected open fun onMainViewClicked(event: MouseEvent) {
-//		if (event.isMetaDown) {
-//			RightClickPopup(this).popup
-//		}
 	}
 
 	protected fun onMenuAboutClicked() {
-		FDialog.infoDialog("""Copyright(c) 2016 Frice Engine Designer
+		InfoAlert("""Copyright(c) 2016 Frice Engine Designer
 Under Apache 2.0 License.
 
 English:
