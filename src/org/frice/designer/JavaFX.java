@@ -1,4 +1,4 @@
-package com.frice.designer;
+package org.frice.designer;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

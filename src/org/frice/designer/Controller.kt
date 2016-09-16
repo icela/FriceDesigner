@@ -1,4 +1,4 @@
-package com.frice.designer
+package org.frice.designer
 
 import com.eldath.alerts.InfoAlert
 import javafx.event.EventType
@@ -25,7 +25,7 @@ abstract class Controller {
 				shapeObject,
 				imageObject
 		))
-		widgetsList.addEventFilter(EventType<DragEvent>(EventType.ROOT), {
+		widgetsList.addEventHandler(EventType<DragEvent>(EventType.ROOT), {
 			InfoAlert("Drag detected")
 		})
 	}
