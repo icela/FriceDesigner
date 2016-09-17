@@ -9,9 +9,9 @@ import java.util.*
  * @author ice1000
  */
 class CodeData() {
-	private val objectList = LinkedList<AnObject>()
+	val objectList = LinkedList<AnObject>()
 
-	fun getCode(language: Int, name: String) = when (language) {
+	fun getCode(language: Int, name: String): String = when (language) {
 		LANGUAGE_JAVA -> String.format(javaCode, name, buildFieldCodes(language),
 				buildInitCodes(language), name)
 		LANGUAGE_KOTLIN -> String.format(kotlinCode, name, buildFieldCodes(language),
@@ -21,35 +21,55 @@ class CodeData() {
 		else -> throw UnknownLanguageException()
 	}
 
-	private fun buildInitCodes(type: Int): String {
-		val s = StringBuilder()
+	private fun buildInitCodes(language: Int): String {
+		val stringBuffer = StringBuffer()
 		objectList.forEach { o ->
-			when (type) {
+			when (language) {
 				LANGUAGE_SCALA -> {
 				}
 				LANGUAGE_JAVA -> {
+					stringBuffer
+							.append("\t\t")
+							.append(o.fieldName)
+							.append(" = new ")
+							.append(type2String(o))
+							.append('(')
+							.append(o.x)
+							.append(", ")
+							.append(o.y)
+							.append(");\n\t\taddObject(")
+							.append(o.fieldName)
+							.append(");\n")
 				}
 				LANGUAGE_KOTLIN -> {
 				}
 			}
 		}
-		return s.toString()
+		return stringBuffer.toString()
 	}
 
-	private fun buildFieldCodes(type: Int): String {
-		val s = StringBuilder()
+	private fun buildFieldCodes(language: Int): String {
+		val stringBuffer = StringBuffer()
 		objectList.forEach { o ->
-			when (type) {
-				LANGUAGE_SCALA -> {
-				}
-				LANGUAGE_JAVA -> {
-				}
-				LANGUAGE_KOTLIN -> {
-					s.append("")
-				}
+			when (language) {
+				LANGUAGE_SCALA -> stringBuffer.append("\tval ", o.fieldName, ": ", type2String(o), " = _\n")
+				LANGUAGE_JAVA -> stringBuffer.append("\tpublic ", type2String(o), " ", o.fieldName, ";\n")
+				LANGUAGE_KOTLIN -> stringBuffer.append("\tlateinit var ", o.fieldName, ": ", type2String(o), "\n")
 			}
 		}
-		return s.toString()
+		return stringBuffer.toString()
+	}
+
+	private fun type2String(obj: AnObject) = when (obj) {
+		is AnShapeObject -> "ShapeObject"
+		is AnText -> "SimpleText"
+		else -> "FObject"
+	}
+
+	private fun shape2String(obj: AnShapeObject) = when (obj.shape) {
+		SHAPE_OVAL -> "FOval"
+		SHAPE_RECTANGLE -> "FRectangle"
+		else -> throw UnknownShapeException()
 	}
 
 	companion object {
@@ -57,12 +77,12 @@ class CodeData() {
 		@JvmField val LANGUAGE_KOTLIN = 0x02
 		@JvmField val LANGUAGE_SCALA = 0x03
 
-		@JvmField val SHAPE_OVAL = 0x05
-		@JvmField val SHAPE_RECTANGLE = 0x06
+		@JvmField val SHAPE_OVAL = 0x04
+		@JvmField val SHAPE_RECTANGLE = 0x05
 
 		private val javaCode = """// Generated codes
 import org.frice.game.*;
-import org.frice.game.obj.*;
+import org.frice.game.o.*;
 import org.frice.game.resource.*;
 import org.frice.game.anim.*;
 import org.frice.game.anim.move.*;
@@ -85,11 +105,11 @@ import org.frice.game.utils.web.*;
  */
 public class %sGame extends Game {
 
-	%s
+%s
 
 	@Override
 	protected void onInit() {
-		%s
+%s
 	}
 
 	public static void main(String[] args) {
@@ -101,7 +121,7 @@ public class %sGame extends Game {
 
 		private val kotlinCode = """// Generated codes
 import org.frice.game.*
-import org.frice.game.obj.*
+import org.frice.game.o.*
 import org.frice.game.resource.*
 import org.frice.game.anim.*
 import org.frice.game.anim.move.*
@@ -124,10 +144,10 @@ import org.frice.game.utils.web.*
  */
 class %sGame() : Game() {
 
-	%s
+%s
 
 	override fun onInit() {
-		%s
+%s
 	}
 
 	companion object {
@@ -143,7 +163,7 @@ class %sGame() : Game() {
 
 		private val scalaCode = """// Generated codes
 import org.frice.game._
-import org.frice.game.obj._
+import org.frice.game.o._
 import org.frice.game.resource._
 import org.frice.game.anim._
 import org.frice.game.anim.move._
@@ -166,10 +186,10 @@ import org.frice.game.utils.web._
  */
 class %sGame extends Game {
 
-	%s
+%s
 
 	override def onInit(): Unit = {
-		%s
+%s
 	}
 
 object %sGame {
@@ -226,3 +246,5 @@ class AnWebImageObject(
 ) : AnObject(x, y, width, height, fieldName)
 
 class UnknownLanguageException() : Exception("Language given is unknown.")
+
+class UnknownShapeException() : Exception("Shape given is unknown")

@@ -32,7 +32,7 @@ public class JavaFX extends Controller implements Initializable {
 		return widgetsList;
 	}
 
-	public void onMenuNewClicked(ActionEvent actionEvent) {
+	public void onMenuNewClicked(ActionEvent event) {
 		super.onMenuNew();
 	}
 
@@ -83,6 +83,10 @@ public class JavaFX extends Controller implements Initializable {
 
 	public void onMenuScalaCodeClicked(ActionEvent event) {
 		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_SCALA, projectName.getText()));
+	}
+
+
+	public void onMenuToolsCompileClicked(ActionEvent event) {
 	}
 
 	@NotNull

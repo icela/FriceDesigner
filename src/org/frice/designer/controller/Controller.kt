@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import org.frice.designer.canvas.Drawer
+import org.frice.designer.code.AnObject
 import org.frice.designer.code.AnShapeObject
 import org.frice.designer.code.CodeData
 import org.frice.game.resource.graphics.ColorResource
@@ -49,7 +50,7 @@ abstract class Controller() : Drawer() {
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObject -> {
-					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
+					addObject(AnShapeObject(e.x, e.y, 10.0, 10.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
 							CodeData.SHAPE_OVAL
@@ -91,6 +92,16 @@ abstract class Controller() : Drawer() {
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) System.exit(0)
+	}
+
+	private fun addObject(o: AnObject) {
+		objects.add(o)
+		codeData.objectList.add(o)
+	}
+
+	private fun removeObject(o: AnObject) {
+		objects.add(o)
+		codeData.objectList.add(o)
 	}
 
 	protected fun onMenuNew() {

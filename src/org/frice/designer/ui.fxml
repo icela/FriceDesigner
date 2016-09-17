@@ -50,6 +50,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#onMenuScalaCodeClicked" text="Scala code" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Tools">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Compile" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#onMenuAboutClicked" text="About Frice Engine" />
