@@ -49,7 +49,7 @@ abstract class Controller() : Drawer() {
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObject -> {
-					shapes.add(ShapeObject(ColorResource.天依蓝, FCircle(20.0), 10.0, 10.0))
+					objects.add(ShapeObject(ColorResource.天依蓝, FCircle(20.0), 10.0, 10.0))
 					paint(mainCanvas.graphicsContext2D)
 				}
 			}
