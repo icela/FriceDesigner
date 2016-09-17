@@ -21,7 +21,7 @@ open class Drawer() {
 				is AnShapeObject -> {
 					g.fill = fromColor(o.color)
 					when (o.shape) {
-						CodeData.SHAPE_CIRCLE, CodeData.SHAPE_OVAL -> g.fillOval(o.x, o.y, o.width, o.height)
+						CodeData.SHAPE_OVAL -> g.fillOval(o.x, o.y, o.width, o.height)
 						CodeData.SHAPE_RECTANGLE -> g.fillRect(o.x, o.y, o.width, o.height)
 					}
 				}

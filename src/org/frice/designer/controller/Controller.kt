@@ -10,12 +10,12 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import org.frice.designer.canvas.Drawer
+import org.frice.designer.code.AnShapeObject
 import org.frice.designer.code.CodeData
-import org.frice.game.obj.sub.ShapeObject
 import org.frice.game.resource.graphics.ColorResource
-import org.frice.game.utils.graphics.shape.FCircle
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.message.log.FLog
+import java.util.*
 import javax.swing.JOptionPane
 
 /**
@@ -42,14 +42,18 @@ abstract class Controller() : Drawer() {
 
 	protected val codeData = CodeData()
 
+	private val random = Random()
+
 	protected fun initialize() {
-		mainView.setOnDragOver { e ->
-			e.acceptTransferModes(TransferMode.MOVE)
-		}
+		mainView.setOnDragOver { e -> e.acceptTransferModes(TransferMode.MOVE) }
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObject -> {
-					objects.add(ShapeObject(ColorResource.天依蓝, FCircle(20.0), 10.0, 10.0))
+					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
+							"shapeObject${random.nextInt(99999)}",
+							ColorResource.IntelliJ_IDEA黑.color,
+							CodeData.SHAPE_OVAL
+					))
 					paint(mainCanvas.graphicsContext2D)
 				}
 			}

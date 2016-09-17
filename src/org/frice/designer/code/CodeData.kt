@@ -57,7 +57,6 @@ class CodeData() {
 		@JvmField val LANGUAGE_KOTLIN = 0x02
 		@JvmField val LANGUAGE_SCALA = 0x03
 
-		@JvmField val SHAPE_CIRCLE = 0x04
 		@JvmField val SHAPE_OVAL = 0x05
 		@JvmField val SHAPE_RECTANGLE = 0x06
 
