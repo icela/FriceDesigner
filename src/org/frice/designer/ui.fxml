@@ -44,7 +44,8 @@
                 </Menu>
             <Menu mnemonicParsing="false" text="View">
               <items>
-                <MenuItem mnemonicParsing="false" text="Show code" />
+                <MenuItem mnemonicParsing="false" onAction="#onMenuJavaCodeClicked" text="Java code" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuKotlinCodeClicked" text="Kotlin code" />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">

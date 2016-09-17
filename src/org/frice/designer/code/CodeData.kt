@@ -31,11 +31,11 @@ import org.frice.game.utils.web.*;
 
 /**
  * Frice engine class.
+ * Java
  */
 public class %sGame extends Game {
 	@Override
 	protected void onInit() {
-		super.onInit();
 		%s
 	}
 
@@ -47,8 +47,6 @@ public class %sGame extends Game {
 """
 
 	private val kotlinCode = """
-package org.frice.designer.code
-
 import org.frice.game.*
 import org.frice.game.obj.*
 import org.frice.game.resource.*
@@ -69,10 +67,10 @@ import org.frice.game.utils.web.*
 
 /**
  * Frice engine class.
+ * Kotlin
  */
 class %sGame() : Game() {
 	override fun onInit() {
-		super.onInit()
 		%s
 	}
 
@@ -84,18 +82,54 @@ class %sGame() : Game() {
 }
 
 """
+	private val scalaCode = """
+import org.frice.game._
+import org.frice.game.obj._
+import org.frice.game.resource._
+import org.frice.game.anim._
+import org.frice.game.anim.move._
+import org.frice.game.anim.scale._
+import org.frice.game.event._
+import org.frice.game.utils.audio._
+import org.frice.game.utils.misc._
+import org.frice.game.utils.graphics.shape._
+import org.frice.game.utils.graphics.utils._
+import org.frice.game.utils.data._
+import org.frice.game.utils.message._
+import org.frice.game.utils.message.error._
+import org.frice.game.utils.message.log._
+import org.frice.game.utils.time._
+import org.frice.game.utils.web._
 
-	fun getCode(language: String, name: String) = String.format(when (language) {
-		LANGUAGE_JAVA -> javaCode
-		LANGUAGE_KOTLIN -> kotlinCode
+/**
+ * Frice engine class.
+ * Scala
+ */
+class %sGame extends Game {
+	override def onInit(): Unit = {
+		%s
+	}
+
+object %sGame {
+	def main(args: Array[String]): Unit = {
+		new %sGame
+	}
+}
+"""
+
+	fun getCode(language: String, name: String) = when (language) {
+		LANGUAGE_JAVA -> String.format(javaCode, name, buildCodes(), name)
+		LANGUAGE_KOTLIN -> String.format(kotlinCode, name, buildCodes(), name)
+		LANGUAGE_SCALA -> String.format(scalaCode, name, buildCodes(), name, name)
 		else -> throw UnknownLanguageException()
-	}, name, buildCodes(), name)
+	}
 
 	private fun buildCodes() = ""
 
 	companion object {
-		val LANGUAGE_JAVA = "LANGUAGE_JAVA"
-		val LANGUAGE_KOTLIN = "LANGUAGE_KOTLIN"
+		@JvmField val LANGUAGE_JAVA = "LANGUAGE_JAVA"
+		@JvmField val LANGUAGE_KOTLIN = "LANGUAGE_KOTLIN"
+		@JvmField val LANGUAGE_SCALA = "LANGUAGE_SCALA"
 	}
 }
 

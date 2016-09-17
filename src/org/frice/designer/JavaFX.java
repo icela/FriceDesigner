@@ -1,11 +1,13 @@
 package org.frice.designer;
 
+import com.eldath.alerts.InfoAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -65,5 +67,13 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	protected void setTitle(@NotNull String string) {
 		projectName.setText(string);
+	}
+
+	public void onMenuJavaCodeClicked(ActionEvent event) {
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_JAVA, projectName.getText()));
+	}
+
+	public void onMenuKotlinCodeClicked(ActionEvent event) {
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_KOTLIN, projectName.getText()));
 	}
 }

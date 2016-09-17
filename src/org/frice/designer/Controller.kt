@@ -3,6 +3,7 @@ package org.frice.designer
 import com.eldath.alerts.InfoAlert
 import javafx.scene.control.Accordion
 import javafx.scene.input.MouseEvent
+import org.frice.designer.code.CodeData
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
 
@@ -18,6 +19,8 @@ abstract class Controller {
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
 	private val webImageObject = "WebImageObject"
+
+	protected val codeData = CodeData()
 
 	protected fun initialize() {
 	}
