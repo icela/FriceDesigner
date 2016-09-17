@@ -1,9 +1,10 @@
 package org.frice.designer;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,51 +13,46 @@ import java.util.ResourceBundle;
 
 public class JavaFX extends Controller implements Initializable {
 
-	@FXML
-	public ListView<String> widgetsList;
+	public Accordion widgetsList;
+	public ScrollPane mainView;
+	public Label shapeObjectChoice;
+	public Label webImageObjectChoice;
+	public Label pathImageObjectChoice;
+	public Label projectName;
 
 	@NotNull
 	@Override
-	public ListView<String> getWidgetsList() {
+	public Accordion getWidgetsList() {
 		return widgetsList;
 	}
 
-	@FXML
 	public void onMenuNewClicked(ActionEvent actionEvent) {
 		super.onMenuNew();
 	}
 
-	@FXML
 	public void onMenuOpenClicked(ActionEvent event) {
 	}
 
-	@FXML
 	public void onMenuExitClicked(ActionEvent event) {
 		super.onMenuExit();
 	}
 
-	@FXML
 	public void onMenuSaveClicked(ActionEvent event) {
 	}
 
-	@FXML
 	public void onMenuCloseClicked(ActionEvent event) {
 	}
 
-	@FXML
 	public void onMenuSaveAsClicked(ActionEvent event) {
 	}
 
-	@FXML
 	public void onMenuPreferenceClicked(ActionEvent event) {
 	}
 
-	@FXML
 	public void onMenuAboutClicked(ActionEvent event) {
 		super.onMenuAboutClicked();
 	}
 
-	@FXML
 	public void onMainViewClicked(@NotNull MouseEvent event) {
 		super.onMainViewClicked(event);
 	}
@@ -64,5 +60,10 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initialize();
+	}
+
+	@Override
+	protected void setTitle(@NotNull String string) {
+		projectName.setText(string);
 	}
 }

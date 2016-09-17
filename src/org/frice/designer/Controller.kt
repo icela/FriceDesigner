@@ -1,9 +1,7 @@
 package org.frice.designer
 
 import com.eldath.alerts.InfoAlert
-import javafx.event.EventType
-import javafx.scene.control.ListView
-import javafx.scene.input.DragEvent
+import javafx.scene.control.Accordion
 import javafx.scene.input.MouseEvent
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
@@ -15,19 +13,13 @@ import javax.swing.JOptionPane
  */
 abstract class Controller {
 
-	protected abstract val widgetsList: ListView<String>
+	protected abstract val widgetsList: Accordion
 
 	private val shapeObject = "ShapeObject"
-	private val imageObject = "ImageObject"
+	private val pathImageObject = "PathImageObject"
+	private val webImageObject = "WebImageObject"
 
 	protected fun initialize() {
-		widgetsList.items.addAll(listOf(
-				shapeObject,
-				imageObject
-		))
-		widgetsList.addEventHandler(EventType<DragEvent>(EventType.ROOT), {
-			InfoAlert("Drag detected")
-		})
 	}
 
 	protected fun onMenuExit() {
@@ -63,4 +55,6 @@ Chinese:
 网站：https://github.com/icela/FriceEngine
 有一个wiki（完整的API参考）和很多Demo。""")
 	}
+
+	protected abstract fun setTitle(string: String)
 }

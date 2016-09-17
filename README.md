@@ -1,3 +1,5 @@
 # FriceDesigner
 
-The GUI designer of frice engine
+A GUI designer for Frice Engine.
+
+[Frice Engine](https://github.com/icela/FriceEngine)

@@ -57,11 +57,35 @@
         <SplitPane dividerPositions="0.25, 0.75" focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <items>
                 <AnchorPane>
-                    <children>
-                        <ListView fx:id="widgetsList" prefHeight="545.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                    </children>
+               <children>
+                  <Accordion fx:id="widgetsList" prefHeight="547.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <panes>
+                      <TitledPane animated="false" text="Objects">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label fx:id="shapeObjectChoice" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="193.0" text="ShapeObject" />
+                                    <Label fx:id="webImageObjectChoice" layoutX="14.0" layoutY="45.0" prefHeight="21.0" prefWidth="193.0" text="WebImageObject" />
+                                    <Label fx:id="pathImageObjectChoice" layoutX="14.0" layoutY="76.0" prefHeight="21.0" prefWidth="193.0" text="PathImageObject" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Effects">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Widgets">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children>
                 </AnchorPane>
-                <ScrollPane prefHeight="545.0" prefWidth="314.0" />
+                <ScrollPane fx:id="mainView" prefHeight="545.0" prefWidth="314.0" />
                 <AnchorPane>
                     <children>
                         <TextField layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
@@ -81,7 +105,7 @@
                     </textFill>
                 </Label>
                 <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-                <Label font="$x3" maxWidth="-1.0" text="By ice1000" textFill="$x4" HBox.hgrow="NEVER" />
+                <Label fx:id="projectName" font="$x3" maxWidth="-1.0" text="By ice1000" textFill="$x4" HBox.hgrow="NEVER" />
             </children>
             <padding>
                 <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
