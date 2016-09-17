@@ -1,14 +1,21 @@
-package org.frice.designer
+package org.frice.designer.controller
 
 import com.eldath.alerts.InfoAlert
+import javafx.scene.canvas.Canvas
 import javafx.scene.control.Accordion
 import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
+import javafx.scene.input.ClipboardContent
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
+import org.frice.designer.canvas.Drawer
 import org.frice.designer.code.CodeData
+import org.frice.game.obj.sub.ShapeObject
+import org.frice.game.resource.graphics.ColorResource
+import org.frice.game.utils.graphics.shape.FCircle
 import org.frice.game.utils.message.FDialog
+import org.frice.game.utils.message.log.FLog
 import javax.swing.JOptionPane
 
 /**
@@ -16,7 +23,7 @@ import javax.swing.JOptionPane
  *
  * @author ice1000
  */
-abstract class Controller {
+abstract class Controller() : Drawer() {
 
 	protected abstract val widgetsList: Accordion
 
@@ -30,17 +37,27 @@ abstract class Controller {
 
 	private var currentSelection = shapeObject
 
+	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
 
 	protected val codeData = CodeData()
 
 	protected fun initialize() {
-		mainView.setOnDragDone { e ->
-			e.acceptTransferModes(TransferMode.MOVE)
+		mainView.setOnDragDropped { e ->
+			e.acceptedTransferMode = TransferMode.MOVE
 			when (currentSelection) {
 				shapeObject -> {
+					shapes.add(ShapeObject(ColorResource.天依蓝, FCircle(20.0), 10.0, 10.0))
+					paint(mainCanvas.graphicsContext2D)
 				}
 			}
+			FLog.d("dragged")
+		}
+		shapeObjectChoice.setOnDragDetected {
+			val d = shapeObjectChoice.startDragAndDrop(TransferMode.MOVE)
+			d.setContent(ClipboardContent().apply {
+				putString(shapeObject)
+			})
 		}
 		shapeObjectChoice.setOnMousePressed {
 			shapeObjectChoice.textFill = Color.web("#0000FF")

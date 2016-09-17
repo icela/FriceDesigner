@@ -1,9 +1,10 @@
-package org.frice.designer;
+package org.frice.designer.controller;
 
 import com.eldath.alerts.InfoAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Accordion;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -17,12 +18,13 @@ import java.util.ResourceBundle;
 public class JavaFX extends Controller implements Initializable {
 
 	public Accordion widgetsList;
-	public ScrollPane mainView;
 
 	public Label shapeObjectChoice;
 	public Label webImageObjectChoice;
 	public Label pathImageObjectChoice;
 	public Label projectName;
+	public Canvas mainCanvas;
+	public ScrollPane mainView;
 
 	@NotNull
 	@Override
@@ -97,6 +99,12 @@ public class JavaFX extends Controller implements Initializable {
 	@NotNull
 	public Label getPathImageObjectChoice() {
 		return pathImageObjectChoice;
+	}
+
+	@NotNull
+	@Override
+	protected Canvas getMainCanvas() {
+		return mainCanvas;
 	}
 
 	@NotNull
