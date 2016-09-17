@@ -43,8 +43,10 @@ abstract class Controller() : Drawer() {
 	protected val codeData = CodeData()
 
 	protected fun initialize() {
+		mainView.setOnDragOver { e ->
+			e.acceptTransferModes(TransferMode.MOVE)
+		}
 		mainView.setOnDragDropped { e ->
-			e.acceptedTransferMode = TransferMode.MOVE
 			when (currentSelection) {
 				shapeObject -> {
 					shapes.add(ShapeObject(ColorResource.天依蓝, FCircle(20.0), 10.0, 10.0))
