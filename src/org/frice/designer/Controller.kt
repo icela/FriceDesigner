@@ -2,7 +2,11 @@ package org.frice.designer
 
 import com.eldath.alerts.InfoAlert
 import javafx.scene.control.Accordion
+import javafx.scene.control.Label
+import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseEvent
+import javafx.scene.input.TransferMode
+import javafx.scene.paint.Color
 import org.frice.designer.code.CodeData
 import org.frice.game.utils.message.FDialog
 import javax.swing.JOptionPane
@@ -16,13 +20,49 @@ abstract class Controller {
 
 	protected abstract val widgetsList: Accordion
 
+	protected abstract val shapeObjectChoice: Label
+	protected abstract val webImageObjectChoice: Label
+	protected abstract val pathImageObjectChoice: Label
+
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
 	private val webImageObject = "WebImageObject"
 
+	private var currentSelection = shapeObject
+
+	protected abstract val mainView: ScrollPane
+
 	protected val codeData = CodeData()
 
 	protected fun initialize() {
+		mainView.setOnDragDone { e ->
+			e.acceptTransferModes(TransferMode.MOVE)
+			when (currentSelection) {
+				shapeObject -> {
+				}
+			}
+		}
+		shapeObjectChoice.setOnMousePressed {
+			shapeObjectChoice.textFill = Color.web("#0000FF")
+			currentSelection = shapeObject
+		}
+		shapeObjectChoice.setOnMouseReleased {
+			shapeObjectChoice.textFill = Color.web("#000000")
+		}
+		webImageObjectChoice.setOnMousePressed {
+			webImageObjectChoice.textFill = Color.web("#0000FF")
+			currentSelection = webImageObject
+		}
+		webImageObjectChoice.setOnMouseReleased {
+			webImageObjectChoice.textFill = Color.web("#000000")
+		}
+		pathImageObjectChoice.setOnMousePressed {
+			pathImageObjectChoice.textFill = Color.web("#0000FF")
+			currentSelection = pathImageObject
+		}
+		pathImageObjectChoice.setOnMouseReleased {
+			pathImageObjectChoice.textFill = Color.web("#000000")
+		}
 	}
 
 	protected fun onMenuExit() {
@@ -60,4 +100,5 @@ Chinese:
 	}
 
 	protected abstract fun setTitle(string: String)
+
 }

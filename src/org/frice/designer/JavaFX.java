@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -17,6 +18,7 @@ public class JavaFX extends Controller implements Initializable {
 
 	public Accordion widgetsList;
 	public ScrollPane mainView;
+
 	public Label shapeObjectChoice;
 	public Label webImageObjectChoice;
 	public Label pathImageObjectChoice;
@@ -61,7 +63,7 @@ public class JavaFX extends Controller implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		initialize();
+		super.initialize();
 	}
 
 	@Override
@@ -75,5 +77,31 @@ public class JavaFX extends Controller implements Initializable {
 
 	public void onMenuKotlinCodeClicked(ActionEvent event) {
 		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_KOTLIN, projectName.getText()));
+	}
+
+	public void onMenuScalaCodeClicked(ActionEvent event) {
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_SCALA, projectName.getText()));
+	}
+
+	@NotNull
+	public Label getShapeObjectChoice() {
+		new Color(0xfffff);
+		return shapeObjectChoice;
+	}
+
+	@NotNull
+	public Label getWebImageObjectChoice() {
+		return webImageObjectChoice;
+	}
+
+	@NotNull
+	public Label getPathImageObjectChoice() {
+		return pathImageObjectChoice;
+	}
+
+	@NotNull
+	@Override
+	protected ScrollPane getMainView() {
+		return mainView;
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
@@ -46,6 +47,7 @@
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#onMenuJavaCodeClicked" text="Java code" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuKotlinCodeClicked" text="Kotlin code" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuScalaCodeClicked" text="Scala code" />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -86,7 +88,10 @@
                   </Accordion>
                </children>
                 </AnchorPane>
-                <ScrollPane fx:id="mainView" prefHeight="545.0" prefWidth="314.0" />
+                <ScrollPane fx:id="mainView" prefHeight="545.0" prefWidth="314.0">
+               <content>
+                  <Canvas fx:id="mainCanvas" height="537.0" width="438.0" />
+               </content></ScrollPane>
                 <AnchorPane>
                     <children>
                         <TextField layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
@@ -106,7 +111,7 @@
                     </textFill>
                 </Label>
                 <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-                <Label fx:id="projectName" font="$x3" maxWidth="-1.0" text="By ice1000" textFill="$x4" HBox.hgrow="NEVER" />
+                <Label fx:id="projectName" font="$x3" maxWidth="-1.0" text="FriceProject" textFill="$x4" HBox.hgrow="NEVER" />
             </children>
             <padding>
                 <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
