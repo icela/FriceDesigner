@@ -29,17 +29,9 @@ class CodeData() {
 				}
 				LANGUAGE_JAVA -> {
 					stringBuffer
-							.append("\t\t")
-							.append(o.fieldName)
-							.append(" = new ")
-							.append(type2String(o))
-							.append('(')
-							.append(o.x)
-							.append(", ")
-							.append(o.y)
-							.append(");\n\t\taddObject(")
-							.append(o.fieldName)
-							.append(");\n")
+							.append("\t\t", o.fieldName, " = new ")
+							.append(type2String(o), "(", "${o.x}", ", ", "${o.y}", ");\n")
+							.append("\t\taddObject(", o.fieldName, ");\n")
 				}
 				LANGUAGE_KOTLIN -> {
 				}
