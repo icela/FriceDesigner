@@ -31,18 +31,25 @@ class CodeData() {
 				}
 				LANGUAGE_JAVA -> {
 					when (o) {
-						is AnShapeObject -> {
+						is AnShapeObject ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(0x${o.color.rgb}), ",
 									"new ${shapeOf(o)}, ${o.x}, ${o.y});\n")
-						}
-						is AnText -> {
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
-									.append("\t\t${o.fieldName}.setColorResource(new ColorResource(0x${o.color.rgb}))")
-						}
+						is AnText ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
+									"\t\t${o.fieldName}.setColorResource(new ColorResource(0x${o.color.rgb}))\n")
 					}
-					sb.append("\t\taddObject(${o.fieldName});\n")
+					sb.append("\t\tsuper.addObject(${o.fieldName});\n")
 				}
 				LANGUAGE_KOTLIN -> {
+					when (o) {
+						is AnShapeObject ->
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(0x${o.color.rgb}), ",
+									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
+						is AnText ->
+								sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
+										"\t\t${o.fieldName}.colorResource = ColorResource(0x${o.color.rgb})\n")
+					}
+					sb.append("\t\tsuper<Game>.addObject(${o.fieldName})\n")
 				}
 			}
 		}
@@ -50,15 +57,15 @@ class CodeData() {
 	}
 
 	private fun buildFieldCodes(language: Int): String {
-		val stringBuffer = StringBuffer()
+		val sb = StringBuffer()
 		objectList.forEach { o ->
 			when (language) {
-				LANGUAGE_SCALA -> stringBuffer.append("\tval ${o.fieldName}: ${typeOf(o)} = _\n")
-				LANGUAGE_JAVA -> stringBuffer.append("\tpublic ${typeOf(o)} ${o.fieldName};\n")
-				LANGUAGE_KOTLIN -> stringBuffer.append("\tlateinit var ${o.fieldName}: ${typeOf(o)}\n")
+				LANGUAGE_SCALA -> sb.append("\tval ${o.fieldName}: ${typeOf(o)} = _\n")
+				LANGUAGE_JAVA -> sb.append("\tpublic ${typeOf(o)} ${o.fieldName};\n")
+				LANGUAGE_KOTLIN -> sb.append("\tlateinit var ${o.fieldName}: ${typeOf(o)}\n")
 			}
 		}
-		return stringBuffer.toString()
+		return sb.toString()
 	}
 
 	private fun typeOf(obj: AnObject) = when (obj) {
@@ -68,7 +75,8 @@ class CodeData() {
 	}
 
 	private fun shapeOf(obj: AnShapeObject) = when (obj.shape) {
-		SHAPE_OVAL -> "FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
+		SHAPE_OVAL -> if (obj.width == obj.height)
+			"FCircle(${obj.width})" else "FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
 		SHAPE_RECTANGLE -> "FRectangle(${obj.width}, ${obj.height})"
 		else -> throw UnknownShapeException()
 	}

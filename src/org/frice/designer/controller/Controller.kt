@@ -50,7 +50,7 @@ abstract class Controller() : Drawer() {
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
 
-	private val codeData = CodeData()
+	protected val codeData = CodeData()
 
 	private val random = Random()
 
