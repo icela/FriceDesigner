@@ -39,6 +39,9 @@ abstract class Controller() : Drawer() {
 	protected abstract val boxHeight: TextField
 	protected abstract val boxSource: TextField
 	protected abstract val boxFieldName: TextField
+	protected abstract val boxColor: TextField
+
+	private lateinit var boxes: List<TextField>
 
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
@@ -49,8 +52,6 @@ abstract class Controller() : Drawer() {
 
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
-
-	protected val codeData = CodeData()
 
 	private val random = Random()
 
@@ -70,22 +71,30 @@ abstract class Controller() : Drawer() {
 			}
 		}
 		mainView.setOnMouseClicked { e ->
-			codeData.objectList.forEach { o ->
-				if (o.containsPoint(e.x, e.y)) {
-				}
+			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
+				codeData.objectChosen = o
+				break
 			}
 		}
-		shapeObjectChoice.setupChoice(shapeObject)
-		webImageObjectChoice.setupChoice(webImageObject)
+
+		boxes = listOf(boxFieldName, boxHeight, boxWidth, boxSource, boxX, boxY)
+		shapeObjectChoice.setupChoice(shapeObject, {
+			boxSource.isDisable = true
+		})
+		webImageObjectChoice.setupChoice(webImageObject, {
+			boxColor.isDisable = true
+		})
 		pathImageObjectChoice.setupChoice(pathImageObject)
 		simpleTextChoice.setupChoice(simpleText)
 	}
 
-	private fun Label.setupChoice(selection: String) {
+	private fun Label.setupChoice(selection: String, disable: () -> Unit = { }) {
 		setOnMouseEntered { textFill = Color.web("#0000FF") }
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
 			currentSelection = selection
+			boxes.forEach { b -> b.isDisable = false }
+			disable()
 			startDragAndDrop(TransferMode.MOVE).run {
 				setContent(ClipboardContent().apply { putString(selection) })
 			}
@@ -100,11 +109,15 @@ abstract class Controller() : Drawer() {
 	private fun addObject(o: AnObject) {
 		objects.add(o)
 		codeData.objectList.add(o)
+		objectChosen = o
+		codeData.objectChosen = o
 	}
 
 	private fun removeObject(o: AnObject) {
 		objects.add(o)
 		codeData.objectList.add(o)
+		objectChosen = null
+		codeData.objectChosen = null
 	}
 
 	protected fun onMenuNew() {

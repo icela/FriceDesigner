@@ -5,6 +5,7 @@ import org.frice.designer.code.AnObject
 import org.frice.designer.code.AnShapeObject
 import org.frice.designer.code.AnText
 import org.frice.designer.code.CodeData
+import java.awt.Color
 import java.util.*
 
 /**
@@ -14,6 +15,13 @@ import java.util.*
  */
 open class Drawer() {
 	protected val objects = LinkedList<AnObject>()
+	protected val codeData = CodeData()
+
+	protected var objectChosen: AnObject?
+		get() = codeData.objectChosen
+		set(value) {
+			codeData.objectChosen = value
+		}
 
 	protected fun paint(g: GraphicsContext) {
 		objects.forEach { o ->
@@ -31,9 +39,17 @@ open class Drawer() {
 				}
 			}
 		}
+		if (objectChosen != null) {
+			println("2333")
+			g.fill = fromColor(Color.BLUE)
+			g.strokeRect(objectChosen?.x!! - 5,
+					objectChosen?.y!! - 5,
+					objectChosen?.width!! + 5,
+					objectChosen?.height!! + 5)
+		}
 	}
 
 	companion object {
-		fun fromColor(c: java.awt.Color) = javafx.scene.paint.Color.rgb(c.red, c.green, c.blue)
+		infix fun fromColor(c: java.awt.Color) = javafx.scene.paint.Color.rgb(c.red, c.green, c.blue)!!
 	}
 }

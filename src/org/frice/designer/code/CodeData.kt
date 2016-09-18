@@ -12,6 +12,7 @@ import java.util.*
  */
 class CodeData() {
 	val objectList = LinkedList<AnObject>()
+	var objectChosen: AnObject? = null
 
 	fun getCode(language: Int, name: String): String = when (language) {
 		LANGUAGE_JAVA -> String.format(javaCode, name, buildFieldCodes(language),
@@ -46,8 +47,8 @@ class CodeData() {
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(0x${o.color.rgb}), ",
 									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
 						is AnText ->
-								sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
-										"\t\t${o.fieldName}.colorResource = ColorResource(0x${o.color.rgb})\n")
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
+									"\t\t${o.fieldName}.colorResource = ColorResource(0x${o.color.rgb})\n")
 					}
 					sb.append("\t\tsuper<Game>.addObject(${o.fieldName})\n")
 				}
@@ -91,8 +92,10 @@ class CodeData() {
 
 		private val javaCode = """// Generated codes
 import org.frice.game.*;
-import org.frice.game.o.*;
+import org.frice.game.obj.*;
+import org.frice.game.obj.sub.*;
 import org.frice.game.resource.*;
+import org.frice.game.resource.graphics.*;
 import org.frice.game.anim.*;
 import org.frice.game.anim.move.*;
 import org.frice.game.anim.scale.*;
@@ -130,8 +133,10 @@ public class %sGame extends Game {
 
 		private val kotlinCode = """// Generated codes
 import org.frice.game.*
-import org.frice.game.o.*
+import org.frice.game.obj.*
+import org.frice.game.obj.sub.*
 import org.frice.game.resource.*
+import org.frice.game.resource.graphics.*
 import org.frice.game.anim.*
 import org.frice.game.anim.move.*
 import org.frice.game.anim.scale.*
@@ -172,8 +177,10 @@ class %sGame() : Game() {
 
 		private val scalaCode = """// Generated codes
 import org.frice.game._
-import org.frice.game.o._
+import org.frice.game.obj._
+import org.frice.game.obj.sub._
 import org.frice.game.resource._
+import org.frice.game.resource.graphics._
 import org.frice.game.anim._
 import org.frice.game.anim.move._
 import org.frice.game.anim.scale._

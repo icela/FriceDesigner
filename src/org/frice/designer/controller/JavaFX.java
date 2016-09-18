@@ -36,6 +36,7 @@ public class JavaFX extends Controller implements Initializable {
 	public TextField boxHeight;
 	public TextField boxSource;
 	public TextField boxFieldName;
+	public TextField boxColor;
 
 	@NotNull
 	@Override
@@ -165,4 +166,11 @@ public class JavaFX extends Controller implements Initializable {
 	public Label getSimpleTextChoice() {
 		return simpleTextChoice;
 	}
+
+	@NotNull
+	@Override
+	public TextField getBoxColor() {
+		return boxColor;
+	}
+
 }
