@@ -43,13 +43,14 @@ abstract class Controller() : Drawer() {
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
 	private val webImageObject = "WebImageObject"
+	private val simpleText = "SimpleText"
 
 	private var currentSelection = shapeObject
 
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
 
-	protected val codeData = CodeData()
+	private val codeData = CodeData()
 
 	private val random = Random()
 
@@ -68,12 +69,16 @@ abstract class Controller() : Drawer() {
 				pathImageObject -> FLog.d(currentSelection)
 			}
 		}
-		mainView.setOnMouseClicked {
-
+		mainView.setOnMouseClicked { e ->
+			codeData.objectList.forEach { o ->
+				if (o.containsPoint(e.x, e.y)) {
+				}
+			}
 		}
 		shapeObjectChoice.setupChoice(shapeObject)
 		webImageObjectChoice.setupChoice(webImageObject)
 		pathImageObjectChoice.setupChoice(pathImageObject)
+		simpleTextChoice.setupChoice(simpleText)
 	}
 
 	private fun Label.setupChoice(selection: String) {
@@ -81,7 +86,9 @@ abstract class Controller() : Drawer() {
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
 			currentSelection = selection
-			startDragAndDrop(TransferMode.MOVE).run { setContent(ClipboardContent().apply { putString(selection) }) }
+			startDragAndDrop(TransferMode.MOVE).run {
+				setContent(ClipboardContent().apply { putString(selection) })
+			}
 		}
 	}
 
