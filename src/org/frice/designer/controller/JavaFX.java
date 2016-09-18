@@ -4,11 +4,10 @@ import com.eldath.alerts.InfoAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +22,11 @@ public class JavaFX extends Controller implements Initializable {
 	public Label shapeObjectChoice;
 	public Label webImageObjectChoice;
 	public Label pathImageObjectChoice;
+
+	public Label simpleTextChoice;
+
 	public Label projectName;
+
 	public Canvas mainCanvas;
 	public ScrollPane mainView;
 
@@ -32,6 +35,7 @@ public class JavaFX extends Controller implements Initializable {
 	public TextField boxWidth;
 	public TextField boxHeight;
 	public TextField boxSource;
+	public TextField boxFieldName;
 
 	@NotNull
 	@Override
@@ -64,10 +68,6 @@ public class JavaFX extends Controller implements Initializable {
 
 	public void onMenuAboutClicked(ActionEvent event) {
 		super.onMenuAboutClicked();
-	}
-
-	public void onMainViewClicked(@NotNull MouseEvent event) {
-		super.onMainViewClicked(event);
 	}
 
 	@Override
@@ -152,5 +152,17 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	public TextField getBoxSource() {
 		return boxSource;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxFieldName() {
+		return boxFieldName;
+	}
+
+	@NotNull
+	@Override
+	public Label getSimpleTextChoice() {
+		return simpleTextChoice;
 	}
 }

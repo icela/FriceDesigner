@@ -7,7 +7,6 @@ import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
 import javafx.scene.input.ClipboardContent
-import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import org.frice.designer.canvas.Drawer
@@ -32,12 +31,14 @@ abstract class Controller() : Drawer() {
 	protected abstract val shapeObjectChoice: Label
 	protected abstract val webImageObjectChoice: Label
 	protected abstract val pathImageObjectChoice: Label
+	protected abstract val simpleTextChoice: Label
 
 	protected abstract val boxX: TextField
 	protected abstract val boxY: TextField
 	protected abstract val boxWidth: TextField
 	protected abstract val boxHeight: TextField
 	protected abstract val boxSource: TextField
+	protected abstract val boxFieldName: TextField
 
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
@@ -66,6 +67,9 @@ abstract class Controller() : Drawer() {
 				}
 				pathImageObject -> FLog.d(currentSelection)
 			}
+		}
+		mainView.setOnMouseClicked {
+
 		}
 		shapeObjectChoice.setupChoice(shapeObject)
 		webImageObjectChoice.setupChoice(webImageObject)
@@ -104,9 +108,6 @@ abstract class Controller() : Drawer() {
 	}
 
 	protected fun onMenuPreference() {
-	}
-
-	protected open fun onMainViewClicked(event: MouseEvent) {
 	}
 
 	protected fun onMenuAboutClicked() {
