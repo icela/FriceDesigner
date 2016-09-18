@@ -1,5 +1,6 @@
 package org.frice.designer.code
 
+import javafx.scene.image.Image
 import org.frice.game.anim.move.DoublePair
 import org.frice.game.utils.graphics.shape.FPoint
 import java.awt.Color
@@ -42,11 +43,11 @@ class CodeData() {
 				LANGUAGE_KOTLIN -> {
 					when (o) {
 						is AnShapeObject ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(0x${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
 									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
 						is AnText ->
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
-									"\t\t${o.fieldName}.colorResource = ColorResource(0x${o.color.rgb})\n")
+									"\t\t${o.fieldName}.colorResource = ColorResource(${o.color.rgb})\n")
 					}
 					sb.append("\t\tsuper<Game>.addObject(${o.fieldName})\n")
 				}
@@ -258,7 +259,9 @@ class AnPathImageObject(
 		height: Double,
 		fieldName: String,
 		var path: String
-) : AnObject(x, y, width, height, fieldName)
+) : AnObject(x, y, width, height, fieldName) {
+	var image = Image(path)
+}
 
 class AnWebImageObject(
 		x: Double,

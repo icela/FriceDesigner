@@ -14,7 +14,6 @@ import org.frice.designer.canvas.Drawer
 import org.frice.designer.code.*
 import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.message.FDialog
-import org.frice.game.utils.message.log.FLog
 import org.frice.game.utils.misc.forceRun
 import java.util.*
 import javax.swing.JOptionPane
@@ -55,6 +54,12 @@ abstract class Controller() : Drawer() {
 
 	private val random = Random()
 
+	override val width: Double
+		get() = mainCanvas.width
+
+	override val height: Double
+		get() = mainCanvas.height
+
 	protected fun initialize() {
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
@@ -66,27 +71,31 @@ abstract class Controller() : Drawer() {
 					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
-							CodeData.SHAPE_OVAL
-					))
+							CodeData.SHAPE_OVAL).apply {
+						changeSelected(this)
+					})
 					paint(mainCanvas.graphicsContext2D)
 				}
-				pathImageObject -> FLog.d(currentSelection)
 				simpleText -> {
 					objects.add(AnText(e.x, e.y,
 							"simpleText${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
-							"Hello World"))
+							"Hello World").apply {
+						changeSelected(this)
+					})
 					paint(mainCanvas.graphicsContext2D)
 				}
 			}
 		}
 
 		mainView.setOnMouseClicked { e ->
+			var found = false
 			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
-				codeData.objectChosen = o
-				paint(mainCanvas.graphicsContext2D)
+				changeSelected(o)
+				found = true
 				break
 			}
+			if (!found) objectChosen = null
 		}
 
 		boxes = listOf(boxFieldName, boxHeight, boxWidth, boxSource, boxX, boxY)
@@ -133,6 +142,10 @@ abstract class Controller() : Drawer() {
 			if (objectChosen is AnPathImageObject) (objectChosen as AnPathImageObject).path = (s)
 			if (objectChosen is AnWebImageObject) (objectChosen as AnWebImageObject).url = (s)
 		}
+
+		boxFieldName.setupClicked { n ->
+			objectChosen?.fieldName = n
+		}
 	}
 
 	private inline fun Label.setupChoice(selection: String, crossinline disable: () -> Unit) {
@@ -174,6 +187,29 @@ abstract class Controller() : Drawer() {
 	}
 
 	protected fun onMenuPreference() {
+	}
+
+	/**
+	 * change the selected object
+	 */
+	private fun changeSelected(o: AnObject) {
+		codeData.objectChosen = o
+		boxFieldName.text = o.fieldName
+		boxX.text = "${o.x}"
+		boxY.text = "${o.y}"
+		boxWidth.text = "${o.width}"
+		boxHeight.text = "${o.height}"
+
+		if (o is AnText) {
+			boxSource.text = o.text
+			boxColor.text = "${o.color.rgb}"
+		}
+
+		if (o is AnShapeObject) boxColor.text = "${o.color.rgb}"
+		if (o is AnPathImageObject) boxSource.text = o.path
+		if (o is AnWebImageObject) boxSource.text = o.url
+
+		paint(mainCanvas.graphicsContext2D)
 	}
 
 	protected fun onMenuAboutClicked() {

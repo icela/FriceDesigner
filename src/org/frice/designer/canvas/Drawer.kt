@@ -1,10 +1,7 @@
 package org.frice.designer.canvas
 
 import javafx.scene.canvas.GraphicsContext
-import org.frice.designer.code.AnObject
-import org.frice.designer.code.AnShapeObject
-import org.frice.designer.code.AnText
-import org.frice.designer.code.CodeData
+import org.frice.designer.code.*
 import java.awt.Color
 import java.util.*
 
@@ -13,7 +10,7 @@ import java.util.*
  *
  * @author ice1000
  */
-open class Drawer() {
+abstract class Drawer() {
 	protected val objects = object : LinkedList<AnObject>() {
 		override fun add(element: AnObject): Boolean {
 			objectChosen = element
@@ -30,6 +27,9 @@ open class Drawer() {
 
 	protected val codeData = CodeData()
 
+	protected abstract val width: Double
+	protected abstract val height: Double
+
 	protected var objectChosen: AnObject?
 		get() = codeData.objectChosen
 		set(value) {
@@ -37,6 +37,7 @@ open class Drawer() {
 		}
 
 	protected fun paint(g: GraphicsContext) {
+		g.clearRect(0.0, 0.0, width, height)
 		objects.forEach { o ->
 			when (o) {
 				is AnShapeObject -> {
@@ -50,6 +51,7 @@ open class Drawer() {
 					g.fill = fromColor(o.color)
 					g.fillText(o.text, o.x, o.y)
 				}
+				is AnPathImageObject -> g.drawImage(o.image, o.x, o.y, o.image.width, o.image.height)
 			}
 		}
 		if (objectChosen != null) {
