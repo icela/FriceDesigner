@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,12 @@ public class JavaFX extends Controller implements Initializable {
 	public Label projectName;
 	public Canvas mainCanvas;
 	public ScrollPane mainView;
+
+	public TextField boxX;
+	public TextField boxY;
+	public TextField boxWidth;
+	public TextField boxHeight;
+	public TextField boxSource;
 
 	@NotNull
 	@Override
@@ -115,5 +122,35 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	protected ScrollPane getMainView() {
 		return mainView;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxX() {
+		return boxX;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxY() {
+		return boxY;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxWidth() {
+		return boxWidth;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxHeight() {
+		return boxHeight;
+	}
+
+	@NotNull
+	@Override
+	public TextField getBoxSource() {
+		return boxSource;
 	}
 }

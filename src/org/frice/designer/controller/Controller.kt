@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.control.Accordion
 import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
+import javafx.scene.control.TextField
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode
@@ -32,6 +33,12 @@ abstract class Controller() : Drawer() {
 	protected abstract val webImageObjectChoice: Label
 	protected abstract val pathImageObjectChoice: Label
 
+	protected abstract val boxX: TextField
+	protected abstract val boxY: TextField
+	protected abstract val boxWidth: TextField
+	protected abstract val boxHeight: TextField
+	protected abstract val boxSource: TextField
+
 	private val shapeObject = "ShapeObject"
 	private val pathImageObject = "PathImageObject"
 	private val webImageObject = "WebImageObject"
@@ -57,35 +64,20 @@ abstract class Controller() : Drawer() {
 					))
 					paint(mainCanvas.graphicsContext2D)
 				}
+				pathImageObject -> FLog.d(currentSelection)
 			}
-			FLog.d("dragged")
 		}
-		shapeObjectChoice.setOnDragDetected {
-			val d = shapeObjectChoice.startDragAndDrop(TransferMode.MOVE)
-			d.setContent(ClipboardContent().apply {
-				putString(shapeObject)
-			})
-		}
-		shapeObjectChoice.setOnMousePressed {
-			shapeObjectChoice.textFill = Color.web("#0000FF")
-			currentSelection = shapeObject
-		}
-		shapeObjectChoice.setOnMouseReleased {
-			shapeObjectChoice.textFill = Color.web("#000000")
-		}
-		webImageObjectChoice.setOnMousePressed {
-			webImageObjectChoice.textFill = Color.web("#0000FF")
-			currentSelection = webImageObject
-		}
-		webImageObjectChoice.setOnMouseReleased {
-			webImageObjectChoice.textFill = Color.web("#000000")
-		}
-		pathImageObjectChoice.setOnMousePressed {
-			pathImageObjectChoice.textFill = Color.web("#0000FF")
-			currentSelection = pathImageObject
-		}
-		pathImageObjectChoice.setOnMouseReleased {
-			pathImageObjectChoice.textFill = Color.web("#000000")
+		shapeObjectChoice.setupChoice(shapeObject)
+		webImageObjectChoice.setupChoice(webImageObject)
+		pathImageObjectChoice.setupChoice(pathImageObject)
+	}
+
+	private fun Label.setupChoice(selection: String) {
+		setOnMouseEntered { textFill = Color.web("#0000FF") }
+		setOnMouseExited { textFill = Color.web("#000000") }
+		setOnDragDetected {
+			currentSelection = selection
+			startDragAndDrop(TransferMode.MOVE).run { setContent(ClipboardContent().apply { putString(selection) }) }
 		}
 	}
 

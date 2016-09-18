@@ -1,5 +1,7 @@
 package org.frice.designer.code
 
+import org.frice.game.anim.move.DoublePair
+import org.frice.game.utils.graphics.shape.FPoint
 import java.awt.Color
 import java.util.*
 
@@ -198,8 +200,12 @@ open class AnObject(
 		var y: Double,
 		var width: Double,
 		var height: Double,
-		var fieldName: String
-)
+		var fieldName: String) {
+	fun containsPoint(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
+	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())
+	infix fun containsPoint(point: FPoint) = containsPoint(point.x, point.y)
+	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
+}
 
 class AnShapeObject(
 		x: Double,
