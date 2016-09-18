@@ -14,7 +14,20 @@ import java.util.*
  * @author ice1000
  */
 open class Drawer() {
-	protected val objects = LinkedList<AnObject>()
+	protected val objects = object : LinkedList<AnObject>() {
+		override fun add(element: AnObject): Boolean {
+			objectChosen = element
+			codeData.objectList.add(element)
+			return super.add(element)
+		}
+
+		override fun remove(element: AnObject): Boolean {
+			objectChosen = null
+			codeData.objectList.remove(element)
+			return super.remove(element)
+		}
+	}
+
 	protected val codeData = CodeData()
 
 	protected var objectChosen: AnObject?

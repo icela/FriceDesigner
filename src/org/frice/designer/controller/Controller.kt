@@ -7,15 +7,16 @@ import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
 import javafx.scene.input.ClipboardContent
+import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import org.frice.designer.canvas.Drawer
-import org.frice.designer.code.AnObject
 import org.frice.designer.code.AnShapeObject
 import org.frice.designer.code.CodeData
 import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.message.log.FLog
+import org.frice.game.utils.misc.forceRun
 import java.util.*
 import javax.swing.JOptionPane
 
@@ -56,11 +57,14 @@ abstract class Controller() : Drawer() {
 	private val random = Random()
 
 	protected fun initialize() {
-		mainView.setOnDragOver { e -> e.acceptTransferModes(TransferMode.MOVE) }
+		mainView.setOnDragOver { e ->
+			e.acceptTransferModes(TransferMode.MOVE)
+		}
+
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObject -> {
-					addObject(AnShapeObject(e.x, e.y, 10.0, 10.0,
+					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
 							CodeData.SHAPE_OVAL
@@ -70,6 +74,7 @@ abstract class Controller() : Drawer() {
 				pathImageObject -> FLog.d(currentSelection)
 			}
 		}
+
 		mainView.setOnMouseClicked { e ->
 			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
 				codeData.objectChosen = o
@@ -78,25 +83,62 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxes = listOf(boxFieldName, boxHeight, boxWidth, boxSource, boxX, boxY)
-		shapeObjectChoice.setupChoice(shapeObject, {
+
+		shapeObjectChoice.setupChoice(shapeObject) {
 			boxSource.isDisable = true
-		})
-		webImageObjectChoice.setupChoice(webImageObject, {
+		}
+
+		webImageObjectChoice.setupChoice(webImageObject) {
 			boxColor.isDisable = true
-		})
-		pathImageObjectChoice.setupChoice(pathImageObject)
-		simpleTextChoice.setupChoice(simpleText)
+		}
+
+		pathImageObjectChoice.setupChoice(pathImageObject) {
+			boxColor.isDisable = true
+		}
+
+		simpleTextChoice.setupChoice(simpleText) {
+			boxHeight.isDisable = true
+			boxWidth.isDisable = true
+		}
+
+		boxX.setupClicked { v ->
+			objectChosen?.x = Integer.parseInt(v).toDouble()
+		}
+
+		boxY.setupClicked { v ->
+			objectChosen?.y = Integer.parseInt(v).toDouble()
+		}
+
+		boxWidth.setupClicked { v ->
+			objectChosen?.width = Integer.parseInt(v).toDouble()
+		}
+
+		boxHeight.setupClicked { v ->
+			objectChosen?.height = Integer.parseInt(v).toDouble()
+		}
 	}
 
-	private fun Label.setupChoice(selection: String, disable: () -> Unit = { }) {
+	private inline fun Label.setupChoice(selection: String, crossinline disable: () -> Unit) {
 		setOnMouseEntered { textFill = Color.web("#0000FF") }
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
 			currentSelection = selection
-			boxes.forEach { b -> b.isDisable = false }
+			boxes.forEach { b ->
+				b.isDisable = false
+			}
 			disable()
 			startDragAndDrop(TransferMode.MOVE).run {
-				setContent(ClipboardContent().apply { putString(selection) })
+				setContent(ClipboardContent().apply {
+					putString(selection)
+				})
+			}
+		}
+	}
+
+	private inline fun TextField.setupClicked(crossinline set: (String) -> Unit) {
+		setOnKeyPressed { e ->
+			if (e.code == KeyCode.ENTER) forceRun {
+				set(text)
 			}
 		}
 	}
@@ -104,20 +146,6 @@ abstract class Controller() : Drawer() {
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
 				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) System.exit(0)
-	}
-
-	private fun addObject(o: AnObject) {
-		objects.add(o)
-		codeData.objectList.add(o)
-		objectChosen = o
-		codeData.objectChosen = o
-	}
-
-	private fun removeObject(o: AnObject) {
-		objects.add(o)
-		codeData.objectList.add(o)
-		objectChosen = null
-		codeData.objectChosen = null
 	}
 
 	protected fun onMenuNew() {
