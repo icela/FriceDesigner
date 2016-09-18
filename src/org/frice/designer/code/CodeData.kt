@@ -28,9 +28,7 @@ class CodeData() {
 		val sb = StringBuffer()
 		objectList.forEach { o ->
 			when (language) {
-				LANGUAGE_SCALA -> {
-				}
-				LANGUAGE_JAVA -> {
+				LANGUAGE_SCALA, LANGUAGE_JAVA -> {
 					when (o) {
 						is AnShapeObject ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(0x${o.color.rgb}), ",
@@ -94,6 +92,8 @@ class CodeData() {
 import org.frice.game.*;
 import org.frice.game.obj.*;
 import org.frice.game.obj.sub.*;
+import org.frice.game.obj.button.*;
+import org.frice.game.obj.effects.*;
 import org.frice.game.resource.*;
 import org.frice.game.resource.graphics.*;
 import org.frice.game.anim.*;
@@ -135,6 +135,8 @@ public class %sGame extends Game {
 import org.frice.game.*
 import org.frice.game.obj.*
 import org.frice.game.obj.sub.*
+import org.frice.game.obj.button.*
+import org.frice.game.obj.effects.*
 import org.frice.game.resource.*
 import org.frice.game.resource.graphics.*
 import org.frice.game.anim.*
@@ -179,6 +181,8 @@ class %sGame() : Game() {
 import org.frice.game._
 import org.frice.game.obj._
 import org.frice.game.obj.sub._
+import org.frice.game.obj.button._
+import org.frice.game.obj.effects._
 import org.frice.game.resource._
 import org.frice.game.resource.graphics._
 import org.frice.game.anim._

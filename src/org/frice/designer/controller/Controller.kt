@@ -11,8 +11,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import org.frice.designer.canvas.Drawer
-import org.frice.designer.code.AnShapeObject
-import org.frice.designer.code.CodeData
+import org.frice.designer.code.*
 import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.message.log.FLog
@@ -72,12 +71,20 @@ abstract class Controller() : Drawer() {
 					paint(mainCanvas.graphicsContext2D)
 				}
 				pathImageObject -> FLog.d(currentSelection)
+				simpleText -> {
+					objects.add(AnText(e.x, e.y,
+							"simpleText${random.nextInt(99999)}",
+							ColorResource.IntelliJ_IDEA黑.color,
+							"Hello World"))
+					paint(mainCanvas.graphicsContext2D)
+				}
 			}
 		}
 
 		mainView.setOnMouseClicked { e ->
 			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
 				codeData.objectChosen = o
+				paint(mainCanvas.graphicsContext2D)
 				break
 			}
 		}
@@ -116,6 +123,16 @@ abstract class Controller() : Drawer() {
 		boxHeight.setupClicked { v ->
 			objectChosen?.height = Integer.parseInt(v).toDouble()
 		}
+
+		boxColor.setupClicked { c ->
+			if (objectChosen is AnText) (objectChosen as AnText).color = java.awt.Color.getColor(c)
+			if (objectChosen is AnShapeObject) (objectChosen as AnShapeObject).color = java.awt.Color.getColor(c)
+		}
+
+		boxSource.setupClicked { s ->
+			if (objectChosen is AnPathImageObject) (objectChosen as AnPathImageObject).path = (s)
+			if (objectChosen is AnWebImageObject) (objectChosen as AnWebImageObject).url = (s)
+		}
 	}
 
 	private inline fun Label.setupChoice(selection: String, crossinline disable: () -> Unit) {
@@ -140,6 +157,7 @@ abstract class Controller() : Drawer() {
 			if (e.code == KeyCode.ENTER) forceRun {
 				set(text)
 			}
+			paint(mainCanvas.graphicsContext2D)
 		}
 	}
 

@@ -55,10 +55,10 @@ open class Drawer() {
 		if (objectChosen != null) {
 			println("2333")
 			g.fill = fromColor(Color.BLUE)
-			g.strokeRect(objectChosen?.x!! - 5,
-					objectChosen?.y!! - 5,
-					objectChosen?.width!! + 5,
-					objectChosen?.height!! + 5)
+			g.strokeRect(objectChosen?.x!!,
+					objectChosen?.y!!,
+					objectChosen?.width!!,
+					objectChosen?.height!!)
 		}
 	}
 
