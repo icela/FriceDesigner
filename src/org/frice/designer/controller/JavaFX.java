@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,7 +18,9 @@ public class JavaFX extends Controller implements Initializable {
 
 	public Accordion widgetsList;
 
-	public Label shapeObjectChoice;
+	public Label ovalObjectChoice;
+
+	public Label rectangleObjectChoice;
 	public Label webImageObjectChoice;
 	public Label pathImageObjectChoice;
 
@@ -98,9 +99,8 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	@NotNull
-	public Label getShapeObjectChoice() {
-		new Color(0xfffff);
-		return shapeObjectChoice;
+	public Label getOvalObjectChoice() {
+		return ovalObjectChoice;
 	}
 
 	@NotNull
@@ -171,6 +171,12 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	public TextField getBoxColor() {
 		return boxColor;
+	}
+
+	@NotNull
+	@Override
+	public Label getRectangleObjectChoice() {
+		return rectangleObjectChoice;
 	}
 
 }

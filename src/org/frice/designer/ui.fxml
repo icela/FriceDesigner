@@ -64,7 +64,7 @@
         </MenuBar>
         <SplitPane dividerPositions="0.25, 0.75" focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <items>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+            <SplitPane dividerPositions="0.726605504587156" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
               <items>
                       <AnchorPane>
                      <children>
@@ -74,9 +74,10 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="shapeObjectChoice" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="193.0" text="ShapeObject" />
-                                          <Label fx:id="webImageObjectChoice" layoutX="14.0" layoutY="45.0" prefHeight="21.0" prefWidth="193.0" text="WebImageObject" />
-                                          <Label fx:id="pathImageObjectChoice" layoutX="14.0" layoutY="76.0" prefHeight="21.0" prefWidth="193.0" text="PathImageObject" />
+                                          <Label fx:id="ovalObjectChoice" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="193.0" text="Oval" />
+                                          <Label fx:id="webImageObjectChoice" layoutX="13.0" layoutY="79.0" prefHeight="21.0" prefWidth="193.0" text="WebImage" />
+                                          <Label fx:id="pathImageObjectChoice" layoutX="13.0" layoutY="110.0" prefHeight="21.0" prefWidth="193.0" text="LocalImage" />
+                                          <Label fx:id="rectangleObjectChoice" layoutX="13.0" layoutY="47.0" prefHeight="21.0" prefWidth="193.0" text="Rectangle" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -106,24 +107,28 @@
                <content>
                   <Canvas fx:id="mainCanvas" height="1000.0" width="1000.0" />
                </content></ScrollPane>
-                <AnchorPane>
-                    <children>
-                        <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <Label layoutX="9.0" layoutY="14.0" text="fieldName" />
-                  <Label layoutX="14.0" layoutY="86.0" text="x" />
-                  <TextField fx:id="boxX" layoutX="10.0" layoutY="106.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <TextField fx:id="boxY" layoutX="10.0" layoutY="184.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <Label layoutX="13.0" layoutY="164.0" text="y" />
-                  <Label layoutX="13.0" layoutY="235.0" text="width" />
-                  <TextField fx:id="boxWidth" layoutX="10.0" layoutY="255.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <TextField fx:id="boxHeight" layoutX="10.0" layoutY="332.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <Label layoutX="13.0" layoutY="312.0" text="height" />
-                  <Label layoutX="13.0" layoutY="384.0" text="source" />
-                  <TextField fx:id="boxSource" layoutX="10.0" layoutY="404.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <TextField fx:id="boxColor" layoutX="10.0" layoutY="475.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <Label layoutX="13.0" layoutY="455.0" text="color" />
-                    </children>
-                </AnchorPane>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+               <content>
+                      <AnchorPane prefHeight="644.0" prefWidth="213.0">
+                          <children>
+                              <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                              <Label layoutX="9.0" layoutY="14.0" text="fieldName" />
+                        <Label layoutX="14.0" layoutY="86.0" text="x" />
+                        <TextField fx:id="boxX" layoutX="10.0" layoutY="106.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <TextField fx:id="boxY" layoutX="10.0" layoutY="184.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="13.0" layoutY="164.0" text="y" />
+                        <Label layoutX="13.0" layoutY="235.0" text="width" />
+                        <TextField fx:id="boxWidth" layoutX="10.0" layoutY="255.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <TextField fx:id="boxHeight" layoutX="10.0" layoutY="332.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="13.0" layoutY="312.0" text="height" />
+                        <Label layoutX="13.0" layoutY="384.0" text="source" />
+                        <TextField fx:id="boxSource" layoutX="10.0" layoutY="404.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <TextField fx:id="boxColor" layoutX="10.0" layoutY="475.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="13.0" layoutY="455.0" text="color" />
+                          </children>
+                      </AnchorPane>
+               </content>
+            </ScrollPane>
             </items>
         </SplitPane>
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

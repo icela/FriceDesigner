@@ -250,27 +250,23 @@ class AnText(
 		fieldName: String,
 		var color: Color,
 		var text: String
-) : AnObject(x, y, 0.0, 0.0, fieldName)
+) : AnObject(x, y, -1.0, -1.0, fieldName)
 
 class AnPathImageObject(
 		x: Double,
 		y: Double,
-		width: Double,
-		height: Double,
 		fieldName: String,
 		var path: String
-) : AnObject(x, y, width, height, fieldName) {
+) : AnObject(x, y, -1.0, -1.0, fieldName) {
 	var image = Image(path)
 }
 
 class AnWebImageObject(
 		x: Double,
 		y: Double,
-		width: Double,
-		height: Double,
 		fieldName: String,
 		var url: String
-) : AnObject(x, y, width, height, fieldName)
+) : AnObject(x, y, -1.0, -1.0, fieldName)
 
 class UnknownLanguageException() : Exception("Language given is unknown.")
 

@@ -51,11 +51,13 @@ abstract class Drawer() {
 					g.fill = fromColor(o.color)
 					g.fillText(o.text, o.x, o.y)
 				}
-				is AnPathImageObject -> g.drawImage(o.image, o.x, o.y, o.image.width, o.image.height)
+				is AnPathImageObject -> {
+					println("drawing image")
+					g.drawImage(o.image, o.x, o.y, o.image.width, o.image.height)
+				}
 			}
 		}
 		if (objectChosen != null) {
-			println("2333")
 			g.fill = fromColor(Color.BLUE)
 			g.strokeRect(objectChosen?.x!!,
 					objectChosen?.y!!,

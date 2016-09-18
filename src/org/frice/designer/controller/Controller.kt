@@ -1,5 +1,6 @@
 package org.frice.designer.controller
 
+import com.eldath.alerts.ErrorAlert
 import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.Accordion
@@ -14,7 +15,6 @@ import org.frice.designer.canvas.Drawer
 import org.frice.designer.code.*
 import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.message.FDialog
-import org.frice.game.utils.misc.forceRun
 import java.util.*
 import javax.swing.JOptionPane
 
@@ -27,7 +27,8 @@ abstract class Controller() : Drawer() {
 
 	protected abstract val widgetsList: Accordion
 
-	protected abstract val shapeObjectChoice: Label
+	protected abstract val ovalObjectChoice: Label
+	protected abstract val rectangleObjectChoice: Label
 	protected abstract val webImageObjectChoice: Label
 	protected abstract val pathImageObjectChoice: Label
 	protected abstract val simpleTextChoice: Label
@@ -42,12 +43,13 @@ abstract class Controller() : Drawer() {
 
 	private lateinit var boxes: List<TextField>
 
-	private val shapeObject = "ShapeObject"
+	private val shapeObjectOval = "ShapeObjectOval"
+	private val shapeObjectRectangle = "ShapeObjectRectangle"
 	private val pathImageObject = "PathImageObject"
 	private val webImageObject = "WebImageObject"
 	private val simpleText = "SimpleText"
 
-	private var currentSelection = shapeObject
+	private var currentSelection = shapeObjectOval
 
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
@@ -67,11 +69,12 @@ abstract class Controller() : Drawer() {
 
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
-				shapeObject -> {
+				shapeObjectOval, shapeObjectRectangle -> {
 					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
-							CodeData.SHAPE_OVAL).apply {
+							if (currentSelection == shapeObjectOval) CodeData.SHAPE_OVAL
+							else CodeData.SHAPE_RECTANGLE).apply {
 						changeSelected(this)
 					})
 					paint(mainCanvas.graphicsContext2D)
@@ -85,6 +88,12 @@ abstract class Controller() : Drawer() {
 					})
 					paint(mainCanvas.graphicsContext2D)
 				}
+				pathImageObject -> {
+					objects.add(AnPathImageObject(e.x, e.y,
+							"pathImageObject${random.nextInt(99999)}", "").apply {
+						changeSelected(this)
+					})
+				}
 			}
 		}
 
@@ -96,11 +105,16 @@ abstract class Controller() : Drawer() {
 				break
 			}
 			if (!found) objectChosen = null
+			paint(mainCanvas.graphicsContext2D)
 		}
 
 		boxes = listOf(boxFieldName, boxHeight, boxWidth, boxSource, boxX, boxY)
 
-		shapeObjectChoice.setupChoice(shapeObject) {
+		ovalObjectChoice.setupChoice(shapeObjectOval) {
+			boxSource.isDisable = true
+		}
+
+		rectangleObjectChoice.setupChoice(shapeObjectRectangle) {
 			boxSource.isDisable = true
 		}
 
@@ -134,8 +148,12 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxColor.setupClicked { c ->
-			if (objectChosen is AnText) (objectChosen as AnText).color = java.awt.Color.getColor(c)
-			if (objectChosen is AnShapeObject) (objectChosen as AnShapeObject).color = java.awt.Color.getColor(c)
+			if (objectChosen is AnText)
+				(objectChosen as AnText).color = java.awt.Color(Integer.parseInt(c))
+			if (objectChosen is AnShapeObject) {
+				(objectChosen as AnShapeObject).color = java.awt.Color(Integer.parseInt(c))
+				println("shape color changed")
+			}
 		}
 
 		boxSource.setupClicked { s ->
@@ -167,8 +185,10 @@ abstract class Controller() : Drawer() {
 
 	private inline fun TextField.setupClicked(crossinline set: (String) -> Unit) {
 		setOnKeyPressed { e ->
-			if (e.code == KeyCode.ENTER) forceRun {
+			if (e.code == KeyCode.ENTER) try {
 				set(text)
+			} catch (throwable: Throwable) {
+				ErrorAlert("value invalid", throwable)
 			}
 			paint(mainCanvas.graphicsContext2D)
 		}
