@@ -2,10 +2,7 @@ package org.frice.designer.controller
 
 import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
-import javafx.scene.control.Accordion
-import javafx.scene.control.Label
-import javafx.scene.control.ScrollPane
-import javafx.scene.control.TextField
+import javafx.scene.control.*
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
@@ -17,6 +14,7 @@ import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.misc.forceRun
+import java.io.File
 import java.util.*
 import javax.swing.JOptionPane
 
@@ -43,6 +41,8 @@ abstract class Controller() : Drawer() {
 	protected abstract val boxFieldName: TextField
 	protected abstract val boxColor: TextField
 
+	protected abstract val messageBox: TextArea
+
 	private lateinit var boxes: List<TextField>
 
 	private var currentSelection = shapeObjectOval
@@ -51,6 +51,8 @@ abstract class Controller() : Drawer() {
 	protected abstract val mainView: ScrollPane
 
 	private val random = Random()
+
+	private var workingFile: File? = null
 
 	override val width: Double
 		get() = mainCanvas.width
@@ -64,14 +66,10 @@ abstract class Controller() : Drawer() {
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
 			mainView.requestFocus()
-//			objectChosen?.let {
-//				objectChosen?.x = e.x
-//				objectChosen?.y = e.y
-//				repaint()
-//			}
 		}
 
 		mainView.setOnDragDropped { e ->
+			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added."
 			when (currentSelection) {
 				shapeObjectOval, shapeObjectRectangle -> {
 					val temp = AnShapeObject(e.x, e.y, 30.0, 30.0,
@@ -110,17 +108,28 @@ abstract class Controller() : Drawer() {
 						b.isDisable = false
 					}
 					changeSelected(o, index)
+					messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
 					found = true
 					break
 				}
 				++index
 			}
-			if (!found) objectChosen = null
+			if (!found) {
+				objectChosen = null
+				messageBox.text = "position: (${e.x}, ${e.y})\nno objects selected."
+			}
 			repaint()
 		}
 
 		mainView.setOnKeyPressed { e ->
-			if (e.code == KeyCode.DELETE) onMenuDeleteClicked()
+			when (e.code) {
+				KeyCode.DELETE -> onMenuDeleteClicked()
+				KeyCode.N -> if (e.isControlDown) onMenuNew()
+				KeyCode.S -> if (e.isControlDown) onMenuSave()
+				KeyCode.W -> if (e.isControlDown) onMenuExit()
+				else -> {
+				}
+			}
 		}
 
 		boxes = listOf(
@@ -175,7 +184,6 @@ abstract class Controller() : Drawer() {
 				(objectChosen as AnText).color = java.awt.Color(Integer.parseInt(c))
 			if (objectChosen is AnShapeObject) {
 				(objectChosen as AnShapeObject).color = java.awt.Color(Integer.parseInt(c))
-				println("shape color changed")
 			}
 		}
 
@@ -192,6 +200,9 @@ abstract class Controller() : Drawer() {
 
 	protected fun onMenuDeleteClicked() {
 		if (objectIndexChosen != null) {
+			messageBox.text = """menu item: delete
+operation detected.
+object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y})"""
 			objects.removeAt(objectIndexChosen!!)
 			objectChosen = null
 			repaint()
@@ -232,22 +243,43 @@ abstract class Controller() : Drawer() {
 	}
 
 	protected fun onMenuNew() {
-		val s = FDialog(null).input()
-		setTitle(s)
+		FileChooser().showOpenDialog(null)
+		messageBox.text = "menu item: new\noperation detected."
+	}
+
+	protected fun onMenuToolsExportFileClicked() {
+		val file = FileChooser().apply {
+			if (workingFile != null) initialDirectory = workingFile!!.parentFile
+			initialFileName = "ThisGame.java"
+		}.showOpenDialog(null)
+		messageBox.text = "menu item: export java.\noperation detected.\n\npath:\n$file"
+		FileUtils.string2File(codeData.getCode(CodeData.LANGUAGE_JAVA), file)
+	}
+
+	protected fun onMenuToolsJarClicked() {
+	}
+
+	protected fun onMenuToolsCompileClicked() {
 	}
 
 	protected fun onMenuSave() {
-		FileUtils.string2File(codeData.toString(), FileChooser().apply {
-			initialFileName = "save.txt"
-		}.showSaveDialog(null))
+		if (workingFile == null)
+			workingFile = FileChooser().apply {
+				initialFileName = "save.txt"
+			}.showSaveDialog(null)
+		FileUtils.string2File(codeData.toString(), workingFile!!)
+		messageBox.text = "menu item: save\noperation detected.\n\npath:\n$workingFile"
+
 	}
 
 	protected fun onMenuPreference() {
 	}
 
 	protected fun onMenuOpen() {
-		codeData = CodeData.fromString(FileChooser().apply {
-		}.showOpenDialog(null).readText())
+		workingFile = FileChooser().showOpenDialog(null)
+		messageBox.text = "menu item: open\noperation detected.\n\npath:\n$workingFile"
+		codeData = CodeData.fromString(workingFile!!.readText())
+		repaint()
 	}
 
 	/**

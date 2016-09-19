@@ -4,10 +4,7 @@ import com.eldath.alerts.InfoAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.frice.designer.code.CodeData;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +35,8 @@ public class JavaFX extends Controller implements Initializable {
 	public TextField boxSource;
 	public TextField boxFieldName;
 	public TextField boxColor;
+
+	public TextArea messageBox;
 
 	@NotNull
 	@Override
@@ -86,19 +85,20 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	public void onMenuJavaCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_JAVA, projectName.getText()));
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_JAVA));
 	}
 
 	public void onMenuKotlinCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_KOTLIN, projectName.getText()));
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_KOTLIN));
 	}
 
 	public void onMenuScalaCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_SCALA, projectName.getText()));
+		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_SCALA));
 	}
 
 
 	public void onMenuToolsCompileClicked(ActionEvent event) {
+		super.onMenuToolsCompileClicked();
 	}
 
 	@NotNull
@@ -182,7 +182,21 @@ public class JavaFX extends Controller implements Initializable {
 		return rectangleObjectChoice;
 	}
 
+	@NotNull
+	@Override
+	public TextArea getMessageBox() {
+		return messageBox;
+	}
+
 	public void onMenuDeleteClicked(ActionEvent event) {
 		super.onMenuDeleteClicked();
+	}
+
+	public void onMenuToolsExportFileClicked(ActionEvent event) {
+		super.onMenuToolsExportFileClicked();
+	}
+
+	public void onMenuToolsJarClicked(ActionEvent event) {
+		super.onMenuToolsJarClicked();
 	}
 }

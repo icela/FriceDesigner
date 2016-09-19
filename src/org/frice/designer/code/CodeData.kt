@@ -13,12 +13,10 @@ class CodeData() {
 	var objectList = LinkedList<AnObject>()
 	var objectChosen: AnObject? = null
 
-	fun getCode(language: Int, name: String): String = when (language) {
+	fun getCode(language: Int): String = when (language) {
 		LANGUAGE_JAVA -> String.format(javaCode, buildFieldCodes(language), buildInitCodes(language))
-		LANGUAGE_KOTLIN -> String.format(kotlinCode, buildFieldCodes(language),
-				buildInitCodes(language))
-		LANGUAGE_SCALA -> String.format(scalaCode, buildFieldCodes(language),
-				buildInitCodes(language))
+		LANGUAGE_KOTLIN -> String.format(kotlinCode, buildFieldCodes(language), buildInitCodes(language))
+		LANGUAGE_SCALA -> String.format(scalaCode, buildFieldCodes(language), buildInitCodes(language))
 		else -> throw UnknownLanguageException()
 	}
 

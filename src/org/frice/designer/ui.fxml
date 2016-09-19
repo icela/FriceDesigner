@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
@@ -7,6 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.frice.designer.controller.JavaFX">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -48,8 +54,9 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Tools">
               <items>
-                <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Compile..." />
-                  <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Export Jar..." />
+                <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Export Compiled" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuToolsExportFileClicked" text="Export Java" />
+                  <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsJarClicked" text="Export Jar..." />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -112,7 +119,10 @@
                         </Accordion>
                      </children>
                       </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane prefHeight="159.0" prefWidth="221.0">
+                     <children>
+                        <TextArea fx:id="messageBox" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="System message" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children></AnchorPane>
               </items>
             </SplitPane>
                 <ScrollPane fx:id="mainView" prefHeight="545.0" prefWidth="314.0">
