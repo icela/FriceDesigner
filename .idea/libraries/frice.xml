@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="engine">
+  <library name="frice">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../FriceEngine/out/artifacts/frice/engine.jar!/" />
     </CLASSES>
