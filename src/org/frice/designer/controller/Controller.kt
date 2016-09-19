@@ -251,8 +251,8 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		val file = FileChooser().apply {
 			if (workingFile != null) initialDirectory = workingFile!!.parentFile
 			initialFileName = "ThisGame.java"
-		}.showOpenDialog(null)
-		messageBox.text = "menu item: export java.\noperation detected.\n\npath:\n$file"
+		}.showSaveDialog(null)
+		messageBox.text = "menu item: export java.\noperation detected.\n\npath:\n$file\nclass name: ThisGame"
 		FileUtils.string2File(codeData.getCode(CodeData.LANGUAGE_JAVA), file)
 	}
 
