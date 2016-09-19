@@ -163,11 +163,11 @@ import org.frice.game.utils.web.*;
  */
 public class ThisGame extends Game {
 
-%source
+%s
 
 	@Override
 	protected void onInit() {
-%source
+%s
 	}
 
 	public static void main(String[] args) {
@@ -208,10 +208,10 @@ import org.frice.game.utils.web.*
  */
 class ThisGame() : Game() {
 
-%source
+%s
 
 	override fun onInit() {
-%source
+%s
 	}
 
 	companion object {
@@ -254,10 +254,10 @@ import org.frice.game.utils.web._
  */
 class ThisGame extends Game {
 
-%source
+%s
 
 	override def onInit(): Unit = {
-%source
+%s
 	}
 
 object ThisGame {
