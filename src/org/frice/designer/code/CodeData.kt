@@ -250,7 +250,7 @@ class AnText(
 		fieldName: String,
 		var color: Color,
 		var text: String
-) : AnObject(x, y, -1.0, -1.0, fieldName)
+) : AnObject(x, y, text.length * 8.0, 16.0, fieldName)
 
 class AnPathImageObject(
 		x: Double,

@@ -157,8 +157,9 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxSource.setupClicked { s ->
-			if (objectChosen is AnPathImageObject) (objectChosen as AnPathImageObject).path = (s)
-			if (objectChosen is AnWebImageObject) (objectChosen as AnWebImageObject).url = (s)
+			if (objectChosen is AnPathImageObject) (objectChosen as AnPathImageObject).path = s
+			if (objectChosen is AnWebImageObject) (objectChosen as AnWebImageObject).url = s
+			if (objectChosen is AnText) (objectChosen as AnText).text = s
 		}
 
 		boxFieldName.setupClicked { n ->

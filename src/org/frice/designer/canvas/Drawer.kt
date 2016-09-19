@@ -49,7 +49,7 @@ abstract class Drawer() {
 				}
 				is AnText -> {
 					g.fill = fromColor(o.color)
-					g.fillText(o.text, o.x, o.y)
+					g.fillText(o.text, o.x + 2, o.y + 13)
 				}
 				is AnPathImageObject -> {
 					println("drawing image")
