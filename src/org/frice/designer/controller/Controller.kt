@@ -59,59 +59,72 @@ abstract class Controller() : Drawer() {
 		get() = mainCanvas.height
 
 	protected fun initialize() {
-		paint(mainCanvas.graphicsContext2D)
+		repaint()
 
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
+			mainView.requestFocus()
 //			objectChosen?.let {
 //				objectChosen?.x = e.x
 //				objectChosen?.y = e.y
-//				paint(mainCanvas.graphicsContext2D)
+//				repaint()
 //			}
 		}
 
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObjectOval, shapeObjectRectangle -> {
-					objects.add(AnShapeObject(e.x, e.y, 30.0, 30.0,
+					val temp = AnShapeObject(e.x, e.y, 30.0, 30.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
 							if (currentSelection == shapeObjectOval) CodeData.SHAPE_OVAL
-							else CodeData.SHAPE_RECTANGLE).apply {
-						changeSelected(this)
-					})
-					paint(mainCanvas.graphicsContext2D)
+							else CodeData.SHAPE_RECTANGLE)
+					objects.add(temp)
+					changeSelected(temp)
+					repaint()
 				}
 				simpleText -> {
-					objects.add(AnText(e.x, e.y,
+					val temp = AnText(e.x, e.y,
 							"simpleText${random.nextInt(99999)}",
 							ColorResource.WHITE.color,
-							"Hello World").apply {
-						changeSelected(this)
-					})
-					paint(mainCanvas.graphicsContext2D)
+							"Hello World")
+					objects.add(temp)
+					changeSelected(temp)
+					repaint()
 				}
 				pathImageObject -> {
-					objects.add(AnPathImageObject(e.x, e.y,
-							"pathImageObject${random.nextInt(99999)}", "").apply {
-						changeSelected(this)
-					})
+					val temp = AnPathImageObject(e.x, e.y,
+							"pathImageObject${random.nextInt(99999)}", "")
+					objects.add(temp)
+					changeSelected(temp)
 				}
 			}
 		}
 
 		mainView.setOnMouseClicked { e ->
 			var found = false
-			for (o in objects) if (o.containsPoint(e.x, e.y)) {
-				boxes.forEach { b ->
-					b.isDisable = false
+			var index = 0
+			for (o in objects) {
+				if (o.containsPoint(e.x, e.y)) {
+					boxes.forEach { b ->
+						b.isDisable = false
+					}
+					changeSelected(o, index)
+					found = true
+					break
 				}
-				changeSelected(o)
-				found = true
-				break
+				++index
 			}
 			if (!found) objectChosen = null
-			paint(mainCanvas.graphicsContext2D)
+			repaint()
+		}
+
+		mainView.setOnKeyPressed { e ->
+			if (e.code == KeyCode.DELETE && objectIndexChosen != null) {
+				objects.removeAt(objectIndexChosen!!)
+				objectChosen = null
+				repaint()
+			}
 		}
 
 		boxes = listOf(
@@ -203,9 +216,11 @@ abstract class Controller() : Drawer() {
 			if (e.code == KeyCode.ENTER) forceRun {
 				set(text)
 			}
-			paint(mainCanvas.graphicsContext2D)
+			repaint()
 		}
 	}
+
+	private fun repaint() = paint(mainCanvas.graphicsContext2D)
 
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
@@ -214,6 +229,7 @@ abstract class Controller() : Drawer() {
 
 	protected fun onMenuNew() {
 		val s = FDialog(null).input()
+		setTitle(s)
 	}
 
 	protected fun onMenuSave() {
@@ -233,8 +249,9 @@ abstract class Controller() : Drawer() {
 	/**
 	 * change the selected object
 	 */
-	private fun changeSelected(o: AnObject) {
+	private fun changeSelected(o: AnObject, index: Int = objects.lastIndex) {
 		objectChosen = o
+		objectIndexChosen = index
 		boxFieldName.text = o.fieldName
 		boxX.text = "${o.x}"
 		boxY.text = "${o.y}"
@@ -250,7 +267,7 @@ abstract class Controller() : Drawer() {
 		if (o is AnPathImageObject) boxSource.text = o.path
 		if (o is AnWebImageObject) boxSource.text = o.url
 
-		paint(mainCanvas.graphicsContext2D)
+		repaint()
 	}
 
 	protected fun onMenuAboutClicked() {

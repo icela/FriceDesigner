@@ -126,7 +126,7 @@
                </content></ScrollPane>
             <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <content>
-                      <AnchorPane prefHeight="644.0" prefWidth="213.0">
+                      <AnchorPane prefHeight="644.0" prefWidth="212.0">
                           <children>
                               <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                               <Label layoutX="9.0" layoutY="14.0" text="fieldName" />
@@ -143,6 +143,9 @@
                         <TextField fx:id="boxColor" layoutX="10.0" layoutY="475.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label layoutX="13.0" layoutY="455.0" text="color" />
                           </children>
+                     <padding>
+                        <Insets left="1.0" right="1.0" />
+                     </padding>
                       </AnchorPane>
                </content>
             </ScrollPane>

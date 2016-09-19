@@ -26,8 +26,11 @@ abstract class Drawer() {
 	protected var objectChosen: AnObject?
 		get() = codeData.objectChosen
 		set(value) {
+			if (value == null) objectIndexChosen = null
 			codeData.objectChosen = value
 		}
+
+	protected var objectIndexChosen: Int? = null
 
 	protected fun paint(g: GraphicsContext) {
 		g.fill = fromColor(ColorResource.LIGHT_GRAY.color)
@@ -46,7 +49,6 @@ abstract class Drawer() {
 					g.fillText(o.text, o.x + 2, o.y + 13)
 				}
 				is AnPathImageObject -> {
-					println("drawing image")
 					o.image?.let {
 						g.drawImage(o.image, o.x, o.y, o.image!!.width, o.image!!.height)
 					}

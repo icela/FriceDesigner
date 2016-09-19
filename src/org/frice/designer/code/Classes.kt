@@ -66,9 +66,6 @@ class AnPathImageObject(
 		}
 
 	init {
-		forceRun {
-			image = Image(path)
-		}
 		this.path = path
 	}
 }
@@ -77,8 +74,19 @@ class AnWebImageObject(
 		x: Double,
 		y: Double,
 		fieldName: String,
-		var url: String
-) : AnObject(x, y, -1.0, -1.0, fieldName)
+		url: String
+) : AnObject(x, y, -1.0, -1.0, fieldName) {
+	var image: Image? = null
+	var url: String = ""
+		set(value) {
+			field = value
+			image = Image(value)
+		}
+
+	init {
+		this.url = url
+	}
+}
 
 class UnknownLanguageException() : Exception("Language given is unknown.")
 
