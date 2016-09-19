@@ -57,12 +57,14 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	public void onMenuSaveClicked(ActionEvent event) {
+		super.onMenuSave();
 	}
 
 	public void onMenuCloseClicked(ActionEvent event) {
 	}
 
 	public void onMenuSaveAsClicked(ActionEvent event) {
+		super.onMenuSave();
 	}
 
 	public void onMenuPreferenceClicked(ActionEvent event) {

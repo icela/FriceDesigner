@@ -1,6 +1,5 @@
 package org.frice.designer.controller
 
-import com.eldath.alerts.ErrorAlert
 import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.Accordion
@@ -11,10 +10,13 @@ import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
+import javafx.stage.FileChooser
 import org.frice.designer.canvas.Drawer
 import org.frice.designer.code.*
 import org.frice.game.resource.graphics.ColorResource
+import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
+import org.frice.game.utils.misc.forceRun
 import java.util.*
 import javax.swing.JOptionPane
 
@@ -43,12 +45,6 @@ abstract class Controller() : Drawer() {
 
 	private lateinit var boxes: List<TextField>
 
-	private val shapeObjectOval = "ShapeObjectOval"
-	private val shapeObjectRectangle = "ShapeObjectRectangle"
-	private val pathImageObject = "PathImageObject"
-	private val webImageObject = "WebImageObject"
-	private val simpleText = "SimpleText"
-
 	private var currentSelection = shapeObjectOval
 
 	protected abstract val mainCanvas: Canvas
@@ -65,6 +61,11 @@ abstract class Controller() : Drawer() {
 	protected fun initialize() {
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
+			objectChosen?.let {
+				objectChosen?.x = e.x
+				objectChosen?.y = e.y
+				paint(mainCanvas.graphicsContext2D)
+			}
 		}
 
 		mainView.setOnDragDropped { e ->
@@ -100,6 +101,9 @@ abstract class Controller() : Drawer() {
 		mainView.setOnMouseClicked { e ->
 			var found = false
 			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
+				boxes.forEach { b ->
+					b.isDisable = false
+				}
 				changeSelected(o)
 				found = true
 				break
@@ -108,7 +112,15 @@ abstract class Controller() : Drawer() {
 			paint(mainCanvas.graphicsContext2D)
 		}
 
-		boxes = listOf(boxFieldName, boxHeight, boxWidth, boxSource, boxX, boxY)
+		boxes = listOf(
+				boxFieldName,
+				boxHeight,
+				boxWidth,
+				boxSource,
+				boxX,
+				boxY,
+				boxColor
+		)
 
 		ovalObjectChoice.setupChoice(shapeObjectOval) {
 			boxSource.isDisable = true
@@ -186,10 +198,8 @@ abstract class Controller() : Drawer() {
 
 	private inline fun TextField.setupClicked(crossinline set: (String) -> Unit) {
 		setOnKeyPressed { e ->
-			if (e.code == KeyCode.ENTER) try {
+			if (e.code == KeyCode.ENTER) forceRun {
 				set(text)
-			} catch (throwable: Throwable) {
-				ErrorAlert("value invalid", throwable)
 			}
 			paint(mainCanvas.graphicsContext2D)
 		}
@@ -205,6 +215,7 @@ abstract class Controller() : Drawer() {
 	}
 
 	protected fun onMenuSave() {
+		FileUtils.string2File(codeData.toString(), FileChooser().showSaveDialog(null))
 	}
 
 	protected fun onMenuPreference() {
@@ -250,5 +261,15 @@ Chinese:
 	}
 
 	protected abstract fun setTitle(string: String)
+
+	companion object {
+		val fObject = "FObject"
+		val shapeObject = "ShapeObject"
+		val shapeObjectOval = "ShapeObjectOval"
+		val shapeObjectRectangle = "ShapeObjectRectangle"
+		val pathImageObject = "PathImageObject"
+		val webImageObject = "WebImageObject"
+		val simpleText = "SimpleText"
+	}
 
 }

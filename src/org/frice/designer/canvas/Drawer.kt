@@ -57,6 +57,10 @@ abstract class Drawer() {
 				}
 			}
 		}
+		paintObjectChosen(g)
+	}
+
+	protected infix fun paintObjectChosen(g: GraphicsContext) {
 		if (objectChosen != null) {
 			g.fill = fromColor(Color.BLUE)
 			g.strokeRect(objectChosen?.x!!,
