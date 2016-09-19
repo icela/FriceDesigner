@@ -50,6 +50,7 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	public void onMenuOpenClicked(ActionEvent event) {
+		super.onMenuOpen();
 	}
 
 	public void onMenuExitClicked(ActionEvent event) {

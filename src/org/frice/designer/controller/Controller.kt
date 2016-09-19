@@ -100,7 +100,7 @@ abstract class Controller() : Drawer() {
 
 		mainView.setOnMouseClicked { e ->
 			var found = false
-			for (o in codeData.objectList) if (o.containsPoint(e.x, e.y)) {
+			for (o in objects) if (o.containsPoint(e.x, e.y)) {
 				boxes.forEach { b ->
 					b.isDisable = false
 				}
@@ -215,17 +215,24 @@ abstract class Controller() : Drawer() {
 	}
 
 	protected fun onMenuSave() {
-		FileUtils.string2File(codeData.toString(), FileChooser().showSaveDialog(null))
+		FileUtils.string2File(codeData.toString(), FileChooser().apply {
+			initialFileName = "save.txt"
+		}.showSaveDialog(null))
 	}
 
 	protected fun onMenuPreference() {
+	}
+
+	protected fun onMenuOpen() {
+		codeData = CodeData.fromString(FileChooser().apply {
+		}.showOpenDialog(null).readText())
 	}
 
 	/**
 	 * change the selected object
 	 */
 	private fun changeSelected(o: AnObject) {
-		codeData.objectChosen = o
+		objectChosen = o
 		boxFieldName.text = o.fieldName
 		boxX.text = "${o.x}"
 		boxY.text = "${o.y}"

@@ -14,7 +14,7 @@ import java.util.*
  * @author ice1000
  */
 class CodeData() {
-	val objectList = LinkedList<AnObject>()
+	var objectList = LinkedList<AnObject>()
 	var objectChosen: AnObject? = null
 
 	fun getCode(language: Int, name: String): String = when (language) {
@@ -86,12 +86,14 @@ class CodeData() {
 	override fun toString(): String {
 		val s = StringBuffer()
 		objectList.forEach { o ->
-			s.append("${typeOf(o)} ${o.x} ${o.y} ${o.width} ${o.height} ${o.fieldName} ")
-			///           0           1      2        3           4             5
+			s.append("${typeOf(o)} ${o.x.toInt()} ${o.y.toInt()} ${o.width.toInt()} ${o.height.toInt()}",
+					///     0             1             2               3                   4
+					" ${o.fieldName} ")
+			///                5
 			when (o) {
-				is AnText -> s.append("${o.text} ${o.color}")
+				is AnText -> s.append("${o.text} ${o.color.rgb}")
 			///                            6         7
-				is AnShapeObject -> s.append("${o.shape} ${o.color}")
+				is AnShapeObject -> s.append("${o.shape} ${o.color.rgb}")
 			///                                    6          7
 				is AnPathImageObject -> s.append("${o.path}")
 			///                                        6

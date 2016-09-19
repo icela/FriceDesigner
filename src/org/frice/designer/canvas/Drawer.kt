@@ -11,21 +11,13 @@ import java.util.*
  * @author ice1000
  */
 abstract class Drawer() {
-	protected val objects = object : LinkedList<AnObject>() {
-		override fun add(element: AnObject): Boolean {
-			objectChosen = element
-			codeData.objectList.add(element)
-			return super.add(element)
+	protected var objects: LinkedList<AnObject>
+		get () = codeData.objectList
+		set(value) {
+			codeData.objectList = value
 		}
 
-		override fun remove(element: AnObject): Boolean {
-			objectChosen = null
-			codeData.objectList.remove(element)
-			return super.remove(element)
-		}
-	}
-
-	protected val codeData = CodeData()
+	protected var codeData = CodeData()
 
 	protected abstract val width: Double
 	protected abstract val height: Double
