@@ -82,9 +82,9 @@ class CodeData() {
 	override fun toString(): String {
 		val s = StringBuffer()
 		objectList.forEach { o ->
-			s.append("${typeOf(o)} ${o.x.toInt()} ${o.y.toInt()} ${o.width.toInt()} ${o.height.toInt()}",
+			s.append("${typeOf(o)} ${o.x.toInt()} ${o.y.toInt()} ${o.width.toInt()} ${o.height.toInt()} ",
 					///     0             1             2               3                   4
-					" ${o.fieldName} ")
+					"${o.fieldName} ")
 			///                5
 			when (o) {
 				is AnText -> s.append("${o.text} ${o.color.rgb}")
@@ -118,7 +118,7 @@ class CodeData() {
 							o[1].toDouble(),
 							o[2].toDouble(),
 							o[5],
-							Color.getColor(o[7]),
+							Color(o[7].toInt()),
 							o[6]
 					))
 					Controller.shapeObject -> data.objectList.add(AnShapeObject(
@@ -127,7 +127,7 @@ class CodeData() {
 							o[3].toDouble(),
 							o[4].toDouble(),
 							o[5],
-							Color.getColor(o[7]),
+							Color(o[7].toInt()),
 							o[6].toInt()
 					))
 				}
@@ -143,6 +143,7 @@ import org.frice.game.obj.button.*;
 import org.frice.game.obj.effects.*;
 import org.frice.game.resource.*;
 import org.frice.game.resource.graphics.*;
+import org.frice.game.resource.image.*;
 import org.frice.game.anim.*;
 import org.frice.game.anim.move.*;
 import org.frice.game.anim.scale.*;
@@ -186,6 +187,7 @@ import org.frice.game.obj.sub.*
 import org.frice.game.obj.button.*
 import org.frice.game.obj.effects.*
 import org.frice.game.resource.*
+import org.frice.game.resource.image.*
 import org.frice.game.resource.graphics.*
 import org.frice.game.anim.*
 import org.frice.game.anim.move.*
@@ -231,6 +233,7 @@ import org.frice.game.obj.sub._
 import org.frice.game.obj.button._
 import org.frice.game.obj.effects._
 import org.frice.game.resource._
+import org.frice.game.resource.image._
 import org.frice.game.resource.graphics._
 import org.frice.game.anim._
 import org.frice.game.anim.move._

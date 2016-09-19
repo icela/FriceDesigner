@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
@@ -71,28 +72,43 @@
                      <children>
                         <Accordion fx:id="widgetsList" prefHeight="547.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <panes>
-                            <TitledPane animated="false" text="Objects">
+                            <TitledPane text="Objects">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="ovalObjectChoice" layoutX="14.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="Oval" />
-                                          <Label fx:id="webImageObjectChoice" layoutX="13.0" layoutY="79.0" prefHeight="21.0" prefWidth="193.0" text="WebImage" />
-                                          <Label fx:id="pathImageObjectChoice" layoutX="13.0" layoutY="110.0" prefHeight="21.0" prefWidth="193.0" text="LocalImage" />
-                                          <Label fx:id="rectangleObjectChoice" layoutX="13.0" layoutY="47.0" prefHeight="21.0" prefWidth="193.0" text="Rectangle" />
+                                          <Label fx:id="ovalObjectChoice" layoutX="14.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="Oval">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor></Label>
+                                          <Label fx:id="webImageObjectChoice" layoutX="13.0" layoutY="79.0" prefHeight="21.0" prefWidth="193.0" text="WebImage">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor></Label>
+                                          <Label fx:id="pathImageObjectChoice" layoutX="13.0" layoutY="110.0" prefHeight="21.0" prefWidth="193.0" text="LocalImage">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor></Label>
+                                          <Label fx:id="rectangleObjectChoice" layoutX="13.0" layoutY="47.0" prefHeight="21.0" prefWidth="193.0" text="Rectangle">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor></Label>
                                        </children>
                                     </AnchorPane>
                               </content>
                             </TitledPane>
-                            <TitledPane animated="false" text="Effects">
+                            <TitledPane text="Effects">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
                             </TitledPane>
-                            <TitledPane animated="false" text="Widgets">
+                            <TitledPane text="Widgets">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="simpleTextChoice" layoutX="13.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="SimpleText" />
+                                          <Label fx:id="simpleTextChoice" layoutX="13.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="SimpleText">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor></Label>
                                        </children>
                                     </AnchorPane>
                               </content>

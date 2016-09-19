@@ -63,17 +63,17 @@ abstract class Controller() : Drawer() {
 
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
-			objectChosen?.let {
-				objectChosen?.x = e.x
-				objectChosen?.y = e.y
-				paint(mainCanvas.graphicsContext2D)
-			}
+//			objectChosen?.let {
+//				objectChosen?.x = e.x
+//				objectChosen?.y = e.y
+//				paint(mainCanvas.graphicsContext2D)
+//			}
 		}
 
 		mainView.setOnDragDropped { e ->
 			when (currentSelection) {
 				shapeObjectOval, shapeObjectRectangle -> {
-					objects.add(AnShapeObject(e.x, e.y, 10.0, 10.0,
+					objects.add(AnShapeObject(e.x, e.y, 30.0, 30.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
 							if (currentSelection == shapeObjectOval) CodeData.SHAPE_OVAL
@@ -85,7 +85,7 @@ abstract class Controller() : Drawer() {
 				simpleText -> {
 					objects.add(AnText(e.x, e.y,
 							"simpleText${random.nextInt(99999)}",
-							ColorResource.IntelliJ_IDEA黑.color,
+							ColorResource.WHITE.color,
 							"Hello World").apply {
 						changeSelected(this)
 					})
@@ -256,6 +256,7 @@ abstract class Controller() : Drawer() {
 	protected fun onMenuAboutClicked() {
 		InfoAlert("""Copyright(c) 2016 Frice Engine Designer
 Under Apache 2.0 License.
+
 
 English:
 Author: ice1000

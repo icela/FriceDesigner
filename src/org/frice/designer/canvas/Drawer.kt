@@ -47,7 +47,9 @@ abstract class Drawer() {
 				}
 				is AnPathImageObject -> {
 					println("drawing image")
-					g.drawImage(o.image, o.x, o.y, o.image.width, o.image.height)
+					o.image?.let {
+						g.drawImage(o.image, o.x, o.y, o.image!!.width, o.image!!.height)
+					}
 				}
 			}
 		}

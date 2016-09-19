@@ -58,7 +58,7 @@ class AnPathImageObject(
 		fieldName: String,
 		path: String
 ) : AnObject(x, y, -1.0, -1.0, fieldName) {
-	var image = Image(path)
+	var image: Image? = null
 	var path: String = ""
 		set(value) {
 			forceRun { image = Image(value) }
@@ -66,6 +66,9 @@ class AnPathImageObject(
 		}
 
 	init {
+		forceRun {
+			image = Image(path)
+		}
 		this.path = path
 	}
 }
