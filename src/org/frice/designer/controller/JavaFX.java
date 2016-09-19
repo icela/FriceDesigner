@@ -182,4 +182,7 @@ public class JavaFX extends Controller implements Initializable {
 		return rectangleObjectChoice;
 	}
 
+	public void onMenuDeleteClicked(ActionEvent event) {
+		super.onMenuDeleteClicked();
+	}
 }

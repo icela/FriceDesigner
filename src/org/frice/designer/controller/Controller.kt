@@ -120,11 +120,7 @@ abstract class Controller() : Drawer() {
 		}
 
 		mainView.setOnKeyPressed { e ->
-			if (e.code == KeyCode.DELETE && objectIndexChosen != null) {
-				objects.removeAt(objectIndexChosen!!)
-				objectChosen = null
-				repaint()
-			}
+			if (e.code == KeyCode.DELETE) onMenuDeleteClicked()
 		}
 
 		boxes = listOf(
@@ -191,6 +187,14 @@ abstract class Controller() : Drawer() {
 
 		boxFieldName.setupClicked { n ->
 			objectChosen?.fieldName = n
+		}
+	}
+
+	protected fun onMenuDeleteClicked() {
+		if (objectIndexChosen != null) {
+			objects.removeAt(objectIndexChosen!!)
+			objectChosen = null
+			repaint()
 		}
 	}
 

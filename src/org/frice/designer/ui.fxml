@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.canvas.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.frice.designer.controller.JavaFX">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -38,7 +33,7 @@
                         <MenuItem disable="true" mnemonicParsing="false" text="Cut" />
                         <MenuItem disable="true" mnemonicParsing="false" text="Copy" />
                         <MenuItem disable="true" mnemonicParsing="false" text="Paste" />
-                        <MenuItem disable="true" mnemonicParsing="false" text="Delete" />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuDeleteClicked" text="Delete" />
                         <SeparatorMenuItem disable="true" mnemonicParsing="false" />
                         <MenuItem disable="true" mnemonicParsing="false" text="Select All" />
                         <MenuItem disable="true" mnemonicParsing="false" text="Unselect All" />
