@@ -1,10 +1,6 @@
 package org.frice.designer.code
 
-import javafx.scene.image.Image
 import org.frice.designer.controller.Controller
-import org.frice.game.anim.move.DoublePair
-import org.frice.game.utils.graphics.shape.FPoint
-import org.frice.game.utils.misc.forceRun
 import java.awt.Color
 import java.util.*
 
@@ -34,11 +30,11 @@ class CodeData() {
 				LANGUAGE_SCALA, LANGUAGE_JAVA -> {
 					when (o) {
 						is AnShapeObject ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(0x${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
 									"new ${shapeOf(o)}, ${o.x}, ${o.y});\n")
 						is AnText ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
-									"\t\t${o.fieldName}.setColorResource(new ColorResource(0x${o.color.rgb}))\n")
+									"\t\t${o.fieldName}.setColorResource(new ColorResource(${o.color.rgb}))\n")
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName});\n")
 				}
@@ -106,12 +102,12 @@ class CodeData() {
 	}
 
 	companion object {
-		@JvmField val LANGUAGE_JAVA = 0x01
-		@JvmField val LANGUAGE_KOTLIN = 0x02
-		@JvmField val LANGUAGE_SCALA = 0x03
+		const val LANGUAGE_JAVA = 0x01
+		const val LANGUAGE_KOTLIN = 0x02
+		const val LANGUAGE_SCALA = 0x03
 
-		@JvmField val SHAPE_OVAL = 0x04
-		@JvmField val SHAPE_RECTANGLE = 0x05
+		const val SHAPE_OVAL = 0x04
+		const val SHAPE_RECTANGLE = 0x05
 
 		fun fromString(source: String): CodeData {
 			val data = CodeData()
@@ -119,20 +115,20 @@ class CodeData() {
 				val o = s.split(" ")
 				when (o[0]) {
 					Controller.simpleText -> data.objectList.add(AnText(
-							Integer.parseInt(o[1]).toDouble(),
-							Integer.parseInt(o[2]).toDouble(),
+							o[1].toDouble(),
+							o[2].toDouble(),
 							o[5],
 							Color.getColor(o[7]),
 							o[6]
 					))
 					Controller.shapeObject -> data.objectList.add(AnShapeObject(
-							Integer.parseInt(o[1]).toDouble(),
-							Integer.parseInt(o[2]).toDouble(),
-							Integer.parseInt(o[3]).toDouble(),
-							Integer.parseInt(o[4]).toDouble(),
+							o[1].toDouble(),
+							o[2].toDouble(),
+							o[3].toDouble(),
+							o[4].toDouble(),
 							o[5],
 							Color.getColor(o[7]),
-							Integer.parseInt(o[6])
+							o[6].toInt()
 					))
 				}
 			}
@@ -272,72 +268,3 @@ object %sGame {
 """
 	}
 }
-
-open class AnObject(
-		open var x: Double,
-		open var y: Double,
-		open var width: Double,
-		open var height: Double,
-		open var fieldName: String) {
-	fun containsPoint(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
-	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())
-	infix fun containsPoint(point: FPoint) = containsPoint(point.x, point.y)
-	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
-}
-
-class AnShapeObject(
-		x: Double,
-		y: Double,
-		width: Double,
-		height: Double,
-		fieldName: String,
-		var color: Color,
-		var shape: Int
-) : AnObject(x, y, width, height, fieldName)
-
-class AnText(
-		x: Double,
-		y: Double,
-		fieldName: String,
-		var color: Color,
-		var text: String
-) : AnObject(x, y, text.length * 8.0, 16.0, fieldName) {
-	override var width: Double
-		get() = text.length * 8.0
-		set(value) {
-		}
-
-	override var height: Double
-		get() = 16.0
-		set(value) {
-		}
-}
-
-class AnPathImageObject(
-		x: Double,
-		y: Double,
-		fieldName: String,
-		path: String
-) : AnObject(x, y, -1.0, -1.0, fieldName) {
-	var image = Image(path)
-	var path: String = ""
-		set(value) {
-			forceRun { image = Image(value) }
-			field = value
-		}
-
-	init {
-		this.path = path
-	}
-}
-
-class AnWebImageObject(
-		x: Double,
-		y: Double,
-		fieldName: String,
-		var url: String
-) : AnObject(x, y, -1.0, -1.0, fieldName)
-
-class UnknownLanguageException() : Exception("Language given is unknown.")
-
-class UnknownShapeException() : Exception("Shape given is unknown")

@@ -20,39 +20,40 @@
                         <MenuItem mnemonicParsing="false" onAction="#onMenuNewClicked" text="New" />
                         <MenuItem mnemonicParsing="false" onAction="#onMenuOpenClicked" text="Open…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuCloseClicked" text="Close" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuSaveClicked" text="Save" />
+                        <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuCloseClicked" text="Close" />
+                        <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuSaveClicked" text="Save" />
                         <MenuItem mnemonicParsing="false" onAction="#onMenuSaveAsClicked" text="Save As…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuPreferenceClicked" text="Preferences…" />
+                        <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuPreferenceClicked" text="Preferences…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#onMenuExitClicked" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Undo" />
-                        <MenuItem mnemonicParsing="false" text="Redo" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Cut" />
-                        <MenuItem mnemonicParsing="false" text="Copy" />
-                        <MenuItem mnemonicParsing="false" text="Paste" />
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Select All" />
-                        <MenuItem mnemonicParsing="false" text="Unselect All" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Undo" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Redo" />
+                        <SeparatorMenuItem disable="true" mnemonicParsing="false" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Cut" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Copy" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Paste" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Delete" />
+                        <SeparatorMenuItem disable="true" mnemonicParsing="false" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Select All" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Unselect All" />
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="View">
+            <Menu mnemonicParsing="false" text="Code">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#onMenuJavaCodeClicked" text="Java code" />
-                  <MenuItem mnemonicParsing="false" onAction="#onMenuKotlinCodeClicked" text="Kotlin code" />
-                  <MenuItem mnemonicParsing="false" onAction="#onMenuScalaCodeClicked" text="Scala code" />
+                <MenuItem mnemonicParsing="false" onAction="#onMenuJavaCodeClicked" text="Java" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuKotlinCodeClicked" text="Kotlin" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuScalaCodeClicked" text="Scala" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Tools">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Compile" />
+                <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Compile..." />
+                  <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Export Jar..." />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -74,7 +75,7 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="ovalObjectChoice" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="193.0" text="Oval" />
+                                          <Label fx:id="ovalObjectChoice" layoutX="14.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="Oval" />
                                           <Label fx:id="webImageObjectChoice" layoutX="13.0" layoutY="79.0" prefHeight="21.0" prefWidth="193.0" text="WebImage" />
                                           <Label fx:id="pathImageObjectChoice" layoutX="13.0" layoutY="110.0" prefHeight="21.0" prefWidth="193.0" text="LocalImage" />
                                           <Label fx:id="rectangleObjectChoice" layoutX="13.0" layoutY="47.0" prefHeight="21.0" prefWidth="193.0" text="Rectangle" />

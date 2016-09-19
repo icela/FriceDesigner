@@ -59,6 +59,8 @@ abstract class Controller() : Drawer() {
 		get() = mainCanvas.height
 
 	protected fun initialize() {
+		paint(mainCanvas.graphicsContext2D)
+
 		mainView.setOnDragOver { e ->
 			e.acceptTransferModes(TransferMode.MOVE)
 			objectChosen?.let {
@@ -144,19 +146,19 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxX.setupClicked { v ->
-			objectChosen?.x = Integer.parseInt(v).toDouble()
+			objectChosen?.x = v.toDouble()
 		}
 
 		boxY.setupClicked { v ->
-			objectChosen?.y = Integer.parseInt(v).toDouble()
+			objectChosen?.y = v.toDouble()
 		}
 
 		boxWidth.setupClicked { v ->
-			objectChosen?.width = Integer.parseInt(v).toDouble()
+			objectChosen?.width = v.toDouble()
 		}
 
 		boxHeight.setupClicked { v ->
-			objectChosen?.height = Integer.parseInt(v).toDouble()
+			objectChosen?.height = v.toDouble()
 		}
 
 		boxColor.setupClicked { c ->

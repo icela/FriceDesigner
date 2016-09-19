@@ -2,6 +2,7 @@ package org.frice.designer.canvas
 
 import javafx.scene.canvas.GraphicsContext
 import org.frice.designer.code.*
+import org.frice.game.resource.graphics.ColorResource
 import java.awt.Color
 import java.util.*
 
@@ -29,7 +30,8 @@ abstract class Drawer() {
 		}
 
 	protected fun paint(g: GraphicsContext) {
-		g.clearRect(0.0, 0.0, width, height)
+		g.fill = fromColor(ColorResource.LIGHT_GRAY.color)
+		g.fillRect(0.0, 0.0, width, height)
 		objects.forEach { o ->
 			when (o) {
 				is AnShapeObject -> {
@@ -54,7 +56,7 @@ abstract class Drawer() {
 
 	protected infix fun paintObjectChosen(g: GraphicsContext) {
 		if (objectChosen != null) {
-			g.fill = fromColor(Color.BLUE)
+			g.stroke = fromColor(Color.BLUE)
 			g.strokeRect(objectChosen?.x!!,
 					objectChosen?.y!!,
 					objectChosen?.width!!,
