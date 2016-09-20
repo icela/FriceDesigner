@@ -27,9 +27,12 @@ class CodeData() {
 			when (language) {
 				LANGUAGE_JAVA -> {
 					when (o) {
-						is AnShapeObject ->
+						is AnOval ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
-									"new ${shapeOf(o)}, ${o.x}, ${o.y});\n")
+									"new ${oval(o)}, ${o.x}, ${o.y});\n")
+						is AnRectangle ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+									"new ${rect(o)}, ${o.x}, ${o.y});\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
@@ -44,9 +47,12 @@ class CodeData() {
 				}
 				LANGUAGE_SCALA, LANGUAGE_GROOVY -> {
 					when (o) {
-						is AnShapeObject ->
+						is AnOval ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
-									"new ${shapeOf(o)}, ${o.x}, ${o.y})\n")
+									"new ${oval(o)}, ${o.x}, ${o.y})\n")
+						is AnRectangle ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+									"new ${rect(o)}, ${o.x}, ${o.y})\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
@@ -61,9 +67,12 @@ class CodeData() {
 				}
 				LANGUAGE_KOTLIN -> {
 					when (o) {
-						is AnShapeObject ->
+						is AnOval ->
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
-									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
+									"${oval(o)}, ${o.x}, ${o.y})\n")
+						is AnRectangle ->
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
+									"${rect(o)}, ${o.x}, ${o.y})\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
@@ -102,18 +111,19 @@ class CodeData() {
 	}
 
 	private fun typeOf(obj: AnObject) = when (obj) {
-		is AnShapeObject -> Controller.shapeObject
+		is AnOval, is AnRectangle -> Controller.shapeObject_
 		is AnText -> Controller.simpleText
 		is AnButton -> Controller.simpleButton
 		else -> Controller.fObject
 	}
 
-	private fun shapeOf(obj: AnShapeObject) = when (obj.shape) {
-		SHAPE_OVAL -> if (obj.width == obj.height)
-			"FCircle(${obj.width / 2.0})" else "FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
-		SHAPE_RECTANGLE -> "FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
-		else -> throw UnknownShapeException()
-	}
+	private fun oval(obj: AnOval) =
+			if (obj.width == obj.height)
+				"FCircle(${obj.width / 2.0})"
+			else
+				"FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
+
+	private fun rect(obj: AnRectangle) = "FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
 
 	override fun toString(): String {
 		val s = StringBuffer()
@@ -123,16 +133,14 @@ class CodeData() {
 					"${o.fieldName} ")
 			///                5
 			when (o) {
-				is AnText -> s.append("${o.color.rgb} ${o.text}")
-			///                              6            7
-				is AnButton -> s.append("${o.color.rgb} ${o.text}")
-			///                              6            7
-				is AnShapeObject -> s.append("${o.color.rgb} ${o.shape}")
-			///                                    6          7
-				is AnPathImageObject -> s.append("${o.path}")
-			///                                        6
-				is AnWebImageObject -> s.append("${o.url}")
-			///                                      6
+				is ColorOwner -> s.append("${o.color} ")
+			///                          6
+				is TextOwner -> s.append("${o.text} ")
+			///                          6 or 7
+				is PathOwner -> s.append("${o.path}")
+			///                          6, 7 or 8
+				is UrlOwner -> s.append("${o.url}")
+			///                          6, 7, 8 or 9
 			}
 			s.append("\n")
 		}
@@ -144,9 +152,6 @@ class CodeData() {
 		const val LANGUAGE_KOTLIN = 0x02
 		const val LANGUAGE_SCALA = 0x03
 		const val LANGUAGE_GROOVY = 0x04
-
-		const val SHAPE_OVAL = 0x05
-		const val SHAPE_RECTANGLE = 0x06
 
 		fun fromString(source: String): CodeData {
 			val data = CodeData()
@@ -160,14 +165,21 @@ class CodeData() {
 							Color(o[6].toInt()),
 							o[7]
 					))
-					Controller.shapeObject -> data.objectList.add(AnShapeObject(
+					Controller.shapeObjectOval -> data.objectList.add(AnOval(
 							o[1].toDouble(),
 							o[2].toDouble(),
 							o[3].toDouble(),
 							o[4].toDouble(),
 							o[5],
-							Color(o[6].toInt()),
-							o[7].toInt()
+							Color(o[6].toInt())
+					))
+					Controller.shapeObjectRectangle -> data.objectList.add(AnRectangle(
+							o[1].toDouble(),
+							o[2].toDouble(),
+							o[3].toDouble(),
+							o[4].toDouble(),
+							o[5],
+							Color(o[6].toInt())
 					))
 					Controller.simpleButton -> data.objectList.add(AnButton(
 							o[1].toDouble(),
