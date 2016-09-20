@@ -46,6 +46,7 @@ abstract class Controller() : Drawer() {
 	protected abstract val messageBox: TextArea
 
 	private lateinit var boxes: List<TextField>
+	private val disables = HashMap<String, () -> Unit>()
 
 	private var currentSelection = shapeObjectOval
 
@@ -85,13 +86,13 @@ abstract class Controller() : Drawer() {
 					temp = AnText(e.x, e.y,
 							"simpleText${random.nextInt(99999)}",
 							ColorResource.WHITE.color,
-							"Hello World")
+							"HelloWorld")
 				}
 				simpleButton -> {
 					temp = AnButton(e.x, e.y, 80.0, 40.0,
 							"simpleButton${random.nextInt(99999)}",
 							ColorResource.洵濑绘理.color,
-							"Click me!")
+							"Start")
 				}
 				pathImageObject -> {
 					temp = AnPathImageObject(e.x, e.y,
@@ -101,6 +102,7 @@ abstract class Controller() : Drawer() {
 			temp?.let {
 				objects.add(temp!!)
 				changeSelected(temp!!)
+				disables[currentSelection]?.invoke()
 				repaint()
 			}
 		}
@@ -230,6 +232,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 			boxes.forEach { b ->
 				b.isDisable = false
 			}
+			disables += Pair(selection, disable)
 			disable()
 			startDragAndDrop(TransferMode.MOVE).run {
 				setContent(ClipboardContent().apply {
@@ -243,6 +246,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		setOnKeyPressed { e ->
 			if (e.code == KeyCode.ENTER) forceRun {
 				set(text)
+				messageBox.text = "property changed.\n\nnew value:\n$text"
 			}
 			repaint()
 		}
