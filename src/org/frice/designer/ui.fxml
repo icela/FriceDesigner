@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
@@ -50,6 +51,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#onMenuJavaCodeClicked" text="Java" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuKotlinCodeClicked" text="Kotlin" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuScalaCodeClicked" text="Scala" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuGroovyCodeClicked" text="Groovy" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Tools">
@@ -107,10 +109,15 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="simpleTextChoice" layoutX="13.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="SimpleText">
+                                          <Label fx:id="simpleTextChoice" layoutX="13.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="Text">
                                              <cursor>
                                                 <Cursor fx:constant="MOVE" />
                                              </cursor></Label>
+                                          <Label fx:id="simpleButtonChoice" layoutX="13.0" layoutY="47.0" prefHeight="21.0" prefWidth="193.0" text="Button">
+                                             <cursor>
+                                                <Cursor fx:constant="MOVE" />
+                                             </cursor>
+                                          </Label>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -131,7 +138,7 @@
                </content></ScrollPane>
             <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <content>
-                      <AnchorPane prefHeight="644.0" prefWidth="212.0">
+                      <AnchorPane prefHeight="778.0" prefWidth="212.0">
                           <children>
                               <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                               <Label layoutX="9.0" layoutY="14.0" text="fieldName" />

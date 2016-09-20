@@ -21,21 +21,21 @@ public class JavaFX extends Controller implements Initializable {
 	public Label webImageObjectChoice;
 	public Label pathImageObjectChoice;
 
+	public Label simpleButtonChoice;
 	public Label simpleTextChoice;
 
 	public Label projectName;
-
 	public Canvas mainCanvas;
-	public ScrollPane mainView;
 
+	public ScrollPane mainView;
 	public TextField boxX;
 	public TextField boxY;
 	public TextField boxWidth;
 	public TextField boxHeight;
 	public TextField boxSource;
 	public TextField boxFieldName;
-	public TextField boxColor;
 
+	public TextField boxColor;
 	public TextArea messageBox;
 
 	@NotNull
@@ -186,6 +186,12 @@ public class JavaFX extends Controller implements Initializable {
 	@Override
 	public TextArea getMessageBox() {
 		return messageBox;
+	}
+
+	@NotNull
+	@Override
+	public Label getSimpleButtonChoice() {
+		return simpleButtonChoice;
 	}
 
 	public void onMenuDeleteClicked(ActionEvent event) {
