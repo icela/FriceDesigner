@@ -88,6 +88,15 @@ class AnWebImageObject(
 	}
 }
 
+class AnButton(
+		x: Double,
+		y: Double,
+		width: Double,
+		height: Double,
+		fieldName: String,
+		var color: Color
+) : AnObject(x, y, width, height, fieldName)
+
 class UnknownLanguageException() : Exception("Language given is unknown.")
 
 class UnknownShapeException() : Exception("Shape given is unknown")

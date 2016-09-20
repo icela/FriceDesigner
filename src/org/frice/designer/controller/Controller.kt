@@ -31,7 +31,9 @@ abstract class Controller() : Drawer() {
 	protected abstract val rectangleObjectChoice: Label
 	protected abstract val webImageObjectChoice: Label
 	protected abstract val pathImageObjectChoice: Label
+
 	protected abstract val simpleTextChoice: Label
+	protected abstract val simpleButtonChoice: Label
 
 	protected abstract val boxX: TextField
 	protected abstract val boxY: TextField
@@ -70,32 +72,35 @@ abstract class Controller() : Drawer() {
 
 		mainView.setOnDragDropped { e ->
 			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added."
+			var temp: AnObject? = null
 			when (currentSelection) {
 				shapeObjectOval, shapeObjectRectangle -> {
-					val temp = AnShapeObject(e.x, e.y, 30.0, 30.0,
+					temp = AnShapeObject(e.x, e.y, 30.0, 30.0,
 							"shapeObject${random.nextInt(99999)}",
 							ColorResource.IntelliJ_IDEA黑.color,
 							if (currentSelection == shapeObjectOval) CodeData.SHAPE_OVAL
 							else CodeData.SHAPE_RECTANGLE)
-					objects.add(temp)
-					changeSelected(temp)
-					repaint()
 				}
 				simpleText -> {
-					val temp = AnText(e.x, e.y,
+					temp = AnText(e.x, e.y,
 							"simpleText${random.nextInt(99999)}",
 							ColorResource.WHITE.color,
 							"Hello World")
-					objects.add(temp)
-					changeSelected(temp)
-					repaint()
+				}
+				simpleButton -> {
+					temp = AnButton(e.x, e.y, 60.0, 30.0,
+							"simpleButton${random.nextInt(99999)}",
+							ColorResource.潮田渚.color)
 				}
 				pathImageObject -> {
-					val temp = AnPathImageObject(e.x, e.y,
+					temp = AnPathImageObject(e.x, e.y,
 							"pathImageObject${random.nextInt(99999)}", "")
-					objects.add(temp)
-					changeSelected(temp)
 				}
+			}
+			temp?.let {
+				objects.add(temp!!)
+				changeSelected(temp!!)
+				repaint()
 			}
 		}
 
@@ -163,6 +168,10 @@ abstract class Controller() : Drawer() {
 			boxWidth.isDisable = true
 		}
 
+		simpleButtonChoice.setupChoice(simpleButton) {
+			boxSource.isDisable = true
+		}
+
 		boxX.setupClicked { v ->
 			objectChosen?.x = v.toDouble()
 		}
@@ -181,10 +190,11 @@ abstract class Controller() : Drawer() {
 
 		boxColor.setupClicked { c ->
 			if (objectChosen is AnText)
-				(objectChosen as AnText).color = java.awt.Color(Integer.parseInt(c))
-			if (objectChosen is AnShapeObject) {
-				(objectChosen as AnShapeObject).color = java.awt.Color(Integer.parseInt(c))
-			}
+				(objectChosen as AnText).color = awtColor(c)
+			if (objectChosen is AnShapeObject)
+				(objectChosen as AnShapeObject).color = awtColor(c)
+			if (objectChosen is AnButton)
+				(objectChosen as AnButton).color = awtColor(c)
 		}
 
 		boxSource.setupClicked { s ->
@@ -236,6 +246,8 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	private fun repaint() = paint(mainCanvas.graphicsContext2D)
+	private fun awtColor(c: String) = java.awt.Color(c.toInt())
+	private fun awtColor(c: Int) = java.awt.Color(c)
 
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
@@ -326,13 +338,14 @@ Chinese:
 	protected abstract fun setTitle(string: String)
 
 	companion object {
-		val fObject = "FObject"
-		val shapeObject = "ShapeObject"
-		val shapeObjectOval = "ShapeObjectOval"
-		val shapeObjectRectangle = "ShapeObjectRectangle"
-		val pathImageObject = "PathImageObject"
-		val webImageObject = "WebImageObject"
-		val simpleText = "SimpleText"
+		const val fObject = "FObject"
+		const val shapeObject = "ShapeObject"
+		const val shapeObjectOval = "ShapeObjectOval"
+		const val shapeObjectRectangle = "ShapeObjectRectangle"
+		const val pathImageObject = "PathImageObject"
+		const val webImageObject = "WebImageObject"
+		const val simpleText = "SimpleText"
+		const val simpleButton = "SimpleButton"
 	}
 
 }
