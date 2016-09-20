@@ -172,7 +172,6 @@ abstract class Controller() : Drawer() {
 		}
 
 		simpleButtonChoice.setupChoice(simpleButton) {
-			boxSource.isDisable = true
 		}
 
 		boxX.setupInput { v ->

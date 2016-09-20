@@ -25,6 +25,8 @@ open class AnObject(
 	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
 
 	override fun toString() = Controller.fObject
+
+	open fun new(): AnObject? = null
 }
 
 class AnShapeObject(
@@ -59,6 +61,7 @@ class AnText(
 		}
 
 	override fun toString() = Controller.simpleText
+
 }
 
 class AnPathImageObject(
