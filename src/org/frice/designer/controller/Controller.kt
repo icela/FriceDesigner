@@ -102,7 +102,6 @@ abstract class Controller() : Drawer() {
 			temp?.let {
 				objects.add(temp!!)
 				changeSelected(temp!!)
-				disables[currentSelection]?.invoke()
 				repaint()
 			}
 		}
@@ -116,6 +115,7 @@ abstract class Controller() : Drawer() {
 						b.isDisable = false
 					}
 					changeSelected(o, index)
+					disables[o.toString()]?.invoke()
 					messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
 					found = true
 					break
@@ -225,6 +225,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	private fun Label.setupChoice(selection: String, disable: () -> Unit) {
+		disables += Pair(selection, disable)
 		setOnMouseEntered { textFill = Color.web("#0000FF") }
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
@@ -232,7 +233,6 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 			boxes.forEach { b ->
 				b.isDisable = false
 			}
-			disables += Pair(selection, disable)
 			disable()
 			startDragAndDrop(TransferMode.MOVE).run {
 				setContent(ClipboardContent().apply {

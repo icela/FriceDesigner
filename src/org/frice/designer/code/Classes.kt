@@ -6,6 +6,7 @@
 package org.frice.designer.code
 
 import javafx.scene.image.Image
+import org.frice.designer.controller.Controller
 import org.frice.game.anim.move.DoublePair
 import org.frice.game.utils.graphics.shape.FPoint
 import org.frice.game.utils.misc.forceRun
@@ -22,6 +23,8 @@ open class AnObject(
 	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())
 	infix fun containsPoint(point: FPoint) = containsPoint(point.x, point.y)
 	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
+
+	override fun toString() = Controller.fObject
 }
 
 class AnShapeObject(
@@ -32,7 +35,11 @@ class AnShapeObject(
 		fieldName: String,
 		var color: Color,
 		var shape: Int
-) : AnObject(x, y, width, height, fieldName)
+) : AnObject(x, y, width, height, fieldName) {
+	override fun toString() =
+			if (shape == CodeData.SHAPE_OVAL) Controller.shapeObjectOval
+			else Controller.shapeObjectRectangle
+}
 
 class AnText(
 		x: Double,
@@ -50,6 +57,8 @@ class AnText(
 		get() = 16.0
 		set(value) {
 		}
+
+	override fun toString() = Controller.simpleText
 }
 
 class AnPathImageObject(
@@ -68,6 +77,8 @@ class AnPathImageObject(
 	init {
 		this.path = path
 	}
+
+	override fun toString() = Controller.pathImageObject
 }
 
 class AnWebImageObject(
@@ -86,6 +97,8 @@ class AnWebImageObject(
 	init {
 		this.url = url
 	}
+
+	override fun toString() = Controller.webImageObject
 }
 
 class AnButton(
@@ -95,9 +108,13 @@ class AnButton(
 		height: Double,
 		fieldName: String,
 		var color: Color,
-        var text: String
-) : AnObject(x, y, width, height, fieldName)
+		var text: String
+) : AnObject(x, y, width, height, fieldName) {
+	override fun toString() = Controller.simpleButton
+}
 
 class UnknownLanguageException() : Exception("Language given is unknown.")
+
+class UnknownObjectException() : Exception("Object given is unknown.")
 
 class UnknownShapeException() : Exception("Shape given is unknown")
