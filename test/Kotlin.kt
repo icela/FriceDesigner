@@ -1,26 +1,11 @@
 // Generated codes
-import org.frice.game.*
-import org.frice.game.obj.*
-import org.frice.game.obj.sub.*
-import org.frice.game.obj.button.*
-import org.frice.game.obj.effects.*
-import org.frice.game.resource.*
-import org.frice.game.resource.image.*
-import org.frice.game.resource.graphics.*
-import org.frice.game.anim.*
-import org.frice.game.anim.move.*
-import org.frice.game.anim.scale.*
-import org.frice.game.event.*
-import org.frice.game.utils.audio.*
-import org.frice.game.utils.misc.*
-import org.frice.game.utils.graphics.shape.*
-import org.frice.game.utils.graphics.utils.*
-import org.frice.game.utils.data.*
-import org.frice.game.utils.message.*
-import org.frice.game.utils.message.error.*
-import org.frice.game.utils.message.log.*
-import org.frice.game.utils.time.*
-import org.frice.game.utils.web.*
+import org.frice.game.Game
+import org.frice.game.obj.button.SimpleButton
+import org.frice.game.obj.button.SimpleText
+import org.frice.game.obj.sub.ShapeObject
+import org.frice.game.resource.graphics.ColorResource
+import org.frice.game.utils.graphics.shape.FCircle
+import org.frice.game.utils.graphics.shape.FRectangle
 
 /**
  * Frice engine class.
@@ -42,7 +27,7 @@ class ThisGame() : Game() {
 		simpleText60943 = SimpleText("MyGame", 300.0, 199.0)
 		simpleText60943.colorResource = ColorResource(-1)
 		super<Game>.addObject(simpleText60943)
-		shapeObject669 = ShapeObject(ColorResource(-13948117), FCircle(80.0), 74.0, 100.0)
+		shapeObject669 = ShapeObject(ColorResource(-13948117), FCircle(40.0), 74.0, 100.0)
 		super<Game>.addObject(shapeObject669)
 		shapeObject63353 = ShapeObject(ColorResource(-13948117), FRectangle(50, 60), 141.0, 477.0)
 		super<Game>.addObject(shapeObject63353)
