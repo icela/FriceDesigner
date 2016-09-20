@@ -319,6 +319,10 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		repaint()
 	}
 
+	protected fun showCode(language: Int) {
+		InfoAlert(codeData.getCode(language))
+	}
+
 	protected fun onMenuAboutClicked() {
 		InfoAlert("""Copyright(c) 2016 Frice Engine Designer
 Under Apache 2.0 License.

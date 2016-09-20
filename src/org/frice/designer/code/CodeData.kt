@@ -30,9 +30,10 @@ class CodeData() {
 						is AnShapeObject ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
 									"new ${shapeOf(o)}, ${o.x}, ${o.y});\n")
-						is AnText ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n",
-									"\t\t${o.fieldName}.setColorResource(new ColorResource(${o.color.rgb}));\n")
+						is AnText -> {
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName});\n")
 				}
@@ -41,9 +42,10 @@ class CodeData() {
 						is AnShapeObject ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
 									"new ${shapeOf(o)}, ${o.x}, ${o.y})\n")
-						is AnText ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
-									"\t\t${o.fieldName}.setColorResource(new ColorResource(${o.color.rgb}))\n")
+						is AnText -> {
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName})\n")
 				}
@@ -52,15 +54,23 @@ class CodeData() {
 						is AnShapeObject ->
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
 									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
-						is AnText ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n",
-									"\t\t${o.fieldName}.colorResource = ColorResource(${o.color.rgb})\n")
+						is AnText -> {
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
 					}
 					sb.append("\t\tsuper<Game>.addObject(${o.fieldName})\n")
 				}
 			}
 		}
 		return sb.toString()
+	}
+
+	private fun buildColorCode(fieldName: String, color: Color, language: Int) = when (language) {
+		LANGUAGE_KOTLIN -> "\t\t$fieldName.colorResource = ColorResource(${color.rgb})\n"
+		LANGUAGE_SCALA, LANGUAGE_GROOVY -> "\t\t$fieldName.setColorResource(new ColorResource(${color.rgb}))\n"
+		LANGUAGE_JAVA -> "\t\t$fieldName.setColorResource(new ColorResource(${color.rgb}));\n"
+		else -> throw UnknownLanguageException()
 	}
 
 	private fun buildFieldCodes(language: Int): String {

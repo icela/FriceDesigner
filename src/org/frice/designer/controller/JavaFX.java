@@ -1,6 +1,5 @@
 package org.frice.designer.controller;
 
-import com.eldath.alerts.InfoAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -89,15 +88,15 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	public void onMenuJavaCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_JAVA));
+		showCode(CodeData.LANGUAGE_JAVA);
 	}
 
 	public void onMenuKotlinCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_KOTLIN));
+		showCode(CodeData.LANGUAGE_KOTLIN);
 	}
 
 	public void onMenuScalaCodeClicked(ActionEvent event) {
-		new InfoAlert(getCodeData().getCode(CodeData.LANGUAGE_SCALA));
+		showCode(CodeData.LANGUAGE_SCALA);
 	}
 
 
@@ -208,5 +207,9 @@ public class JavaFX extends Controller implements Initializable {
 
 	public void onMenuToolsJarClicked(ActionEvent event) {
 		super.onMenuToolsJarClicked();
+	}
+
+	public void onMenuGroovyCodeClicked(ActionEvent event) {
+		showCode(CodeData.LANGUAGE_GROOVY);
 	}
 }

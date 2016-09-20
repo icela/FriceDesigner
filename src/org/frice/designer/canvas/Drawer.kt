@@ -55,7 +55,7 @@ abstract class Drawer() {
 							Math.min(o.width * 0.5, 10.0),
 							Math.min(o.height * 0.5, 10.0))
 					g.fill = fromColor(ColorResource.DARK_GRAY.color)
-					g.fillText(o.text, o.x + 10.0, o.y + o.height / 2)
+					g.fillText(o.text, o.x + 10, o.y + o.height / 2)
 				}
 				is AnPathImageObject -> {
 					o.image?.let {
