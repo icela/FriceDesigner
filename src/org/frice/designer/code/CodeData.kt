@@ -34,6 +34,11 @@ class CodeData() {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
 						}
+						is AnButton -> {
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
+									"${o.width}, ${o.height});\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName});\n")
 				}
@@ -46,6 +51,11 @@ class CodeData() {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
 						}
+						is AnButton -> {
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
+									"${o.width}, ${o.height})\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName})\n")
 				}
@@ -56,6 +66,11 @@ class CodeData() {
 									"${shapeOf(o)}, ${o.x}, ${o.y})\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
+							sb.append(buildColorCode(o.fieldName, o.color, language))
+						}
+						is AnButton -> {
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
+									"${o.width}, ${o.height})\n")
 							sb.append(buildColorCode(o.fieldName, o.color, language))
 						}
 					}
@@ -95,7 +110,7 @@ class CodeData() {
 	private fun shapeOf(obj: AnShapeObject) = when (obj.shape) {
 		SHAPE_OVAL -> if (obj.width == obj.height)
 			"FCircle(${obj.width})" else "FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
-		SHAPE_RECTANGLE -> "FRectangle(${obj.width}, ${obj.height})"
+		SHAPE_RECTANGLE -> "FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
 		else -> throw UnknownShapeException()
 	}
 
