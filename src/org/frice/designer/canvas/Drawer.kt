@@ -35,14 +35,16 @@ abstract class Drawer() {
 	protected fun paint(g: GraphicsContext) {
 		g.fill = fromColor(ColorResource.LIGHT_GRAY.color)
 		g.fillRect(0.0, 0.0, width, height)
+
 		objects.forEach { o ->
 			when (o) {
-				is AnShapeObject -> {
+				is AnOval-> {
 					g.fill = fromColor(o.color)
-					when (o.shape) {
-						CodeData.SHAPE_OVAL -> g.fillOval(o.x, o.y, o.width, o.height)
-						CodeData.SHAPE_RECTANGLE -> g.fillRect(o.x, o.y, o.width, o.height)
-					}
+					g.fillOval(o.x, o.y, o.width, o.height)
+				}
+				is AnRectangle -> {
+					g.fill = fromColor(o.color)
+					g.fillRect(o.x, o.y, o.width, o.height)
 				}
 				is AnText -> {
 					g.fill = fromColor(o.color)
