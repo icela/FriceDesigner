@@ -48,6 +48,15 @@ abstract class Drawer() {
 					g.fill = fromColor(o.color)
 					g.fillText(o.text, o.x + 2, o.y + 13)
 				}
+				is AnButton -> {
+					/// from Frice engine.
+					g.fill = fromColor(o.color)
+					g.fillRoundRect(o.x, o.y, o.width, o.height,
+							Math.min(o.width * 0.5, 10.0),
+							Math.min(o.height * 0.5, 10.0))
+					g.fill = fromColor(ColorResource.DARK_GRAY.color)
+					g.fillText(o.text, o.x + 10.0, o.y + o.height / 2)
+				}
 				is AnPathImageObject -> {
 					o.image?.let {
 						g.drawImage(o.image, o.x, o.y, o.image!!.width, o.image!!.height)

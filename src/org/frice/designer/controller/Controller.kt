@@ -90,7 +90,8 @@ abstract class Controller() : Drawer() {
 				simpleButton -> {
 					temp = AnButton(e.x, e.y, 60.0, 30.0,
 							"simpleButton${random.nextInt(99999)}",
-							ColorResource.潮田渚.color)
+							ColorResource.潮田渚.color,
+							"Click me!")
 				}
 				pathImageObject -> {
 					temp = AnPathImageObject(e.x, e.y,

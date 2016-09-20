@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * simply an interface of java and kotlin.
+ * JavaFX works awful with kotlin but java.
+ */
 public class JavaFX extends Controller implements Initializable {
 
 	public Accordion widgetsList;

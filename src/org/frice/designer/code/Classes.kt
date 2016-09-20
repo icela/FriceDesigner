@@ -94,7 +94,8 @@ class AnButton(
 		width: Double,
 		height: Double,
 		fieldName: String,
-		var color: Color
+		var color: Color,
+        var text: String
 ) : AnObject(x, y, width, height, fieldName)
 
 class UnknownLanguageException() : Exception("Language given is unknown.")
