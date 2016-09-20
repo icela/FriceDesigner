@@ -1,11 +1,26 @@
 // Generated codes
-import org.frice.game.Game
-import org.frice.game.obj.button.SimpleButton
-import org.frice.game.obj.button.SimpleText
-import org.frice.game.obj.sub.ShapeObject
-import org.frice.game.resource.graphics.ColorResource
-import org.frice.game.utils.graphics.shape.FCircle
-import org.frice.game.utils.graphics.shape.FRectangle
+import org.frice.game.*
+import org.frice.game.obj.*
+import org.frice.game.obj.sub.*
+import org.frice.game.obj.button.*
+import org.frice.game.obj.effects.*
+import org.frice.game.resource.*
+import org.frice.game.resource.image.*
+import org.frice.game.resource.graphics.*
+import org.frice.game.anim.*
+import org.frice.game.anim.move.*
+import org.frice.game.anim.scale.*
+import org.frice.game.event.*
+import org.frice.game.utils.audio.*
+import org.frice.game.utils.misc.*
+import org.frice.game.utils.graphics.shape.*
+import org.frice.game.utils.graphics.utils.*
+import org.frice.game.utils.data.*
+import org.frice.game.utils.message.*
+import org.frice.game.utils.message.error.*
+import org.frice.game.utils.message.log.*
+import org.frice.game.utils.time.*
+import org.frice.game.utils.web.*
 
 /**
  * Frice engine class.
@@ -21,7 +36,7 @@ class ThisGame() : Game() {
 
 
 	override fun onInit() {
-		simpleButton66240 = SimpleButton("GameSatrt", 300.0, 272.0, 100.0, 40.0)
+		simpleButton66240 = SimpleButton("GameStart", 300.0, 272.0, 100.0, 40.0)
 		simpleButton66240.colorResource = ColorResource(-15728641)
 		super<Game>.addObject(simpleButton66240)
 		simpleText60943 = SimpleText("MyGame", 300.0, 199.0)
