@@ -104,6 +104,7 @@ class CodeData() {
 	private fun typeOf(obj: AnObject) = when (obj) {
 		is AnShapeObject -> Controller.shapeObject
 		is AnText -> Controller.simpleText
+		is AnButton -> Controller.simpleButton
 		else -> Controller.fObject
 	}
 
@@ -123,6 +124,8 @@ class CodeData() {
 			///                5
 			when (o) {
 				is AnText -> s.append("${o.color.rgb} ${o.text}")
+			///                              6            7
+				is AnButton -> s.append("${o.color.rgb} ${o.text}")
 			///                              6            7
 				is AnShapeObject -> s.append("${o.color.rgb} ${o.shape}")
 			///                                    6          7
@@ -165,6 +168,15 @@ class CodeData() {
 							o[5],
 							Color(o[6].toInt()),
 							o[7].toInt()
+					))
+					Controller.simpleButton -> data.objectList.add(AnButton(
+							o[1].toDouble(),
+							o[2].toDouble(),
+							o[3].toDouble(),
+							o[4].toDouble(),
+							o[5],
+							Color(o[6].toInt()),
+							o[7]
 					))
 				}
 			}

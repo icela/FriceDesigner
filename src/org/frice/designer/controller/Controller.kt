@@ -71,7 +71,7 @@ abstract class Controller() : Drawer() {
 		}
 
 		mainView.setOnDragDropped { e ->
-			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added."
+			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added.\n\ntype:\n$currentSelection"
 			var temp: AnObject? = null
 			when (currentSelection) {
 				shapeObjectOval, shapeObjectRectangle -> {
@@ -88,9 +88,9 @@ abstract class Controller() : Drawer() {
 							"Hello World")
 				}
 				simpleButton -> {
-					temp = AnButton(e.x, e.y, 60.0, 30.0,
+					temp = AnButton(e.x, e.y, 80.0, 40.0,
 							"simpleButton${random.nextInt(99999)}",
-							ColorResource.潮田渚.color,
+							ColorResource.洵濑绘理.color,
 							"Click me!")
 				}
 				pathImageObject -> {
@@ -173,38 +173,40 @@ abstract class Controller() : Drawer() {
 			boxSource.isDisable = true
 		}
 
-		boxX.setupClicked { v ->
+		boxX.setupInput { v ->
 			objectChosen?.x = v.toDouble()
 		}
 
-		boxY.setupClicked { v ->
+		boxY.setupInput { v ->
 			objectChosen?.y = v.toDouble()
 		}
 
-		boxWidth.setupClicked { v ->
+		boxWidth.setupInput { v ->
 			objectChosen?.width = v.toDouble()
 		}
 
-		boxHeight.setupClicked { v ->
+		boxHeight.setupInput { v ->
 			objectChosen?.height = v.toDouble()
 		}
 
-		boxColor.setupClicked { c ->
-			if (objectChosen is AnText)
-				(objectChosen as AnText).color = awtColor(c)
-			if (objectChosen is AnShapeObject)
-				(objectChosen as AnShapeObject).color = awtColor(c)
-			if (objectChosen is AnButton)
-				(objectChosen as AnButton).color = awtColor(c)
+		boxColor.setupInput { c ->
+			when (objectChosen) {
+				is AnText -> (objectChosen as AnText).color = awtColor(c)
+				is AnShapeObject -> (objectChosen as AnShapeObject).color = awtColor(c)
+				is AnButton -> (objectChosen as AnButton).color = awtColor(c)
+			}
 		}
 
-		boxSource.setupClicked { s ->
-			if (objectChosen is AnPathImageObject) (objectChosen as AnPathImageObject).path = s
-			if (objectChosen is AnWebImageObject) (objectChosen as AnWebImageObject).url = s
-			if (objectChosen is AnText) (objectChosen as AnText).text = s
+		boxSource.setupInput { s ->
+			when (objectChosen) {
+				is AnPathImageObject -> (objectChosen as AnPathImageObject).path = s
+				is AnWebImageObject -> (objectChosen as AnWebImageObject).url = s
+				is AnText -> (objectChosen as AnText).text = s
+				is AnButton -> (objectChosen as AnButton).text = s
+			}
 		}
 
-		boxFieldName.setupClicked { n ->
+		boxFieldName.setupInput { n ->
 			objectChosen?.fieldName = n
 		}
 	}
@@ -220,7 +222,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		}
 	}
 
-	private inline fun Label.setupChoice(selection: String, crossinline disable: () -> Unit) {
+	private fun Label.setupChoice(selection: String, disable: () -> Unit) {
 		setOnMouseEntered { textFill = Color.web("#0000FF") }
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
@@ -237,7 +239,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		}
 	}
 
-	private inline fun TextField.setupClicked(crossinline set: (String) -> Unit) {
+	private fun TextField.setupInput(set: (String) -> Unit) {
 		setOnKeyPressed { e ->
 			if (e.code == KeyCode.ENTER) forceRun {
 				set(text)
@@ -307,14 +309,19 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		boxWidth.text = "${o.width}"
 		boxHeight.text = "${o.height}"
 
-		if (o is AnText) {
-			boxSource.text = o.text
-			boxColor.text = "${o.color.rgb}"
+		when (o) {
+			is AnText -> {
+				boxSource.text = o.text
+				boxColor.text = "${o.color.rgb}"
+			}
+			is AnButton -> {
+				boxSource.text = o.text
+				boxColor.text = "${o.color.rgb}"
+			}
+			is AnShapeObject -> boxColor.text = "${o.color.rgb}"
+			is AnPathImageObject -> boxSource.text = o.path
+			is AnWebImageObject -> boxSource.text = o.url
 		}
-
-		if (o is AnShapeObject) boxColor.text = "${o.color.rgb}"
-		if (o is AnPathImageObject) boxSource.text = o.path
-		if (o is AnWebImageObject) boxSource.text = o.url
 
 		repaint()
 	}
