@@ -8,10 +8,31 @@ package org.frice.designer.code
 import javafx.scene.image.Image
 import org.frice.designer.controller.Controller
 import org.frice.game.anim.move.DoublePair
+import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.graphics.shape.FPoint
 import org.frice.game.utils.misc.forceRun
 import java.awt.Color
 
+interface EdgeOwner {
+	var width: Double
+	var height: Double
+}
+
+interface ColorOwner {
+	var color: Color
+}
+
+interface TextOwner {
+	var text: String
+}
+
+interface PathOwner {
+	var path: String
+}
+
+interface UrlOwner {
+	var url: String
+}
 
 open class AnObject(
 		open var x: Double,
@@ -26,30 +47,50 @@ open class AnObject(
 
 	override fun toString() = Controller.fObject
 
-	open fun new(): AnObject? = null
+	companion object {
+		fun new(): AnObject? = null
+	}
 }
 
-class AnShapeObject(
+class AnOval(
 		x: Double,
 		y: Double,
 		width: Double,
 		height: Double,
 		fieldName: String,
-		var color: Color,
-		var shape: Int
-) : AnObject(x, y, width, height, fieldName) {
-	override fun toString() =
-			if (shape == CodeData.SHAPE_OVAL) Controller.shapeObjectOval
-			else Controller.shapeObjectRectangle
+		override var color: Color
+) : AnObject(x, y, width, height, fieldName), ColorOwner, EdgeOwner {
+	override fun toString() = Controller.shapeObjectOval
+
+	companion object {
+		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnOval(x, y, 30.0, 30.0,
+				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
+	}
+}
+
+class AnRectangle(
+		x: Double,
+		y: Double,
+		width: Double,
+		height: Double,
+		fieldName: String,
+		override var color: Color
+) : AnObject(x, y, width, height, fieldName), ColorOwner, EdgeOwner {
+	override fun toString() = Controller.shapeObjectRectangle
+
+	companion object {
+		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnRectangle(x, y, 30.0, 30.0,
+				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
+	}
 }
 
 class AnText(
 		x: Double,
 		y: Double,
 		fieldName: String,
-		var color: Color,
-		var text: String
-) : AnObject(x, y, text.length * 8.0, 16.0, fieldName) {
+		override var color: Color,
+		override var text: String
+) : AnObject(x, y, text.length * 8.0, 16.0, fieldName), TextOwner, ColorOwner {
 	override var width: Double
 		get() = text.length * 8.0
 		set(value) {
@@ -62,6 +103,10 @@ class AnText(
 
 	override fun toString() = Controller.simpleText
 
+	companion object {
+		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnText(x, y,
+				"simpleText$random", ColorResource.WHITE.color, "HelloWorld")
+	}
 }
 
 class AnPathImageObject(
@@ -69,9 +114,9 @@ class AnPathImageObject(
 		y: Double,
 		fieldName: String,
 		path: String
-) : AnObject(x, y, -1.0, -1.0, fieldName) {
+) : AnObject(x, y, -1.0, -1.0, fieldName), PathOwner {
 	var image: Image? = null
-	var path: String = ""
+	override var path: String = ""
 		set(value) {
 			forceRun { image = Image(value) }
 			field = value
@@ -89,9 +134,9 @@ class AnWebImageObject(
 		y: Double,
 		fieldName: String,
 		url: String
-) : AnObject(x, y, -1.0, -1.0, fieldName) {
+) : AnObject(x, y, -1.0, -1.0, fieldName), UrlOwner {
 	var image: Image? = null
-	var url: String = ""
+	override var url: String = ""
 		set(value) {
 			field = value
 			image = Image(value)
@@ -102,6 +147,10 @@ class AnWebImageObject(
 	}
 
 	override fun toString() = Controller.webImageObject
+
+	companion object {
+		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnPathImageObject(x, y, "pathImageObject$random", "")
+	}
 }
 
 class AnButton(
@@ -110,10 +159,15 @@ class AnButton(
 		width: Double,
 		height: Double,
 		fieldName: String,
-		var color: Color,
-		var text: String
-) : AnObject(x, y, width, height, fieldName) {
+		override var color: Color,
+		override var text: String
+) : AnObject(x, y, width, height, fieldName), ColorOwner, TextOwner, EdgeOwner {
 	override fun toString() = Controller.simpleButton
+
+	companion object {
+		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnButton(x, y, 80.0, 40.0,
+				"simpleButton$random", ColorResource.洵濑绘理.color, "Start")
+	}
 }
 
 class UnknownLanguageException() : Exception("Language given is unknown.")

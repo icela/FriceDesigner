@@ -3,14 +3,12 @@ package org.frice.designer.controller
 import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
-import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import org.frice.designer.canvas.Drawer
 import org.frice.designer.code.*
-import org.frice.game.resource.graphics.ColorResource
 import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.misc.forceRun
@@ -45,10 +43,10 @@ abstract class Controller() : Drawer() {
 
 	protected abstract val messageBox: TextArea
 
-	private lateinit var boxes: List<TextField>
+	private lateinit var disabling: List<TextField>
 	private val disables = HashMap<String, () -> Unit>()
 
-	private var currentSelection = shapeObjectOval
+	private var currentSelection: AnObject? = AnObject.new()
 
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
@@ -73,35 +71,10 @@ abstract class Controller() : Drawer() {
 
 		mainView.setOnDragDropped { e ->
 			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added.\n\ntype:\n$currentSelection"
-			var temp: AnObject? = null
-			when (currentSelection) {
-				shapeObjectOval, shapeObjectRectangle -> {
-					temp = AnShapeObject(e.x, e.y, 30.0, 30.0,
-							"shapeObject${random.nextInt(99999)}",
-							ColorResource.IntelliJ_IDEA黑.color,
-							if (currentSelection == shapeObjectOval) CodeData.SHAPE_OVAL
-							else CodeData.SHAPE_RECTANGLE)
-				}
-				simpleText -> {
-					temp = AnText(e.x, e.y,
-							"simpleText${random.nextInt(99999)}",
-							ColorResource.WHITE.color,
-							"HelloWorld")
-				}
-				simpleButton -> {
-					temp = AnButton(e.x, e.y, 80.0, 40.0,
-							"simpleButton${random.nextInt(99999)}",
-							ColorResource.洵濑绘理.color,
-							"Start")
-				}
-				pathImageObject -> {
-					temp = AnPathImageObject(e.x, e.y,
-							"pathImageObject${random.nextInt(99999)}", "")
-				}
-			}
+			val temp = currentSelection
 			temp?.let {
-				objects.add(temp!!)
-				changeSelected(temp!!)
+				objects.add(temp)
+				changeSelected(temp)
 				repaint()
 			}
 		}
@@ -111,11 +84,8 @@ abstract class Controller() : Drawer() {
 			var index = 0
 			for (o in objects) {
 				if (o.containsPoint(e.x, e.y)) {
-					boxes.forEach { b ->
-						b.isDisable = false
-					}
 					changeSelected(o, index)
-					disables[o.toString()]?.invoke()
+					disableBoxes(o)
 					messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
 					found = true
 					break
@@ -140,39 +110,24 @@ abstract class Controller() : Drawer() {
 			}
 		}
 
-		boxes = listOf(
-				boxFieldName,
+		disabling = listOf(
 				boxHeight,
 				boxWidth,
 				boxSource,
-				boxX,
-				boxY,
 				boxColor
 		)
 
-		ovalObjectChoice.setupChoice(shapeObjectOval) {
-			boxSource.isDisable = true
-		}
+		ovalObjectChoice.setupChoice(AnOval.new())
 
-		rectangleObjectChoice.setupChoice(shapeObjectRectangle) {
-			boxSource.isDisable = true
-		}
+		rectangleObjectChoice.setupChoice(AnRectangle.new())
 
-		webImageObjectChoice.setupChoice(webImageObject) {
-			boxColor.isDisable = true
-		}
+//		webImageObjectChoice.setupChoice(webImageObject)
 
-		pathImageObjectChoice.setupChoice(pathImageObject) {
-			boxColor.isDisable = true
-		}
+//		pathImageObjectChoice.setupChoice(pathImageObject)
 
-		simpleTextChoice.setupChoice(simpleText) {
-			boxHeight.isDisable = true
-			boxWidth.isDisable = true
-		}
+		simpleTextChoice.setupChoice(AnText.new())
 
-		simpleButtonChoice.setupChoice(simpleButton) {
-		}
+		simpleButtonChoice.setupChoice(AnButton.new())
 
 		boxX.setupInput { v ->
 			objectChosen?.x = v.toDouble()
@@ -191,24 +146,33 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxColor.setupInput { c ->
-			when (objectChosen) {
-				is AnText -> (objectChosen as AnText).color = awtColor(c)
-				is AnShapeObject -> (objectChosen as AnShapeObject).color = awtColor(c)
-				is AnButton -> (objectChosen as AnButton).color = awtColor(c)
-			}
+			if (objectChosen is ColorOwner) (objectChosen as ColorOwner).color = awtColor(c)
 		}
 
 		boxSource.setupInput { s ->
 			when (objectChosen) {
-				is AnPathImageObject -> (objectChosen as AnPathImageObject).path = s
-				is AnWebImageObject -> (objectChosen as AnWebImageObject).url = s
-				is AnText -> (objectChosen as AnText).text = s
-				is AnButton -> (objectChosen as AnButton).text = s
+				is UrlOwner -> (objectChosen as UrlOwner).url = s
+				is PathOwner -> (objectChosen as PathOwner).path = s
+				is TextOwner -> (objectChosen as TextOwner).text = s
 			}
 		}
 
 		boxFieldName.setupInput { n ->
 			objectChosen?.fieldName = n
+		}
+	}
+
+	private fun disableBoxes(o: AnObject) {
+		disabling.forEach { b ->
+			b.isDisable = true
+		}
+		when (o) {
+			is ColorOwner -> boxColor.isDisable = false
+			is TextOwner, is PathOwner, is UrlOwner -> boxSource.isDisable = false
+			is EdgeOwner -> {
+				boxWidth.isDisable = true
+				boxHeight.isDisable = true
+			}
 		}
 	}
 
@@ -223,21 +187,16 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		}
 	}
 
-	private fun Label.setupChoice(selection: String, disable: () -> Unit) {
-		disables += Pair(selection, disable)
+	private fun Label.setupChoice(selection: AnObject) {
 		setOnMouseEntered { textFill = Color.web("#0000FF") }
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
 			currentSelection = selection
-			boxes.forEach { b ->
+			disabling.forEach { b ->
 				b.isDisable = false
 			}
-			disable()
-			startDragAndDrop(TransferMode.MOVE).run {
-				setContent(ClipboardContent().apply {
-					putString(selection)
-				})
-			}
+			disableBoxes(selection)
+			startDragAndDrop(TransferMode.MOVE)
 		}
 	}
 
@@ -252,6 +211,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	private fun repaint() = paint(mainCanvas.graphicsContext2D)
+
 	private fun awtColor(c: String) = java.awt.Color(c.toInt())
 	private fun awtColor(c: Int) = java.awt.Color(c)
 
@@ -313,17 +273,10 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		boxHeight.text = "${o.height}"
 
 		when (o) {
-			is AnText -> {
-				boxSource.text = o.text
-				boxColor.text = "${o.color.rgb}"
-			}
-			is AnButton -> {
-				boxSource.text = o.text
-				boxColor.text = "${o.color.rgb}"
-			}
-			is AnShapeObject -> boxColor.text = "${o.color.rgb}"
-			is AnPathImageObject -> boxSource.text = o.path
-			is AnWebImageObject -> boxSource.text = o.url
+			is ColorOwner -> boxColor.text = "${o.color.rgb}"
+			is TextOwner -> boxSource.text = o.text
+			is PathOwner -> boxSource.text = o.path
+			is UrlOwner -> boxSource.text = o.url
 		}
 
 		repaint()
@@ -354,7 +307,7 @@ Chinese:
 
 	companion object {
 		const val fObject = "FObject"
-		const val shapeObject = "ShapeObject"
+		const val shapeObject_ = "ShapeObject"
 		const val shapeObjectOval = "ShapeObjectOval"
 		const val shapeObjectRectangle = "ShapeObjectRectangle"
 		const val pathImageObject = "PathImageObject"
