@@ -35,24 +35,14 @@ abstract class Drawer() {
 	protected fun paint(g: GraphicsContext) {
 		g.fill = fromColor(ColorResource.LIGHT_GRAY.color)
 		g.fillRect(0.0, 0.0, width, height)
-
 		objects.forEach { o ->
+			if (o is ColorOwner) g.fill = fromColor(o.color)
 			when (o) {
-				is AnOval-> {
-					g.fill = fromColor(o.color)
-					g.fillOval(o.x, o.y, o.width, o.height)
-				}
-				is AnRectangle -> {
-					g.fill = fromColor(o.color)
-					g.fillRect(o.x, o.y, o.width, o.height)
-				}
-				is AnText -> {
-					g.fill = fromColor(o.color)
-					g.fillText(o.text, o.x + 2, o.y + 13)
-				}
+				is AnOval -> g.fillOval(o.x, o.y, o.width, o.height)
+				is AnRectangle -> g.fillRect(o.x, o.y, o.width, o.height)
+				is AnText -> g.fillText(o.text, o.x + 2, o.y + 13)
 				is AnButton -> {
 					/// from Frice engine.
-					g.fill = fromColor(o.color)
 					g.fillRoundRect(o.x, o.y, o.width, o.height,
 							Math.min(o.width * 0.5, 10.0),
 							Math.min(o.height * 0.5, 10.0))

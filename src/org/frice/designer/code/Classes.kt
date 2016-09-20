@@ -63,7 +63,7 @@ class AnOval(
 	override fun toString() = Controller.shapeObjectOval
 
 	companion object {
-		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnOval(x, y, 30.0, 30.0,
+		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnOval(x, y, 30.0, 30.0,
 				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
 	}
 }
@@ -79,7 +79,7 @@ class AnRectangle(
 	override fun toString() = Controller.shapeObjectRectangle
 
 	companion object {
-		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnRectangle(x, y, 30.0, 30.0,
+		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnRectangle(x, y, 30.0, 30.0,
 				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
 	}
 }
@@ -104,7 +104,7 @@ class AnText(
 	override fun toString() = Controller.simpleText
 
 	companion object {
-		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnText(x, y,
+		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnText(x, y,
 				"simpleText$random", ColorResource.WHITE.color, "HelloWorld")
 	}
 }
@@ -149,7 +149,7 @@ class AnWebImageObject(
 	override fun toString() = Controller.webImageObject
 
 	companion object {
-		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnPathImageObject(x, y, "pathImageObject$random", "")
+		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnPathImageObject(x, y, "pathImageObject$random", "")
 	}
 }
 
@@ -165,7 +165,7 @@ class AnButton(
 	override fun toString() = Controller.simpleButton
 
 	companion object {
-		fun new(x: Double = -100.0, y: Double = -100.0, random: Int = -1) = AnButton(x, y, 80.0, 40.0,
+		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnButton(x, y, 80.0, 40.0,
 				"simpleButton$random", ColorResource.洵濑绘理.color, "Start")
 	}
 }

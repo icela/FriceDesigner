@@ -3,6 +3,7 @@ package org.frice.designer.controller
 import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
+import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
@@ -44,7 +45,6 @@ abstract class Controller() : Drawer() {
 	protected abstract val messageBox: TextArea
 
 	private lateinit var disabling: List<TextField>
-	private val disables = HashMap<String, () -> Unit>()
 
 	private var currentSelection: AnObject? = AnObject.new()
 
@@ -73,6 +73,8 @@ abstract class Controller() : Drawer() {
 			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added.\n\ntype:\n$currentSelection"
 			val temp = currentSelection
 			temp?.let {
+				temp.x = e.x
+				temp.y = e.y
 				objects.add(temp)
 				changeSelected(temp)
 				repaint()
@@ -117,17 +119,17 @@ abstract class Controller() : Drawer() {
 				boxColor
 		)
 
-		ovalObjectChoice.setupChoice(AnOval.new())
+		ovalObjectChoice.setupChoice(AnOval.new(random.nextInt(99999)))
 
-		rectangleObjectChoice.setupChoice(AnRectangle.new())
+		rectangleObjectChoice.setupChoice(AnRectangle.new(random.nextInt(99999)))
 
 //		webImageObjectChoice.setupChoice(webImageObject)
 
 //		pathImageObjectChoice.setupChoice(pathImageObject)
 
-		simpleTextChoice.setupChoice(AnText.new())
+		simpleTextChoice.setupChoice(AnText.new(random.nextInt(99999)))
 
-		simpleButtonChoice.setupChoice(AnButton.new())
+		simpleButtonChoice.setupChoice(AnButton.new(random.nextInt(99999)))
 
 		boxX.setupInput { v ->
 			objectChosen?.x = v.toDouble()
@@ -166,13 +168,12 @@ abstract class Controller() : Drawer() {
 		disabling.forEach { b ->
 			b.isDisable = true
 		}
-		when (o) {
-			is ColorOwner -> boxColor.isDisable = false
-			is TextOwner, is PathOwner, is UrlOwner -> boxSource.isDisable = false
-			is EdgeOwner -> {
-				boxWidth.isDisable = true
-				boxHeight.isDisable = true
-			}
+
+		if (o is ColorOwner) boxColor.isDisable = false
+		if (o is TextOwner || o is PathOwner || o is UrlOwner) boxSource.isDisable = false
+		if (o is EdgeOwner) {
+			boxWidth.isDisable = false
+			boxHeight.isDisable = false
 		}
 	}
 
@@ -192,11 +193,12 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		setOnMouseExited { textFill = Color.web("#000000") }
 		setOnDragDetected {
 			currentSelection = selection
-			disabling.forEach { b ->
-				b.isDisable = false
-			}
 			disableBoxes(selection)
-			startDragAndDrop(TransferMode.MOVE)
+			startDragAndDrop(TransferMode.MOVE).run {
+				setContent(ClipboardContent().apply {
+					putString(selection.toString())
+				})
+			}
 		}
 	}
 
