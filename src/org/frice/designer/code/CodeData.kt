@@ -110,7 +110,7 @@ class CodeData() {
 
 	private fun shapeOf(obj: AnShapeObject) = when (obj.shape) {
 		SHAPE_OVAL -> if (obj.width == obj.height)
-			"FCircle(${obj.width})" else "FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
+			"FCircle(${obj.width})" else "FOval(${obj.width / 4.0}, ${obj.height / 4.0})"
 		SHAPE_RECTANGLE -> "FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
 		else -> throw UnknownShapeException()
 	}
