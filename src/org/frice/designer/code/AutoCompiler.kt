@@ -37,7 +37,6 @@ constructor(source: String, outPath: String) {
 	var outPath = "."
 
 	/** 提取包名称 */
-
 	private val packPattern = Pattern.compile("^package//s+([a-z0-9.]+);")
 
 	/** 提取类名称 */
@@ -52,7 +51,7 @@ constructor(source: String, outPath: String) {
 	 * 编译
 	 * @return 编译结果 true/false
 	 */
-	private fun doCompile() = InnerCompiler(URI(className), Kind.SOURCE, this.source).compile()
+	private fun doCompile() = InnerCompiler(URI("$className"), Kind.SOURCE, this.source).compile()
 
 	/**
 	 * 调用
@@ -102,7 +101,6 @@ constructor(source: String, outPath: String) {
 	 * @param kind 文件类型
 	 */
 	private constructor(uri: URI, kind: Kind) : SimpleJavaFileObject(uri, kind) {
-
 		private var content = ""
 
 		/**
