@@ -51,14 +51,11 @@ constructor(source: String, outPath: String) {
 	/**
 	 * 编译
 	 * @return 编译结果 true/false
-	 * *
-	 * @throws Exception 抛出异常信息
 	 */
 	private fun doCompile() = InnerCompiler(URI(className), Kind.SOURCE, this.source).compile()
 
 	/**
 	 * 调用
-	 * @param methodName 方法名称
 	 * @return result 调用结果
 	 */
 	fun doInvoke(methodName: String): Any = InnerCompiler::class.java.classLoader.loadClass(className)
@@ -67,7 +64,6 @@ constructor(source: String, outPath: String) {
 
 	/**
 	 * 自动调用
-	 * @param methodName 方法名称
 	 * @return resultObj 调用结果
 	 */
 	fun autoInvoke(methodName: String): Any {
@@ -78,7 +74,6 @@ constructor(source: String, outPath: String) {
 
 	/**
 	 * 解析类名称
-	 * @param source 源字符串
 	 * @return className 类名称/空字符串
 	 */
 	private fun analyseClassName(source: String): String {
@@ -101,12 +96,12 @@ constructor(source: String, outPath: String) {
 	 * @author WangYanCheng
 	 * @version 2011-2-17
 	 */
-	internal open inner class InnerCompiler
+	private open inner class InnerCompiler
 	/**
 	 * @param uri  编译源文件路径
 	 * @param kind 文件类型
 	 */
-	protected constructor(uri: URI, kind: Kind) : SimpleJavaFileObject(uri, kind) {
+	private constructor(uri: URI, kind: Kind) : SimpleJavaFileObject(uri, kind) {
 
 		private var content = ""
 
@@ -139,17 +134,17 @@ constructor(source: String, outPath: String) {
 				).call()
 	}
 
-	companion object {
-		@JvmStatic fun main(args: Array<String>) {
-			val methodName = "compilerTest"
-			val dctInst = AutoCompiler(
-					"package org.ybygjy.basic.jvm; class TestCompiler {public static String compilerTest(){return \"HelloWorld\";}}", "./webRoot/WEB-INF/classes"
-			)
-			println(dctInst.autoInvoke(methodName))
-			// if (dctInst.doCompile()) {
-			// Object obj = dctInst.doInvoke(methodName);
-			// System.out.println(obj);
-			// }
-		}
-	}
+//	companion object {
+//		@JvmStatic fun main(args: Array<String>) {
+//			val methodName = "compilerTest"
+//			val dctInst = AutoCompiler(
+//					"package org.ybygjy.basic.jvm; class TestCompiler {public static String compilerTest(){return \"HelloWorld\";}}", "./webRoot/WEB-INF/classes"
+//			)
+//			println(dctInst.autoInvoke(methodName))
+//			// if (dctInst.doCompile()) {
+//			// Object obj = dctInst.doInvoke(methodName);
+//			// System.out.println(obj);
+//			// }
+//		}
+//	}
 }
