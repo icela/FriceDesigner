@@ -308,14 +308,14 @@ Chinese:
 	protected abstract fun setTitle(string: String)
 
 	companion object {
-		const val fObject = "FObject"
-		const val shapeObject_ = "ShapeObject"
+		const val fObject = "org.frice.game.obj.FObject"
+		const val shapeObject_ = "org.frice.game.obj.sub.ShapeObject"
 		const val shapeObjectOval = "ShapeObjectOval"
 		const val shapeObjectRectangle = "ShapeObjectRectangle"
-		const val pathImageObject = "PathImageObject"
-		const val webImageObject = "WebImageObject"
-		const val simpleText = "SimpleText"
-		const val simpleButton = "SimpleButton"
+		const val pathImageObject = "org.frice.game.obj.sub.ImageObject"
+		const val webImageObject = "org.frice.game.obj.sub.ImageObject"
+		const val simpleText = "org.frice.game.obj.button.SimpleText"
+		const val simpleButton = "org.frice.game.obj.button.SimpleButton"
 	}
 
 }

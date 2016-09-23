@@ -28,10 +28,10 @@ class CodeData() {
 				LANGUAGE_JAVA -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"new ${oval(o)}, ${o.x}, ${o.y});\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"new ${rect(o)}, ${o.x}, ${o.y});\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n")
@@ -48,10 +48,10 @@ class CodeData() {
 				LANGUAGE_SCALA, LANGUAGE_GROOVY -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"new ${oval(o)}, ${o.x}, ${o.y})\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"new ${rect(o)}, ${o.x}, ${o.y})\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
@@ -68,10 +68,10 @@ class CodeData() {
 				LANGUAGE_KOTLIN -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"${oval(o)}, ${o.x}, ${o.y})\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
 									"${rect(o)}, ${o.x}, ${o.y})\n")
 						is AnText -> {
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
@@ -83,7 +83,7 @@ class CodeData() {
 							sb.append(buildColorCode(o.fieldName, o.color, language))
 						}
 					}
-					sb.append("\t\tsuper<Game>.addObject(${o.fieldName})\n")
+					sb.append("\t\tsuper<org.frice.game.Game>.addObject(${o.fieldName})\n")
 				}
 			}
 		}
@@ -91,9 +91,9 @@ class CodeData() {
 	}
 
 	private fun buildColorCode(fieldName: String, color: Color, language: Int) = when (language) {
-		LANGUAGE_KOTLIN -> "\t\t$fieldName.colorResource = ColorResource(${color.rgb})\n"
-		LANGUAGE_SCALA, LANGUAGE_GROOVY -> "\t\t$fieldName.setColorResource(new ColorResource(${color.rgb}))\n"
-		LANGUAGE_JAVA -> "\t\t$fieldName.setColorResource(new ColorResource(${color.rgb}));\n"
+		LANGUAGE_KOTLIN -> "\t\t$fieldName.colorResource = org.frice.game.resource.graphics.ColorResource(${color.rgb})\n"
+		LANGUAGE_SCALA, LANGUAGE_GROOVY -> "\t\t$fieldName.setColorResource(new org.frice.game.resource.graphics.ColorResource(${color.rgb}))\n"
+		LANGUAGE_JAVA -> "\t\t$fieldName.setColorResource(new org.frice.game.resource.graphics.ColorResource(${color.rgb}));\n"
 		else -> throw UnknownLanguageException()
 	}
 
@@ -110,6 +110,10 @@ class CodeData() {
 		return sb.toString()
 	}
 
+	/**
+	 * already put full reference to the returned string.
+	 * @return the full reference of the class name
+	 */
 	private fun typeOf(obj: AnObject) = when (obj) {
 		is AnOval, is AnRectangle -> Controller.shapeObject_
 		is AnText -> Controller.simpleText
@@ -119,11 +123,11 @@ class CodeData() {
 
 	private fun oval(obj: AnOval) =
 			if (obj.width == obj.height)
-				"FCircle(${obj.width / 2.0})"
+				"org.frice.game.utils.graphics.shape.FCircle(${obj.width / 2.0})"
 			else
-				"FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
+				"org.frice.game.utils.graphics.shape.FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
 
-	private fun rect(obj: AnRectangle) = "FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
+	private fun rect(obj: AnRectangle) = "org.frice.game.utils.graphics.shape.FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
 
 	override fun toString(): String {
 		val s = StringBuffer()
@@ -196,35 +200,13 @@ class CodeData() {
 		}
 
 		private const val javaCode = """// Generated codes
-import org.frice.game.*;
-import org.frice.game.obj.*;
-import org.frice.game.obj.sub.*;
-import org.frice.game.obj.button.*;
-import org.frice.game.obj.effects.*;
-import org.frice.game.resource.*;
-import org.frice.game.resource.graphics.*;
-import org.frice.game.resource.image.*;
-import org.frice.game.anim.*;
-import org.frice.game.anim.move.*;
-import org.frice.game.anim.scale.*;
-import org.frice.game.event.*;
-import org.frice.game.utils.audio.*;
-import org.frice.game.utils.misc.*;
-import org.frice.game.utils.graphics.shape.*;
-import org.frice.game.utils.graphics.utils.*;
-import org.frice.game.utils.data.*;
-import org.frice.game.utils.message.*;
-import org.frice.game.utils.message.error.*;
-import org.frice.game.utils.message.log.*;
-import org.frice.game.utils.time.*;
-import org.frice.game.utils.web.*;
 
 /**
  * Frice engine class.
  * Auto-generated by Frice engine designer
  * Java
  */
-public class ThisGame extends Game {
+public class ThisGame extends org.frice.game.Game {
 
 %s
 
@@ -241,38 +223,15 @@ public class ThisGame extends Game {
 """
 
 		private const val groovyCode = """// Generated codes
-import org.frice.game.*
-import org.frice.game.obj.*
-import org.frice.game.obj.sub.*
-import org.frice.game.obj.button.*
-import org.frice.game.obj.effects.*
-import org.frice.game.resource.*
-import org.frice.game.resource.graphics.*
-import org.frice.game.resource.image.*
-import org.frice.game.anim.*
-import org.frice.game.anim.move.*
-import org.frice.game.anim.scale.*
-import org.frice.game.event.*
-import org.frice.game.utils.audio.*
-import org.frice.game.utils.misc.*
-import org.frice.game.utils.graphics.shape.*
-import org.frice.game.utils.graphics.utils.*
-import org.frice.game.utils.data.*
-import org.frice.game.utils.message.*
-import org.frice.game.utils.message.error.*
-import org.frice.game.utils.message.log.*
-import org.frice.game.utils.time.*
-import org.frice.game.utils.web.*
 
 /**
  * Frice engine class.
  * Auto-generated by Frice engine designer
  * Groovy
  */
-public class ThisGame extends Game {
+public class ThisGame extends org.frice.game.Game {
 
 %s
-
 	@Override
 	protected void onInit() {
 %s
@@ -286,38 +245,15 @@ public class ThisGame extends Game {
 """
 
 		private const val kotlinCode = """// Generated codes
-import org.frice.game.*
-import org.frice.game.obj.*
-import org.frice.game.obj.sub.*
-import org.frice.game.obj.button.*
-import org.frice.game.obj.effects.*
-import org.frice.game.resource.*
-import org.frice.game.resource.image.*
-import org.frice.game.resource.graphics.*
-import org.frice.game.anim.*
-import org.frice.game.anim.move.*
-import org.frice.game.anim.scale.*
-import org.frice.game.event.*
-import org.frice.game.utils.audio.*
-import org.frice.game.utils.misc.*
-import org.frice.game.utils.graphics.shape.*
-import org.frice.game.utils.graphics.utils.*
-import org.frice.game.utils.data.*
-import org.frice.game.utils.message.*
-import org.frice.game.utils.message.error.*
-import org.frice.game.utils.message.log.*
-import org.frice.game.utils.time.*
-import org.frice.game.utils.web.*
 
 /**
  * Frice engine class.
  * Auto-generated by Frice engine designer
  * Kotlin
  */
-class ThisGame() : Game() {
+class ThisGame() : org.frice.game.Game() {
 
 %s
-
 	override fun onInit() {
 %s
 	}
@@ -332,38 +268,15 @@ class ThisGame() : Game() {
 """
 
 		private const val scalaCode = """// Generated codes
-import org.frice.game._
-import org.frice.game.obj._
-import org.frice.game.obj.sub._
-import org.frice.game.obj.button._
-import org.frice.game.obj.effects._
-import org.frice.game.resource._
-import org.frice.game.resource.image._
-import org.frice.game.resource.graphics._
-import org.frice.game.anim._
-import org.frice.game.anim.move._
-import org.frice.game.anim.scale._
-import org.frice.game.event._
-import org.frice.game.utils.audio._
-import org.frice.game.utils.misc._
-import org.frice.game.utils.graphics.shape._
-import org.frice.game.utils.graphics.utils._
-import org.frice.game.utils.data._
-import org.frice.game.utils.message._
-import org.frice.game.utils.message.error._
-import org.frice.game.utils.message.log._
-import org.frice.game.utils.time._
-import org.frice.game.utils.web._
 
 /**
  * Frice engine class.
  * Auto-generated by Frice engine designer
  * Scala
  */
-class ThisGame extends Game {
+class ThisGame extends org.frice.game.Game {
 
 %s
-
 	override def onInit(): Unit = {
 %s
 	}
