@@ -2,34 +2,26 @@ package org.frice.designer.code.compile;
 
 import javax.tools.*;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompileEngine {
-	public static void main(String[] args) throws Exception {
-//		DynamicEngine de = DynamicEngine.getInstance();
-//		Object instance = de.javaCodeToObject(fullName, src.toString());
-//		System.out.println(instance);
-	}
-}
+	private static CompileEngine ourInstance = new CompileEngine();
 
-class DynamicEngine {
-	private static DynamicEngine ourInstance = new DynamicEngine();
-
-	static DynamicEngine getInstance() {
+	static CompileEngine getInstance() {
 		return ourInstance;
 	}
 
 	private URLClassLoader parentClassLoader;
 	private String classpath;
 
-	private DynamicEngine() {
+	private CompileEngine() {
 		this.parentClassLoader = (URLClassLoader) this.getClass().getClassLoader();
 		this.buildClassPath();
 	}
@@ -44,35 +36,33 @@ class DynamicEngine {
 		this.classpath = sb.toString();
 	}
 
-	public Object javaCodeToObject(String fullClassName, String javaCode) throws IllegalAccessException, InstantiationException {
+	public Object javaCodeToObject(String fullClassName, String javaCode) throws Exception {
 		long start = System.currentTimeMillis();
 		Object instance = null;
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 		ClassFileManager fileManager = new ClassFileManager(compiler.getStandardFileManager(diagnostics, null, null));
 
-		List<JavaFileObject> jfiles = new ArrayList<JavaFileObject>();
-		jfiles.add(new CharSequenceJavaFileObject(fullClassName, javaCode));
+		List<JavaFileObject> jFiles = new ArrayList<>();
+		jFiles.add(new CharSequenceJavaFileObject(fullClassName, javaCode));
 
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("-encoding");
 		options.add("UTF-8");
 		options.add("-classpath");
 		options.add(this.classpath);
 
-		JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, jfiles);
-		boolean success = task.call();
+		JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, jFiles);
 
-		if (success) {
+		if (task.call()) {
 			JavaClassObject jco = fileManager.getJavaClassObject();
 			DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(this.parentClassLoader);
 			Class<?> clazz = dynamicClassLoader.loadClass(fullClassName, jco);
 			instance = clazz.newInstance();
 		} else {
 			String error = "";
-			for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
-				error = error + compilePrint(diagnostic);
-			}
+			for (Diagnostic diagnostic : diagnostics.getDiagnostics()) error += compilePrint(diagnostic);
+			System.err.println(error);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("javaCodeToObject use:" + (end - start) + "ms");
@@ -89,22 +79,20 @@ class DynamicEngine {
 		System.out.println("Message:" + diagnostic.getMessage(null));
 		System.out.println("LineNumber:" + diagnostic.getLineNumber());
 		System.out.println("ColumnNumber:" + diagnostic.getColumnNumber());
-		StringBuffer res = new StringBuffer();
-		res.append("Code:[").append(diagnostic.getCode()).append("]\n");
-		res.append("Kind:[").append(diagnostic.getKind()).append("]\n");
-		res.append("Position:[").append(diagnostic.getPosition()).append("]\n");
-		res.append("Start Position:[").append(diagnostic.getStartPosition()).append("]\n");
-		res.append("End Position:[").append(diagnostic.getEndPosition()).append("]\n");
-		res.append("Source:[").append(diagnostic.getSource()).append("]\n");
-		res.append("Message:[").append(diagnostic.getMessage(null)).append("]\n");
-		res.append("LineNumber:[").append(diagnostic.getLineNumber()).append("]\n");
-		res.append("ColumnNumber:[").append(diagnostic.getColumnNumber()).append("]\n");
-		return res.toString();
+		return "Code:[" + diagnostic.getCode() + "]\n" +
+				"Kind:[" + diagnostic.getKind() + "]\n" +
+				"Position:[" + diagnostic.getPosition() + "]\n" +
+				"Start Position:[" + diagnostic.getStartPosition() + "]\n" +
+				"End Position:[" + diagnostic.getEndPosition() + "]\n" +
+				"Source:[" + diagnostic.getSource() + "]\n" +
+				"Message:[" + diagnostic.getMessage(null) + "]\n" +
+				"LineNumber:[" + diagnostic.getLineNumber() + "]\n" +
+				"ColumnNumber:[" + diagnostic.getColumnNumber() + "]\n";
 	}
 }
 
-class CharSequenceJavaFileObject extends SimpleJavaFileObject {
 
+class CharSequenceJavaFileObject extends SimpleJavaFileObject {
 	private CharSequence content;
 
 	CharSequenceJavaFileObject(String className,
@@ -115,22 +103,19 @@ class CharSequenceJavaFileObject extends SimpleJavaFileObject {
 	}
 
 	@Override
-	public CharSequence getCharContent(
-			boolean ignoreEncodingErrors) {
+	public CharSequence getCharContent(boolean ignoreEncodingErrors) {
 		return content;
 	}
 }
 
-class ClassFileManager extends
-		ForwardingJavaFileManager {
+class ClassFileManager extends ForwardingJavaFileManager {
 	JavaClassObject getJavaClassObject() {
-		return jclassObject;
+		return jClassObject;
 	}
 
-	private JavaClassObject jclassObject;
+	private JavaClassObject jClassObject;
 
-	ClassFileManager(StandardJavaFileManager
-			                 standardManager) {
+	ClassFileManager(StandardJavaFileManager standardManager) {
 		super(standardManager);
 	}
 
@@ -139,23 +124,21 @@ class ClassFileManager extends
 	public JavaFileObject getJavaFileForOutput(
 			Location location, String className, JavaFileObject.Kind kind, FileObject sibling)
 			throws IOException {
-		jclassObject = new JavaClassObject(className, kind);
-		return jclassObject;
+		jClassObject = new JavaClassObject(className, kind);
+		return jClassObject;
 	}
 }
+
 class JavaClassObject extends SimpleJavaFileObject {
 
-	protected final ByteArrayOutputStream bos =
-			new ByteArrayOutputStream();
+	private final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-
-	public JavaClassObject(String name, JavaFileObject.Kind kind) {
+	JavaClassObject(String name, JavaFileObject.Kind kind) {
 		super(URI.create("string:///" + name.replace('.', '/')
 				+ kind.extension), kind);
 	}
 
-
-	public byte[] getBytes() {
+	byte[] getBytes() {
 		return bos.toByteArray();
 	}
 
@@ -164,6 +147,7 @@ class JavaClassObject extends SimpleJavaFileObject {
 		return bos;
 	}
 }
+
 class DynamicClassLoader extends URLClassLoader {
 	DynamicClassLoader(ClassLoader parent) {
 		super(new URL[0], parent);

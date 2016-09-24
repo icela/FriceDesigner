@@ -59,7 +59,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#onMenuToolsCompileClicked" text="Export Compiled" />
                   <MenuItem mnemonicParsing="false" onAction="#onMenuToolsExportFileClicked" text="Export Java" />
                   <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsJarClicked" text="Export Jar..." />
-                  <MenuItem mnemonicParsing="false" onAction="#onMenuToolsTestClicked" text="Test in Swing" />
+                  <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsTestClicked" text="Test in Swing" />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">
