@@ -6,6 +6,8 @@
 package org.frice.designer.code
 
 import javafx.scene.image.Image
+import javafx.scene.input.DragEvent
+import javafx.scene.input.MouseEvent
 import org.frice.designer.controller.Controller
 import org.frice.game.anim.move.DoublePair
 import org.frice.game.resource.graphics.ColorResource
@@ -40,10 +42,23 @@ open class AnObject(
 		open var width: Double,
 		open var height: Double,
 		open var fieldName: String) {
+
 	fun containsPoint(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
 	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())
 	infix fun containsPoint(point: FPoint) = containsPoint(point.x, point.y)
 	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
+	infix fun containsPoint(d: MouseEvent) = containsPoint(d.x, d.y)
+	infix fun containsPoint(d: DragEvent) = containsPoint(d.x, d.y)
+
+	fun setLocation(x: Double, y: Double) {
+		this.x = x
+		this.y = y
+	}
+
+	infix fun setLocation(d: DoublePair) = setLocation(d.x, d.y)
+	infix fun setLocation(d: MouseEvent) = setLocation(d.x, d.y)
+	infix fun setLocation(d: DragEvent) = setLocation(d.x, d.y)
+	infix fun setLocation(d: FPoint) = setLocation(d.x.toDouble(), d.y.toDouble())
 
 	override fun toString() = Controller.fObject
 

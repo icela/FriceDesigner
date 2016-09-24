@@ -61,6 +61,8 @@ abstract class Controller() : Drawer() {
 	override val height: Double
 		get() = mainCanvas.height
 
+	private var isDragging = false
+
 	protected fun initialize() {
 		repaint()
 
@@ -70,6 +72,11 @@ abstract class Controller() : Drawer() {
 		}
 
 		mainView.setOnDragDropped { e ->
+			println(isDragging)
+			if (isDragging) {
+				objects[objectIndexChosen!!] setLocation e
+				isDragging = false
+			}
 			messageBox.text = "position: (${e.x}, ${e.y}).\nobject added.\n\ntype:\n$currentSelection"
 			val temp = currentSelection
 			temp?.let {
@@ -81,19 +88,21 @@ abstract class Controller() : Drawer() {
 			}
 		}
 
+		mainView.setOnDragDetected { e ->
+			objectIndexChosen?.let {
+				isDragging = objects[objectIndexChosen!!] containsPoint e
+			}
+			mainView.startDragAndDrop(TransferMode.MOVE)
+		}
+
 		mainView.setOnMouseClicked { e ->
 			var found = false
-			var index = 0
-			for (o in objects) {
-				if (o.containsPoint(e.x, e.y)) {
-					changeSelected(o, index)
-					disableBoxes(o)
-					setBoxValues(o)
-					messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
-					found = true
-					break
-				}
-				++index
+			findObject(e.x, e.y) { o, i ->
+				changeSelected(o, i)
+				disableBoxes(o)
+				setBoxValues(o)
+				messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
+				found = true
 			}
 			if (!found) {
 				objectChosen = null
@@ -165,6 +174,17 @@ abstract class Controller() : Drawer() {
 		}
 	}
 
+	private fun findObject(x: Double, y: Double, contains: (AnObject, Int) -> Unit) {
+		var index = 0
+		for (o in objects) {
+			if (o.containsPoint(x, y)) {
+				contains(o, index)
+				break
+			}
+			++index
+		}
+	}
+
 	private fun disableBoxes(o: AnObject) {
 		disabling.forEach { b ->
 			b.isDisable = true
@@ -190,9 +210,9 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	private fun Label.setupChoice(selection: AnObject) {
-		setOnMouseEntered { textFill = Color.web("#0000FF") }
-		setOnMouseExited { textFill = Color.web("#000000") }
-		setOnDragDetected {
+		setOnMouseEntered { e -> textFill = Color.web("#0000FF") }
+		setOnMouseExited { e -> textFill = Color.web("#000000") }
+		setOnDragDetected { e ->
 			currentSelection = selection
 			disableBoxes(selection)
 			startDragAndDrop(TransferMode.MOVE).run {
@@ -215,8 +235,8 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 
 	private fun repaint() = paint(mainCanvas.graphicsContext2D)
 
-	private fun awtColor(c: String) = java.awt.Color(c.toInt())
-	private fun awtColor(c: Int) = java.awt.Color(c)
+	private infix fun awtColor(c: String) = java.awt.Color(c.toInt())
+	private infix fun awtColor(c: Int) = java.awt.Color(c)
 
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
