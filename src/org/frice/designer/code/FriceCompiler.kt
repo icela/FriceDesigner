@@ -1,6 +1,8 @@
 package org.frice.designer.code
 
 
+import org.frice.game.utils.misc.unless
+import java.io.File
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
@@ -21,7 +23,7 @@ import javax.tools.ToolProvider
  * @since 2011-2-17
  * @version 2016-9-23
  */
-class Compiler
+class FriceCompiler
 /**
  * Constructor
  *
@@ -31,18 +33,20 @@ class Compiler
 constructor(source_: String, outPath_: String) {
 	/** 源代码 */
 	var source = source_
-		set(value) {
+		private set(value) {
 			field = value
 			this.className = analyseClassName(value).trim { i -> i <= ' ' }
 		}
+
 	/** 类名 */
 	var className = ""
+		private set
 
 	/** 编译输出路径 */
-	var outPath = outPath_
+	val outPath = outPath_
 
 	/** 提取包名称 */
-	private val packPattern = Pattern.compile("^package//s+([a-z0-9.]+);")
+	private val packagePattern = Pattern.compile("^package//s+([a-z0-9.]+);")
 
 	/** 提取类名称 */
 	private val classNamePattern = Pattern.compile("class//s+([^{]+)")
@@ -79,23 +83,18 @@ constructor(source_: String, outPath_: String) {
 	 */
 	fun analyseClassName(source: String): String {
 		var tmpName = ""
-		var matcher = packPattern.matcher(source)
+		var matcher = packagePattern.matcher(source)
 		if (matcher.find()) tmpName = matcher.group(1) + "."
 		matcher = classNamePattern.matcher(source)
 		if (matcher.find()) tmpName += matcher.group(1)
 		return tmpName
 	}
 
-	/**
-	 * alias
-	 */
-	fun analyseClassName() = analyseClassName(source)
-
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	override fun toString() = "Compiler [className=$className, source=$source]"
+	override fun toString() = "FriceCompiler [className=$className, source=$source]"
 
 	/**
 	 * 负责自动编译
@@ -133,9 +132,13 @@ constructor(source_: String, outPath_: String) {
 	}
 
 	companion object {
-		const val path = "file:out"
-		fun compile(code: String) {
-			Compiler(code, path).doCompile()
+		infix fun compile(code: String) {
+			val path = "file:out"
+			val f = File(".${File.separator}out")
+			unless(f.exists()) {
+				f.mkdir()
+			}
+			FriceCompiler(code, f.absolutePath).doCompile()
 			URLClassLoader(Array(1, { idx ->
 				URL(path)
 			})).loadClass("ThisGame").newInstance()

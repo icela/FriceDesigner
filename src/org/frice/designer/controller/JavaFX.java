@@ -212,4 +212,8 @@ public class JavaFX extends Controller implements Initializable {
 	public void onMenuGroovyCodeClicked(ActionEvent event) {
 		showCode(CodeData.LANGUAGE_GROOVY);
 	}
+
+	public void onMenuToolsTestClicked(ActionEvent event) {
+		super.compileAndRun();
+	}
 }

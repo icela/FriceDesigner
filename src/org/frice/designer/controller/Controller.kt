@@ -288,6 +288,10 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		InfoAlert(codeData.getCode(language))
 	}
 
+	protected fun compileAndRun() {
+		FriceCompiler compile codeData.getCode(CodeData.LANGUAGE_JAVA)
+	}
+
 	protected fun onMenuAboutClicked() {
 		InfoAlert("""Copyright(c) 2016 Frice Engine Designer
 Under Apache 2.0 License.
