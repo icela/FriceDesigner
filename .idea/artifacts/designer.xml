@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/designer</output-path>
     <properties id="javafx-properties">
       <options>
-        <option name="appClass" value="org.frice.designer.Main" />
+        <option name="appClass" value="org.frice.designer.view.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
         <option name="title" value="FriceDesigner" />

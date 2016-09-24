@@ -1,11 +1,7 @@
-package org.frice.designer.code
+package org.frice.designer.code.compile
 
 
-import org.frice.game.utils.misc.unless
-import java.io.File
 import java.net.URI
-import java.net.URL
-import java.net.URLClassLoader
 import java.util.*
 import java.util.regex.Pattern
 import javax.tools.JavaFileObject.Kind
@@ -132,18 +128,25 @@ class FriceCompiler
 	}
 
 	companion object {
-		const private val path = "file:compile"
-		infix fun compile(code: String) {
-			val f = File(".${File.separator}compile")
-			unless(f.exists()) {
-				f.mkdir()
-			}
-			FriceCompiler(code, f.absolutePath).doCompile()
-			executeCompiled()
-		}
+//		const private val url = "file:compile"
+//		private var path = "compile"
+//		infix fun compile(code: String) {
+//			val f = File(path)
+//			unless(f.exists()) {
+//				f.mkdir()
+//			}
+//			FriceCompiler(code, f.absolutePath).doCompile()
+//			executeCompiled()
+//		}
+//
+//		fun executeCompiled() {
+////			URLClassLoader(Array(1, { URL(path) })).loadClass("ThisGame").newInstance()
+//			Runtime.getRuntime().exec("java ${path}${File.separator}ThisGame.class")
+//		}
 
-		fun executeCompiled() {
-			URLClassLoader(Array(1, { URL(path) })).loadClass("ThisGame").newInstance()
+		infix fun compile(src: String) {
+			val engine = DynamicEngine.getInstance()
+			engine.javaCodeToObject("ThisGame", src)
 		}
 	}
 }
