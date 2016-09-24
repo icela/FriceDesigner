@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="designer">
+    <output-path>$PROJECT_DIR$/out/artifacts/designer</output-path>
+    <root id="root">
+      <element id="archive" name="designer.jar">
+        <element id="module-output" name="FriceDesigner" />
+      </element>
+      <element id="library" level="project" name="frice" />
+    </root>
+  </artifact>
+</component>
