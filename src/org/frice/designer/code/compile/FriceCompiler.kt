@@ -145,7 +145,7 @@ class FriceCompiler
 //		}
 
 		infix fun compile(src: String) {
-			val engine = CompileEngine.getInstance()
+			val engine = CompileEngine.instance
 			engine.javaCodeToObject("ThisGame", src)
 		}
 	}
