@@ -30,7 +30,7 @@ class FriceCompiler
  * @param source_  源代码
  * @param outPath_ 动态编译文件的输出路径
  */
-constructor(source_: String, outPath_: String) {
+(source_: String, outPath_: String) {
 	/** 源代码 */
 	var source = source_
 		private set(value) {
@@ -132,16 +132,18 @@ constructor(source_: String, outPath_: String) {
 	}
 
 	companion object {
+		const private val path = "file:compile"
 		infix fun compile(code: String) {
-			val path = "file:out"
-			val f = File(".${File.separator}out")
+			val f = File(".${File.separator}compile")
 			unless(f.exists()) {
 				f.mkdir()
 			}
 			FriceCompiler(code, f.absolutePath).doCompile()
-			URLClassLoader(Array(1, { idx ->
-				URL(path)
-			})).loadClass("ThisGame").newInstance()
+			executeCompiled()
+		}
+
+		fun executeCompiled() {
+			URLClassLoader(Array(1, { URL(path) })).loadClass("ThisGame").newInstance()
 		}
 	}
 }

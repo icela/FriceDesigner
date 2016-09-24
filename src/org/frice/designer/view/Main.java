@@ -1,4 +1,4 @@
-package org.frice.designer;
+package org.frice.designer.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

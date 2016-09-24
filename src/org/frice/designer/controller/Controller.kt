@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
-import org.frice.designer.canvas.Drawer
+import org.frice.designer.controller.canvas.Drawer
 import org.frice.designer.code.*
 import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
@@ -88,6 +88,7 @@ abstract class Controller() : Drawer() {
 				if (o.containsPoint(e.x, e.y)) {
 					changeSelected(o, index)
 					disableBoxes(o)
+					setBoxValues(o)
 					messageBox.text = "position: (${o.x}, ${o.y})\nexisting object selected."
 					found = true
 					break
@@ -269,20 +270,23 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		objectChosen = o
 		objectIndexChosen = index
 		boxFieldName.text = o.fieldName
+
+		setBoxValues(o)
+		repaint()
+	}
+
+	private fun setBoxValues(o: AnObject) {
 		boxX.text = "${o.x}"
 		boxY.text = "${o.y}"
 		boxWidth.text = "${o.width}"
 		boxHeight.text = "${o.height}"
 
-		when (o) {
-			is ColorOwner -> boxColor.text = "${o.color.rgb}"
-			is TextOwner -> boxSource.text = o.text
-			is PathOwner -> boxSource.text = o.path
-			is UrlOwner -> boxSource.text = o.url
-		}
-
-		repaint()
+		if (o is ColorOwner) boxColor.text = "${o.color.rgb}"
+		if (o is TextOwner) boxSource.text = o.text
+		if (o is PathOwner) boxSource.text = o.path
+		if (o is UrlOwner) boxSource.text = o.url
 	}
+
 
 	protected fun showCode(language: Int) {
 		InfoAlert(codeData.getCode(language))

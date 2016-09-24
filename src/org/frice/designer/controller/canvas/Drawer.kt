@@ -1,4 +1,4 @@
-package org.frice.designer.canvas
+package org.frice.designer.controller.canvas
 
 import javafx.scene.canvas.GraphicsContext
 import org.frice.designer.code.*
