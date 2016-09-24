@@ -1,5 +1,6 @@
 package org.frice.designer.code.compile
 
+import org.frice.game.utils.message.log.FLog
 import javax.tools.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -10,18 +11,18 @@ import java.net.URLClassLoader
 import java.io.File
 import java.util.ArrayList
 
-class CompileEngine private constructor() {
+object CompileEngine private constructor() {
 
 	private val parentClassLoader: URLClassLoader
 	private var classpath: String? = null
 
 	init {
-		this.parentClassLoader = this.javaClass.classLoader as URLClassLoader
-		this.buildClassPath()
+		parentClassLoader = this.javaClass.classLoader as URLClassLoader
+		buildClassPath()
 	}
 
 	private fun buildClassPath() {
-		this.classpath = null
+		classpath = null
 		val sb = StringBuilder()
 		for (url in this.parentClassLoader.urLs) {
 			val p = url.file
@@ -30,7 +31,7 @@ class CompileEngine private constructor() {
 		this.classpath = sb.toString()
 	}
 
-	fun javaCodeToObject(fullClassName: String, javaCode: String): Any {
+	fun javaCodeToObject(fullClassName: String, javaCode: String): Any? {
 		val start = System.currentTimeMillis()
 		var instance: Any? = null
 		val compiler = ToolProvider.getSystemJavaCompiler()
@@ -44,35 +45,32 @@ class CompileEngine private constructor() {
 		options.add("-encoding")
 		options.add("UTF-8")
 		options.add("-classpath")
-		options.add(this.classpath)
+		options.add(classpath)
 
-		val task = compiler.getTask(null, fileManager, diagnostics, options, null, jFiles)
-
-		if (task.call()!!) {
+		if (compiler.getTask(null, fileManager, diagnostics, options, null, jFiles).call()!!) {
 			val jco = fileManager.javaClassObject
-			val dynamicClassLoader = DynamicClassLoader(this.parentClassLoader)
+			val dynamicClassLoader = DynamicClassLoader(parentClassLoader)
 			val clazz = dynamicClassLoader.loadClass(fullClassName, jco)
 			instance = clazz.newInstance()
 		} else {
 			var error = ""
 			for (diagnostic in diagnostics.diagnostics) error += compilePrint(diagnostic)
-			System.err.println(error)
+			FLog.e(error)
 		}
-		val end = System.currentTimeMillis()
-		println("javaCodeToObject use:" + (end - start) + "ms")
+		println("javaCodeToObject use:" + (System.currentTimeMillis() - start) + "ms")
 		return instance
 	}
 
 	private fun compilePrint(diagnostic: Diagnostic<*>): String {
-		println("Code:" + diagnostic.code)
-		println("Kind:" + diagnostic.kind)
-		println("Position:" + diagnostic.position)
-		println("Start Position:" + diagnostic.startPosition)
-		println("End Position:" + diagnostic.endPosition)
-		println("Source:" + diagnostic.source)
-		println("Message:" + diagnostic.getMessage(null))
-		println("LineNumber:" + diagnostic.lineNumber)
-		println("ColumnNumber:" + diagnostic.columnNumber)
+		FLog.i("Code:" + diagnostic.code)
+		FLog.i("Kind:" + diagnostic.kind)
+		FLog.i("Position:" + diagnostic.position)
+		FLog.i("Start Position:" + diagnostic.startPosition)
+		FLog.i("End Position:" + diagnostic.endPosition)
+		FLog.i("Source:" + diagnostic.source)
+		FLog.i("Message:" + diagnostic.getMessage(null))
+		FLog.i("LineNumber:" + diagnostic.lineNumber)
+		FLog.i("ColumnNumber:" + diagnostic.columnNumber)
 		return "Code:[" + diagnostic.code + "]\n" +
 				"Kind:[" + diagnostic.kind + "]\n" +
 				"Position:[" + diagnostic.position + "]\n" +
@@ -83,14 +81,9 @@ class CompileEngine private constructor() {
 				"LineNumber:[" + diagnostic.lineNumber + "]\n" +
 				"ColumnNumber:[" + diagnostic.columnNumber + "]\n"
 	}
-
-	companion object {
-		internal val instance = CompileEngine()
-	}
 }
 
-
-internal class CharSequenceJavaFileObject(className: String, private val content: CharSequence) :
+internal class CharSequenceJavaFileObject(className: String, val content: CharSequence) :
 		SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/')
 				+ JavaFileObject.Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE) {
 	override fun getCharContent(ignoreEncodingErrors: Boolean): CharSequence = content
@@ -119,17 +112,12 @@ internal class JavaClassObject(name: String, kind: JavaFileObject.Kind) :
 	val bytes: ByteArray
 		get() = bos.toByteArray()
 
-	override fun openOutputStream(): OutputStream {
-		return bos
-	}
+	override fun openOutputStream(): OutputStream = bos
 }
 
 internal class DynamicClassLoader(parent: ClassLoader) : URLClassLoader(arrayOfNulls<URL>(0), parent) {
 
-	@Throws(ClassNotFoundException::class)
-	fun findClassByClassName(className: String): Class<*> {
-		return this.findClass(className)
-	}
+	fun findClassByClassName(className: String): Class<*> = this.findClass(className)
 
 	fun loadClass(fullName: String, jco: JavaClassObject): Class<*> {
 		val classData = jco.bytes
