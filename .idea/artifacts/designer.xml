@@ -1,6 +1,16 @@
 <component name="ArtifactManager">
   <artifact type="javafx" name="designer">
     <output-path>$PROJECT_DIR$/out/artifacts/designer</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="org.frice.designer.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="FriceDesigner" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
     <root id="root">
       <element id="archive" name="designer.jar">
         <element id="module-output" name="FriceDesigner" />

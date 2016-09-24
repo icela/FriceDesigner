@@ -2,6 +2,8 @@ package org.frice.designer.code
 
 
 import java.net.URI
+import java.net.URL
+import java.net.URLClassLoader
 import java.util.*
 import java.util.regex.Pattern
 import javax.tools.JavaFileObject.Kind
@@ -9,43 +11,41 @@ import javax.tools.SimpleJavaFileObject
 import javax.tools.ToolProvider
 
 /**
+ * P.S. 所有注释除了P.S.开头的都是原作者写的，剩下的是我写的
+ *
+ *
  * Java字节码的操纵之动态编译
 
  * @author WangYanCheng
- * *
- * @version 2011-2-17
+ * @author ice1000
+ * @since 2011-2-17
+ * @version 2016-9-23
  */
-class AutoCompiler
+class Compiler
 /**
  * Constructor
  *
- * @param source  源代码
- * @param outPath 动态编译文件的输出路径
+ * @param source_  源代码
+ * @param outPath_ 动态编译文件的输出路径
  */
-constructor(source: String, outPath: String) {
+constructor(source_: String, outPath_: String) {
 	/** 源代码 */
-	var source = ""
+	var source = source_
 		set(value) {
-			val tmpName = analyseClassName(value)
-			this.className = tmpName.trim { i -> i <= ' ' }
 			field = value
+			this.className = analyseClassName(value).trim { i -> i <= ' ' }
 		}
 	/** 类名 */
 	var className = ""
 
 	/** 编译输出路径 */
-	var outPath = "."
+	var outPath = outPath_
 
 	/** 提取包名称 */
 	private val packPattern = Pattern.compile("^package//s+([a-z0-9.]+);")
 
 	/** 提取类名称 */
 	private val classNamePattern = Pattern.compile("class//s+([^{]+)")
-
-	init {
-		this.outPath = outPath
-		this.source = source
-	}
 
 	/**
 	 * 编译
@@ -62,6 +62,8 @@ constructor(source: String, outPath: String) {
 			.invoke(null, *arrayOf<Any>())
 
 	/**
+	 * P.S.我没看懂这是干嘛的 ——ice1000
+	 *
 	 * 自动调用
 	 * @return resultObj 调用结果
 	 */
@@ -75,7 +77,7 @@ constructor(source: String, outPath: String) {
 	 * 解析类名称
 	 * @return className 类名称/空字符串
 	 */
-	private fun analyseClassName(source: String): String {
+	fun analyseClassName(source: String): String {
 		var tmpName = ""
 		var matcher = packPattern.matcher(source)
 		if (matcher.find()) tmpName = matcher.group(1) + "."
@@ -84,11 +86,16 @@ constructor(source: String, outPath: String) {
 		return tmpName
 	}
 
+	/**
+	 * alias
+	 */
+	fun analyseClassName() = analyseClassName(source)
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	override fun toString() = "AutoCompiler [className=$className, source=$source]"
+	override fun toString() = "Compiler [className=$className, source=$source]"
 
 	/**
 	 * 负责自动编译
@@ -100,17 +107,10 @@ constructor(source: String, outPath: String) {
 	 * @param uri  编译源文件路径
 	 * @param kind 文件类型
 	 */
-	private constructor(uri: URI, kind: Kind) : SimpleJavaFileObject(uri, kind) {
-		private var content = ""
+	internal constructor(uri: URI, kind: Kind, contents: String) : SimpleJavaFileObject(uri, kind) {
+		private val content = contents
 
-		/**
-		 * @param uri     uri
-		 * @param kind    kind
-		 * @param content content
-		 */
-		constructor(uri: URI, kind: Kind, content: String) : this(uri, kind) {
-			this.content = content
-		}
+		internal constructor(uri: URI, kind: Kind) : this(uri, kind, "")
 
 		/*
 		 * (non-Javadoc)
@@ -122,7 +122,7 @@ constructor(source: String, outPath: String) {
 		 * 编译
 		 * @return result 成功编译标记{true|false}
 		 */
-		fun compile(): Boolean = ToolProvider.getSystemJavaCompiler()
+		internal fun compile(): Boolean = ToolProvider.getSystemJavaCompiler()
 				.getTask(null, ToolProvider.getSystemJavaCompiler()
 						.getStandardFileManager(null, null, null),
 						null,
@@ -132,17 +132,13 @@ constructor(source: String, outPath: String) {
 				).call()
 	}
 
-//	companion object {
-//		@JvmStatic fun main(args: Array<String>) {
-//			val methodName = "compilerTest"
-//			val dctInst = AutoCompiler(
-//					"package org.ybygjy.basic.jvm; class TestCompiler {public static String compilerTest(){return \"HelloWorld\";}}", "./webRoot/WEB-INF/classes"
-//			)
-//			println(dctInst.autoInvoke(methodName))
-//			// if (dctInst.doCompile()) {
-//			// Object obj = dctInst.doInvoke(methodName);
-//			// System.out.println(obj);
-//			// }
-//		}
-//	}
+	companion object {
+		const val path = "file:out"
+		fun compile(code: String) {
+			Compiler(code, path).doCompile()
+			URLClassLoader(Array(1, { idx ->
+				URL(path)
+			})).loadClass("ThisGame").newInstance()
+		}
+	}
 }

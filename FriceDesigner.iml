@@ -10,5 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="frice" level="project" />
+    <orderEntry type="library" name="groovy-2.4.7-sim" level="application" />
   </component>
 </module>
