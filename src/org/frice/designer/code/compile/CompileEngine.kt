@@ -1,20 +1,19 @@
 package org.frice.designer.code.compile
 
 import org.frice.game.utils.message.log.FLog
-import javax.tools.*
 import java.io.ByteArrayOutputStream
-import java.io.IOException
+import java.io.File
 import java.io.OutputStream
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
-import java.io.File
-import java.util.ArrayList
+import java.util.*
+import javax.tools.*
 
-object CompileEngine private constructor() {
+object CompileEngine {
 
 	private val parentClassLoader: URLClassLoader
-	private var classpath: String? = null
+	private var classpath: String = ""
 
 	init {
 		parentClassLoader = this.javaClass.classLoader as URLClassLoader
@@ -22,13 +21,10 @@ object CompileEngine private constructor() {
 	}
 
 	private fun buildClassPath() {
-		classpath = null
-		val sb = StringBuilder()
-		for (url in this.parentClassLoader.urLs) {
-			val p = url.file
-			sb.append(p).append(File.pathSeparator)
+		classpath = ""
+		parentClassLoader.urLs.forEach { url ->
+			classpath += url.file + File.pathSeparator
 		}
-		this.classpath = sb.toString()
 	}
 
 	fun javaCodeToObject(fullClassName: String, javaCode: String): Any? {
@@ -48,7 +44,7 @@ object CompileEngine private constructor() {
 		options.add(classpath)
 
 		if (compiler.getTask(null, fileManager, diagnostics, options, null, jFiles).call()!!) {
-			val jco = fileManager.javaClassObject
+			val jco = fileManager.javaClassObejct
 			val dynamicClassLoader = DynamicClassLoader(parentClassLoader)
 			val clazz = dynamicClassLoader.loadClass(fullClassName, jco)
 			instance = clazz.newInstance()
@@ -83,28 +79,28 @@ object CompileEngine private constructor() {
 	}
 }
 
-internal class CharSequenceJavaFileObject(className: String, val content: CharSequence) :
+class CharSequenceJavaFileObject(className: String, val content: CharSequence) :
 		SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/')
 				+ JavaFileObject.Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE) {
 	override fun getCharContent(ignoreEncodingErrors: Boolean): CharSequence = content
 }
 
-internal class ClassFileManager(standardManager: StandardJavaFileManager) : ForwardingJavaFileManager<*>(standardManager) {
+class ClassFileManager(standardManager: StandardJavaFileManager) :
+		ForwardingJavaFileManager<JavaFileManager>(standardManager) {
 
-	var javaClassObject: JavaClassObject? = null
-		private set
+	lateinit var javaClassObejct: JavaClassObject
 
 	override fun getJavaFileForOutput(
 			location: JavaFileManager.Location,
 			className: String,
 			kind: JavaFileObject.Kind,
 			sibling: FileObject): JavaFileObject {
-		javaClassObject = JavaClassObject(className, kind)
-		return javaClassObject
+		javaClassObejct = JavaClassObject(className, kind)
+		return javaClassObejct
 	}
 }
 
-internal class JavaClassObject(name: String, kind: JavaFileObject.Kind) :
+class JavaClassObject(name: String, kind: JavaFileObject.Kind) :
 		SimpleJavaFileObject(URI.create("string:///" + name.replace('.', '/') + kind.extension), kind) {
 
 	private val bos = ByteArrayOutputStream()
@@ -115,9 +111,9 @@ internal class JavaClassObject(name: String, kind: JavaFileObject.Kind) :
 	override fun openOutputStream(): OutputStream = bos
 }
 
-internal class DynamicClassLoader(parent: ClassLoader) : URLClassLoader(arrayOfNulls<URL>(0), parent) {
+class DynamicClassLoader(parent: ClassLoader) : URLClassLoader(arrayOfNulls<URL>(0), parent) {
 
-	fun findClassByClassName(className: String): Class<*> = this.findClass(className)
+	fun findClassByClassName(className: String) = this.findClass(className)
 
 	fun loadClass(fullName: String, jco: JavaClassObject): Class<*> {
 		val classData = jco.bytes

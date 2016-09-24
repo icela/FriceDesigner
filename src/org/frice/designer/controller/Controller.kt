@@ -9,7 +9,6 @@ import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import org.frice.designer.code.*
-import org.frice.designer.code.compile.FriceCompiler
 import org.frice.designer.controller.canvas.Drawer
 import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
@@ -294,7 +293,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	protected fun compileAndRun() {
-		FriceCompiler compile codeData.getCode(CodeData.LANGUAGE_JAVA)
+//		FriceCompiler compile codeData.getCode(CodeData.LANGUAGE_JAVA)
 //		FriceCompiler.executeCompiled()
 	}
 
