@@ -15,7 +15,6 @@
       <element id="archive" name="designer.jar">
         <element id="module-output" name="FriceDesigner" />
       </element>
-      <element id="library" level="project" name="frice" />
     </root>
   </artifact>
 </component>

@@ -1,6 +1,5 @@
 package org.frice.designer.controller
 
-import com.eldath.alerts.InfoAlert
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
 import javafx.scene.input.ClipboardContent
@@ -10,6 +9,7 @@ import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import org.frice.designer.code.*
 import org.frice.designer.controller.canvas.Drawer
+import org.frice.designer.view.AlertStage
 import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.misc.forceRun
@@ -17,12 +17,14 @@ import java.io.File
 import java.util.*
 import javax.swing.JOptionPane
 
+import java.awt.Color as AwtColor
+
 /**
  * Created by ice1000 on 2016/9/15.
  *
  * @author ice1000
  */
-abstract class Controller() : Drawer() {
+abstract class Controller : Drawer() {
 
 	protected abstract val widgetsList: Accordion
 
@@ -158,7 +160,7 @@ abstract class Controller() : Drawer() {
 		}
 
 		boxColor.setupInput { c ->
-			if (objectChosen is ColorOwner) (objectChosen as ColorOwner).color = awtColor(c)
+			if (objectChosen is ColorOwner) (objectChosen as ColorOwner).color = AwtColor.getColor(c)
 		}
 
 		boxSource.setupInput { s ->
@@ -190,11 +192,13 @@ abstract class Controller() : Drawer() {
 			b.isDisable = true
 		}
 
-		if (o is ColorOwner) boxColor.isDisable = false
-		if (o is TextOwner || o is PathOwner || o is UrlOwner) boxSource.isDisable = false
-		if (o is EdgeOwner) {
-			boxWidth.isDisable = false
-			boxHeight.isDisable = false
+		when (o) {
+			is ColorOwner -> boxColor.isDisable = false
+			is TextOwner, is PathOwner, is UrlOwner -> boxSource.isDisable = false
+			is EdgeOwner -> {
+				boxWidth.isDisable = false
+				boxHeight.isDisable = false
+			}
 		}
 	}
 
@@ -210,9 +214,9 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	private fun Label.setupChoice(selection: AnObject) {
-		setOnMouseEntered { e -> textFill = Color.web("#0000FF") }
-		setOnMouseExited { e -> textFill = Color.web("#000000") }
-		setOnDragDetected { e ->
+		setOnMouseEntered { textFill = Color.web("#0000FF") }
+		setOnMouseExited { textFill = Color.web("#000000") }
+		setOnDragDetected {
 			currentSelection = selection
 			disableBoxes(selection)
 			startDragAndDrop(TransferMode.MOVE).run {
@@ -235,12 +239,10 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 
 	private fun repaint() = paint(mainCanvas.graphicsContext2D)
 
-	private infix fun awtColor(c: String) = java.awt.Color(c.toInt())
-	private infix fun awtColor(c: Int) = java.awt.Color(c)
-
 	protected fun onMenuExit() {
 		if (FDialog(null).confirm("Are you sure to exit frice engine designer?", "Frice engine designer",
-				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) System.exit(0)
+				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+			System.exit(0)
 	}
 
 	protected fun onMenuNew() {
@@ -301,15 +303,17 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		boxWidth.text = "${o.width}"
 		boxHeight.text = "${o.height}"
 
-		if (o is ColorOwner) boxColor.text = "${o.color.rgb}"
-		if (o is TextOwner) boxSource.text = o.text
-		if (o is PathOwner) boxSource.text = o.path
-		if (o is UrlOwner) boxSource.text = o.url
+		when (o) {
+			is ColorOwner -> boxColor.text = "${o.color.rgb}"
+			is PathOwner -> boxSource.text = o.path
+			is UrlOwner -> boxSource.text = o.url
+			is TextOwner -> boxSource.text = o.text
+		}
 	}
 
 
 	protected fun showCode(language: Int) {
-		InfoAlert(codeData.getCode(language))
+		AlertStage(codeData.getCode(language))
 	}
 
 	protected fun compileAndRun() {
@@ -318,8 +322,8 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	protected fun onMenuAboutClicked() {
-		InfoAlert("""Copyright(c) 2016 Frice Engine Designer
-Under Apache 2.0 License.
+		AlertStage("""Copyright(c) 2016 Frice Engine Designer
+Under GNU General Public License v3.0.
 
 
 English:

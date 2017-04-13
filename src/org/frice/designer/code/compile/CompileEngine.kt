@@ -12,11 +12,10 @@ import javax.tools.*
 
 object CompileEngine {
 
-	private val parentClassLoader: URLClassLoader
-	private var classpath: String = ""
+	private val parentClassLoader = this.javaClass.classLoader as URLClassLoader
+	private var classpath = ""
 
 	init {
-		parentClassLoader = this.javaClass.classLoader as URLClassLoader
 		buildClassPath()
 	}
 

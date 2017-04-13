@@ -17,3 +17,7 @@ hs_err_pid*
 .idea/vcs.xml
 .idea/workspace.xml
 build/
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/libraries/
+.idea/modules/
