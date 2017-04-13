@@ -1,5 +1,7 @@
 # FriceDesigner
 
+[![Build Status](https://travis-ci.org/icela/FriceDesigner.svg?branch=master)](https://travis-ci.org/icela/FriceDesigner)
+
 A GUI designer for Frice Engine.
 
 ## Screen Shots
