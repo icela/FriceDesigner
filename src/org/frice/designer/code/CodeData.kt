@@ -133,8 +133,9 @@ class CodeData {
 	 * already put full reference to the returned string.
 	 * @return the full reference of the class name
 	 */
-	private fun typeOf(obj: AnObject) = when (obj) {
-		is AnOval, is AnRectangle -> Controller.shapeObject_
+	private fun typeOf(obj: AnObject, isSaving: Boolean = false) = when (obj) {
+		is AnOval-> if (isSaving) Controller.shapeObjectOval else Controller.shapeObject_
+		is AnRectangle -> if (isSaving) Controller.shapeObjectRectangle else Controller.shapeObject_
 		is AnText -> Controller.simpleText
 		is AnButton -> Controller.simpleButton
 		is AnPathImageObject -> Controller.imageObject
@@ -160,12 +161,12 @@ class CodeData {
 	override fun toString(): String {
 		val s = StringBuffer()
 		objectList.forEach { o ->
-			s.append("${typeOf(o)} ${o.x.toInt()} ${o.y.toInt()} ${o.width.toInt()} ${o.height.toInt()} ",
+			s.append("${typeOf(o, true)} ${o.x.toInt()} ${o.y.toInt()} ${o.width.toInt()} ${o.height.toInt()} ",
 					///     0             1             2               3                   4
 					"${o.fieldName} ")
 			///                5
 			when (o) {
-				is ColorOwner -> s.append("${o.color} ")
+				is ColorOwner -> s.append("${o.color.rgb + (o.color.alpha shl 24)} ")
 			///                          6
 				is TextOwner -> s.append("${o.text} ")
 			///                          6 or 7
@@ -188,7 +189,7 @@ class CodeData {
 		fun fromString(source: String): CodeData {
 			val data = CodeData()
 			source.split("\n").forEach { s ->
-				val o = s.split(" ")
+				val o = s.trim().split(" ")
 				when (o[0]) {
 					Controller.pathImageObject -> data.objectList.add(AnPathImageObject(
 							o[1].toDouble(),

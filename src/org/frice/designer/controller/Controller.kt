@@ -161,7 +161,7 @@ abstract class Controller : Drawer() {
 
 		boxColor.setupInput { c ->
 			(objectChosen as? ColorOwner)?.run {
-				println("0x$c".toHexInt())
+//				println("0x$c".toHexInt())
 				this.color = AwtColor("0x$c".toHexInt())
 			}
 		}
@@ -231,7 +231,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	private fun TextField.setupInput(set: (String) -> Unit) {
 		setOnKeyPressed { e ->
 			if (e.code == KeyCode.ENTER) try {
-				set(text)
+				set(text.trim())
 				messageBox.text = "property changed.\n\nnew value:\n$text"
 			} catch (e: Throwable) {
 				messageBox.text = "some error occurred:\n${e.message}"
