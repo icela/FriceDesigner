@@ -12,7 +12,7 @@ import org.frice.designer.controller.canvas.Drawer
 import org.frice.designer.view.AlertStage
 import org.frice.game.utils.data.string2File
 import org.frice.game.utils.message.FDialog
-import org.frice.game.utils.misc.forceRun
+import org.lice.compiler.parse.toHexInt
 import java.io.File
 import javax.swing.JOptionPane
 import java.awt.Color as AwtColor
@@ -160,7 +160,10 @@ abstract class Controller : Drawer() {
 		}
 
 		boxColor.setupInput { c ->
-			if (objectChosen is ColorOwner) (objectChosen as ColorOwner).color = AwtColor.getColor(c)
+			(objectChosen as? ColorOwner)?.run {
+				println("0x$c".toHexInt())
+				this.color = AwtColor("0x$c".toHexInt())
+			}
 		}
 
 		boxSource.setupInput { s ->
@@ -227,9 +230,11 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 
 	private fun TextField.setupInput(set: (String) -> Unit) {
 		setOnKeyPressed { e ->
-			if (e.code == KeyCode.ENTER) forceRun {
+			if (e.code == KeyCode.ENTER) try {
 				set(text)
 				messageBox.text = "property changed.\n\nnew value:\n$text"
+			} catch (e: Throwable) {
+				messageBox.text = "some error occurred:\n${e.message}"
 			}
 			repaint()
 		}
@@ -250,7 +255,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 
 	protected fun onMenuToolsExportFileClicked() {
 		val file = FileChooser().apply {
-			if (workingFile != null) initialDirectory = workingFile!!.parentFile
+			workingFile?.let { initialDirectory = it.parentFile }
 			initialFileName = "ThisGame.java"
 		}.showSaveDialog(null)
 		messageBox.text = "menu item: export java.\noperation detected.\n\npath:\n$file\nclass name: ThisGame"
@@ -268,15 +273,20 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	protected fun onMenuRefreshViewClicked() = repaint()
 
 	protected fun onMenuSave() {
+		if (workingFile == null) showFileChoosingDialog()
 		workingFile?.let { codeData.toString().string2File(it) }
 		messageBox.text = "menu item: save\noperation detected.\n\npath:\n$workingFile"
 		menuSave.isDisable = workingFile == null
 	}
 
-	protected fun onMenuSaveAs() {
+	private fun showFileChoosingDialog() {
 		workingFile = FileChooser().apply {
 			initialFileName = "save.txt"
 		}.showSaveDialog(null)
+	}
+
+	protected fun onMenuSaveAs() {
+		showFileChoosingDialog()
 		onMenuSave()
 	}
 

@@ -129,7 +129,7 @@
                       </AnchorPane>
                   <AnchorPane>
                      <children>
-                        <TextArea fx:id="messageBox" editable="false" promptText="System message" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="messageBox" editable="false" prefHeight="120.0" promptText="System message" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children></AnchorPane>
               </items>
             </SplitPane>
