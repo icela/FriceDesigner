@@ -40,6 +40,7 @@ public class JavaFX extends Controller implements Initializable {
 
 	public TextField boxColor;
 	public TextArea messageBox;
+	public MenuItem menuSave;
 
 	@NotNull
 	@Override
@@ -67,10 +68,11 @@ public class JavaFX extends Controller implements Initializable {
 	}
 
 	public void onMenuSaveAsClicked(ActionEvent event) {
-		super.onMenuSave();
+		super.onMenuSaveAs();
 	}
 
 	public void onMenuPreferenceClicked(ActionEvent event) {
+		super.onMenuPreference();
 	}
 
 	public void onMenuAboutClicked(ActionEvent event) {
@@ -98,7 +100,6 @@ public class JavaFX extends Controller implements Initializable {
 	public void onMenuScalaCodeClicked(ActionEvent event) {
 		showCode(CodeData.LANGUAGE_SCALA);
 	}
-
 
 	public void onMenuToolsCompileClicked(ActionEvent event) {
 		super.onMenuToolsCompileClicked();
@@ -193,6 +194,12 @@ public class JavaFX extends Controller implements Initializable {
 
 	@NotNull
 	@Override
+	public MenuItem getMenuSave() {
+		return menuSave;
+	}
+
+	@NotNull
+	@Override
 	public Label getSimpleButtonChoice() {
 		return simpleButtonChoice;
 	}
@@ -215,5 +222,8 @@ public class JavaFX extends Controller implements Initializable {
 
 	public void onMenuToolsTestClicked(ActionEvent event) {
 		super.compileAndRun();
+	}
+
+	public void onMenuRefreshViewClicked(ActionEvent event) {
 	}
 }

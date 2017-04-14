@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
@@ -7,6 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.frice.designer.controller.JavaFX">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -17,7 +23,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#onMenuOpenClicked" text="Open…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuCloseClicked" text="Close" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuSaveClicked" text="Save" />
+                        <MenuItem fx:id="menuSave" disable="true" mnemonicParsing="false" onAction="#onMenuSaveClicked" text="Save" />
                         <MenuItem mnemonicParsing="false" onAction="#onMenuSaveAsClicked" text="Save As…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuPreferenceClicked" text="Preferences…" />
@@ -53,6 +59,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#onMenuToolsExportFileClicked" text="Export Java" />
                   <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsJarClicked" text="Export Jar..." />
                   <MenuItem disable="true" mnemonicParsing="false" onAction="#onMenuToolsTestClicked" text="Test in Swing" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMenuRefreshViewClicked" text="Refresh View" />
               </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -62,9 +69,9 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <SplitPane dividerPositions="0.25, 0.75" focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-            <items>
-            <SplitPane dividerPositions="0.726605504587156" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+      <AnchorPane prefHeight="536.0" prefWidth="900.0">
+         <children>
+            <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefWidth="220.0">
               <items>
                       <AnchorPane>
                      <children>
@@ -101,7 +108,7 @@
                             </TitledPane>
                             <TitledPane text="Widgets">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="220.0">
                                        <children>
                                           <Label fx:id="simpleTextChoice" layoutX="13.0" layoutY="16.0" prefHeight="21.0" prefWidth="193.0" text="Text">
                                              <cursor>
@@ -120,42 +127,40 @@
                         </Accordion>
                      </children>
                       </AnchorPane>
-                  <AnchorPane prefHeight="159.0" prefWidth="221.0">
+                  <AnchorPane>
                      <children>
-                        <TextArea fx:id="messageBox" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="System message" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="messageBox" editable="false" promptText="System message" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children></AnchorPane>
               </items>
             </SplitPane>
-                <ScrollPane fx:id="mainView" prefHeight="545.0" prefWidth="314.0">
+                <ScrollPane fx:id="mainView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="0.0">
                <content>
                   <Canvas fx:id="mainCanvas" height="1000.0" width="1000.0" />
                </content></ScrollPane>
-            <ScrollPane prefHeight="200.0" prefWidth="200.0">
-               <content>
-                      <AnchorPane prefHeight="778.0" prefWidth="212.0">
-                          <children>
-                              <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                              <Label layoutX="9.0" layoutY="14.0" text="fieldName" />
-                        <Label layoutX="14.0" layoutY="86.0" text="x" />
-                        <TextField fx:id="boxX" layoutX="10.0" layoutY="106.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <TextField fx:id="boxY" layoutX="10.0" layoutY="184.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <Label layoutX="13.0" layoutY="164.0" text="y" />
-                        <Label layoutX="13.0" layoutY="235.0" text="width" />
-                        <TextField fx:id="boxWidth" layoutX="10.0" layoutY="255.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <TextField fx:id="boxHeight" layoutX="10.0" layoutY="332.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <Label layoutX="13.0" layoutY="312.0" text="height" />
-                        <Label layoutX="13.0" layoutY="384.0" text="source" />
-                        <TextField fx:id="boxSource" layoutX="10.0" layoutY="404.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <TextField fx:id="boxColor" layoutX="10.0" layoutY="475.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <Label layoutX="13.0" layoutY="455.0" text="color" />
-                          </children>
-                     <padding>
-                        <Insets left="1.0" right="1.0" />
-                     </padding>
-                      </AnchorPane>
-               </content>
-            </ScrollPane>
-            </items>
+                <AnchorPane prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <TextField fx:id="boxFieldName" layoutX="9.0" layoutY="38.0" promptText="unique field name" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="9.0" layoutY="14.0" text="fieldName" />
+                  <Label layoutX="14.0" layoutY="86.0" text="x" />
+                  <TextField fx:id="boxX" layoutX="10.0" layoutY="106.0" promptText="x location" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <TextField fx:id="boxY" layoutX="10.0" layoutY="184.0" promptText="y location" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <Label layoutX="13.0" layoutY="164.0" text="y" />
+                  <Label layoutX="13.0" layoutY="235.0" text="width" />
+                  <TextField fx:id="boxWidth" layoutX="10.0" layoutY="255.0" promptText="width" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <TextField fx:id="boxHeight" layoutX="10.0" layoutY="332.0" promptText="height" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <Label layoutX="13.0" layoutY="312.0" text="height" />
+                  <Label layoutX="13.0" layoutY="384.0" text="source" />
+                  <TextField fx:id="boxSource" layoutX="10.0" layoutY="404.0" promptText="url or path" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <TextField fx:id="boxColor" layoutX="10.0" layoutY="475.0" promptText="hex number" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <Label layoutX="13.0" layoutY="455.0" text="color" />
+                    </children>
+                </AnchorPane>
+         </children>
+      </AnchorPane>
+        <SplitPane focusTraversable="false" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
         </SplitPane>
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
             <children>

@@ -39,9 +39,9 @@ interface UrlOwner {
 open class AnObject(
 		open var x: Double,
 		open var y: Double,
-		open var width: Double,
-		open var height: Double,
-		open var fieldName: String) {
+		override var width: Double,
+		override var height: Double,
+		open var fieldName: String) : EdgeOwner {
 
 	fun containsPoint(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
 	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())

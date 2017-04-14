@@ -44,6 +44,8 @@ abstract class Controller : Drawer() {
 
 	protected abstract val messageBox: TextArea
 
+	protected abstract val menuSave: MenuItem
+
 	private lateinit var disabling: List<TextField>
 
 	private var currentSelection: AnObject? = AnObject.new()
@@ -190,13 +192,11 @@ abstract class Controller : Drawer() {
 			b.isDisable = true
 		}
 
-		when (o) {
-			is ColorOwner -> boxColor.isDisable = false
-			is TextOwner, is PathOwner, is UrlOwner -> boxSource.isDisable = false
-			is EdgeOwner -> {
-				boxWidth.isDisable = false
-				boxHeight.isDisable = false
-			}
+		if (o is ColorOwner) boxColor.isDisable = false
+		if (o is TextOwner || o is PathOwner || o is UrlOwner) boxSource.isDisable = false
+		if (o is EdgeOwner) {
+			boxWidth.isDisable = false
+			boxHeight.isDisable = false
 		}
 	}
 
@@ -258,28 +258,38 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 	}
 
 	protected fun onMenuToolsJarClicked() {
+		// TODO
 	}
 
 	protected fun onMenuToolsCompileClicked() {
+		// TODO
 	}
 
-	protected fun onMenuSave() {
-		if (workingFile == null)
-			workingFile = FileChooser().apply {
-				initialFileName = "save.txt"
-			}.showSaveDialog(null)
-		codeData.toString().string2File(workingFile!!)
-		messageBox.text = "menu item: save\noperation detected.\n\npath:\n$workingFile"
+	protected fun onMenuRefreshViewClicked() = repaint()
 
+	protected fun onMenuSave() {
+		workingFile?.let { codeData.toString().string2File(it) }
+		messageBox.text = "menu item: save\noperation detected.\n\npath:\n$workingFile"
+		menuSave.isDisable = workingFile == null
+	}
+
+	protected fun onMenuSaveAs() {
+		workingFile = FileChooser().apply {
+			initialFileName = "save.txt"
+		}.showSaveDialog(null)
+		onMenuSave()
 	}
 
 	protected fun onMenuPreference() {
+		// TODO
 	}
 
 	protected fun onMenuOpen() {
 		workingFile = FileChooser().showOpenDialog(null)
 		messageBox.text = "menu item: open\noperation detected.\n\npath:\n$workingFile"
-		codeData = CodeData.fromString(workingFile!!.readText())
+		workingFile?.let {
+			codeData = CodeData.fromString(it.readText())
+		}
 		repaint()
 	}
 
@@ -301,14 +311,11 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 		boxWidth.text = "${o.width}"
 		boxHeight.text = "${o.height}"
 
-		when (o) {
-			is ColorOwner -> boxColor.text = "${o.color.rgb}"
-			is PathOwner -> boxSource.text = o.path
-			is UrlOwner -> boxSource.text = o.url
-			is TextOwner -> boxSource.text = o.text
-		}
+		if (o is ColorOwner) boxColor.text = Integer.toHexString(o.color.rgb)
+		if (o is PathOwner) boxSource.text = o.path
+		if (o is UrlOwner) boxSource.text = o.url
+		if (o is TextOwner) boxSource.text = o.text
 	}
-
 
 	protected fun showCode(language: Int) {
 		AlertStage(codeData.getCode(language))
@@ -338,7 +345,7 @@ Chinese:
 
 	protected abstract fun setTitle(string: String)
 
-	companion object {
+	companion object Constants {
 		const val fObject = "org.frice.game.obj.FObject"
 		const val shapeObject_ = "org.frice.game.obj.sub.ShapeObject"
 		const val shapeObjectOval = "ShapeObjectOval"
