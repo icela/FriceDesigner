@@ -9,7 +9,7 @@ import java.util.*
  *
  * @author ice1000
  */
-class CodeData() {
+class CodeData {
 	var objectList = LinkedList<AnObject>()
 	var objectChosen: AnObject? = null
 
@@ -118,6 +118,8 @@ class CodeData() {
 		is AnOval, is AnRectangle -> Controller.shapeObject_
 		is AnText -> Controller.simpleText
 		is AnButton -> Controller.simpleButton
+		is AnPathImageObject -> Controller.pathImageObject
+		is AnWebImageObject -> Controller.webImageObject
 		else -> Controller.fObject
 	}
 
@@ -141,10 +143,10 @@ class CodeData() {
 			///                          6
 				is TextOwner -> s.append("${o.text} ")
 			///                          6 or 7
-				is PathOwner -> s.append("${o.path}")
-			///                          6, 7 or 8
-				is UrlOwner -> s.append("${o.url}")
-			///                          6, 7, 8 or 9
+				is PathOwner -> s.append(o.path)
+			///                       6, 7 or 8
+				is UrlOwner -> s.append(o.url)
+			///                       6, 7, 8 or 9
 			}
 			s.append("\n")
 		}
@@ -162,6 +164,18 @@ class CodeData() {
 			source.split("\n").forEach { s ->
 				val o = s.split(" ")
 				when (o[0]) {
+//					Controller.pathImageObject -> data.objectList.add(AnPathImageObject(
+//							o[1].toDouble(),
+//							o[2].toDouble(),
+//							o[5],
+//							o[6]
+//					))
+					Controller.webImageObject -> data.objectList.add(AnWebImageObject(
+							o[1].toDouble(),
+							o[2].toDouble(),
+							o[5],
+							o[6]
+					))
 					Controller.simpleText -> data.objectList.add(AnText(
 							o[1].toDouble(),
 							o[2].toDouble(),

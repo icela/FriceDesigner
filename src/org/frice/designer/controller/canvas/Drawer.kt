@@ -49,11 +49,10 @@ abstract class Drawer() {
 					g.fill = fromColor(ColorResource.DARK_GRAY.color)
 					g.fillText(o.text, o.x + 10, o.y + o.height / 2)
 				}
-				is AnPathImageObject -> {
-					o.image?.let {
-						g.drawImage(o.image, o.x, o.y, o.image!!.width, o.image!!.height)
-					}
-				}
+				is AnPathImageObject ->
+					o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
+				is AnWebImageObject ->
+					o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
 			}
 		}
 		paintObjectChosen(g)

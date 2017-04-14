@@ -14,9 +14,7 @@ import org.frice.game.utils.data.FileUtils
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.misc.forceRun
 import java.io.File
-import java.util.*
 import javax.swing.JOptionPane
-
 import java.awt.Color as AwtColor
 
 /**
@@ -53,7 +51,7 @@ abstract class Controller : Drawer() {
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
 
-	private val random = Random()
+	private var random = -1
 
 	private var workingFile: File? = null
 
@@ -131,17 +129,17 @@ abstract class Controller : Drawer() {
 				boxColor
 		)
 
-		ovalObjectChoice.setupChoice(AnOval.new(random.nextInt(99999)))
+		ovalObjectChoice.setupChoice(AnOval.new(++random))
 
-		rectangleObjectChoice.setupChoice(AnRectangle.new(random.nextInt(99999)))
+		rectangleObjectChoice.setupChoice(AnRectangle.new(++random))
 
-//		webImageObjectChoice.setupChoice(webImageObject)
+		webImageObjectChoice.setupChoice(AnWebImageObject.new(++random, ""))
 
-//		pathImageObjectChoice.setupChoice(pathImageObject)
+		pathImageObjectChoice.setupChoice(AnPathImageObject.new(++random, ""))
 
-		simpleTextChoice.setupChoice(AnText.new(random.nextInt(99999)))
+		simpleTextChoice.setupChoice(AnText.new(++random))
 
-		simpleButtonChoice.setupChoice(AnButton.new(random.nextInt(99999)))
+		simpleButtonChoice.setupChoice(AnButton.new(++random))
 
 		boxX.setupInput { v ->
 			objectChosen?.x = v.toDouble()

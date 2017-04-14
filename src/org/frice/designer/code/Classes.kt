@@ -62,7 +62,7 @@ open class AnObject(
 
 	override fun toString() = Controller.fObject
 
-	companion object {
+	companion object Factory {
 		fun new(): AnObject? = null
 	}
 }
@@ -77,7 +77,7 @@ class AnOval(
 ) : AnObject(x, y, width, height, fieldName), ColorOwner, EdgeOwner {
 	override fun toString() = Controller.shapeObjectOval
 
-	companion object {
+	companion object Factory {
 		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnOval(x, y, 30.0, 30.0,
 				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
 	}
@@ -93,7 +93,7 @@ class AnRectangle(
 ) : AnObject(x, y, width, height, fieldName), ColorOwner, EdgeOwner {
 	override fun toString() = Controller.shapeObjectRectangle
 
-	companion object {
+	companion object Factory {
 		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnRectangle(x, y, 30.0, 30.0,
 				"shapeObject$random", ColorResource.IntelliJ_IDEA黑.color)
 	}
@@ -118,7 +118,7 @@ class AnText(
 
 	override fun toString() = Controller.simpleText
 
-	companion object {
+	companion object Factory {
 		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnText(x, y,
 				"simpleText$random", ColorResource.WHITE.color, "HelloWorld")
 	}
@@ -131,17 +131,31 @@ class AnPathImageObject(
 		path: String
 ) : AnObject(x, y, -1.0, -1.0, fieldName), PathOwner {
 	var image: Image? = null
-	override var path: String = ""
+	override var path = ""
 		set(value) {
-			forceRun { image = Image(value) }
+			forceRun {
+				image = Image(if (value.startsWith("file:///")) value else "file:///$value")
+			}
 			field = value
 		}
+	override var width: Double
+		get() = image?.width ?: -1.0
+		set(value) {}
+
+	override var height: Double
+		get() = image?.height ?: -1.0
+		set(value) {}
 
 	init {
 		this.path = path
 	}
 
 	override fun toString() = Controller.pathImageObject
+
+	companion object Factory {
+		fun new(random: Int, path: String, x: Double = -100.0, y: Double = -100.0) = AnPathImageObject(
+				x, y, "pathImage$random", path)
+	}
 }
 
 class AnWebImageObject(
@@ -153,9 +167,17 @@ class AnWebImageObject(
 	var image: Image? = null
 	override var url: String = ""
 		set(value) {
+			forceRun { image = Image(value) }
 			field = value
-			image = Image(value)
 		}
+
+	override var width: Double
+		get() = image?.width ?: -1.0
+		set(value) {}
+
+	override var height: Double
+		get() = image?.height ?: -1.0
+		set(value) {}
 
 	init {
 		this.url = url
@@ -164,7 +186,8 @@ class AnWebImageObject(
 	override fun toString() = Controller.webImageObject
 
 	companion object {
-		fun new(random: Int, x: Double = -100.0, y: Double = -100.0) = AnPathImageObject(x, y, "pathImageObject$random", "")
+		fun new(random: Int, path: String, x: Double = -100.0, y: Double = -100.0) =
+				AnWebImageObject(x, y, "webImage$random", path)
 	}
 }
 
@@ -185,8 +208,8 @@ class AnButton(
 	}
 }
 
-class UnknownLanguageException() : Exception("Language given is unknown.")
+class UnknownLanguageException : Exception("Language given is unknown.")
 
-class UnknownObjectException() : Exception("Object given is unknown.")
+class UnknownObjectException : Exception("Object given is unknown.")
 
-class UnknownShapeException() : Exception("Shape given is unknown")
+class UnknownShapeException : Exception("Shape given is unknown")
