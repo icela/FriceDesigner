@@ -133,9 +133,9 @@ class AnPathImageObject(
 	var image: Image? = null
 	override var path = ""
 		set(value) {
-			field = if (value.startsWith("file:///")) value else "file:///$value"
+			field = if (value.startsWith("file:///")) value.substring(8) else value
 			forceRun {
-				image = Image(field)
+				image = Image("file:///$field")
 			}
 		}
 	override var width: Double

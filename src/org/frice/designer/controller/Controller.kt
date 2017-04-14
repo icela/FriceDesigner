@@ -10,7 +10,7 @@ import javafx.stage.FileChooser
 import org.frice.designer.code.*
 import org.frice.designer.controller.canvas.Drawer
 import org.frice.designer.view.AlertStage
-import org.frice.game.utils.data.FileUtils
+import org.frice.game.utils.data.string2File
 import org.frice.game.utils.message.FDialog
 import org.frice.game.utils.misc.forceRun
 import java.io.File
@@ -254,7 +254,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 			initialFileName = "ThisGame.java"
 		}.showSaveDialog(null)
 		messageBox.text = "menu item: export java.\noperation detected.\n\npath:\n$file\nclass name: ThisGame"
-		FileUtils.string2File(codeData.getCode(CodeData.LANGUAGE_JAVA), file)
+		codeData.getCode(CodeData.LANGUAGE_JAVA).string2File(file)
 	}
 
 	protected fun onMenuToolsJarClicked() {
@@ -268,7 +268,7 @@ object at: (${objects[objectIndexChosen!!].x}, ${objects[objectIndexChosen!!].y}
 			workingFile = FileChooser().apply {
 				initialFileName = "save.txt"
 			}.showSaveDialog(null)
-		FileUtils.string2File(codeData.toString(), workingFile!!)
+		codeData.toString().string2File(workingFile!!)
 		messageBox.text = "menu item: save\noperation detected.\n\npath:\n$workingFile"
 
 	}
@@ -343,8 +343,9 @@ Chinese:
 		const val shapeObject_ = "org.frice.game.obj.sub.ShapeObject"
 		const val shapeObjectOval = "ShapeObjectOval"
 		const val shapeObjectRectangle = "ShapeObjectRectangle"
-		const val pathImageObject = "org.frice.game.obj.sub.ImageObject"
-		const val webImageObject = "org.frice.game.obj.sub.ImageObject"
+		const val pathImageObject = "org.frice.game.obj.sub.ImageObject-Path"
+		const val webImageObject = "org.frice.game.obj.sub.ImageObject-Web"
+		const val imageObject = "org.frice.game.obj.sub.ImageObject"
 		const val simpleText = "org.frice.game.obj.button.SimpleText"
 		const val simpleButton = "org.frice.game.obj.button.SimpleButton"
 	}

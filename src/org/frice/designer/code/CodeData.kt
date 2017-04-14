@@ -28,60 +28,66 @@ class CodeData {
 				LANGUAGE_JAVA -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${buildColorCode(o.color, language)}, ",
 									"new ${oval(o)}, ${o.x}, ${o.y});\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${buildColorCode(o.color, language)}, ",
 									"new ${rect(o)}, ${o.x}, ${o.y});\n")
-						is AnText -> {
+						is AnText ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y});\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
-						is AnButton -> {
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
-									"${o.width}, ${o.height});\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnButton ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ")
+									.append("${o.width}, ${o.height});\n")
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnPathImageObject ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
+						is AnWebImageObject ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName});\n")
 				}
 				LANGUAGE_SCALA, LANGUAGE_GROOVY -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
-									"new ${oval(o)}, ${o.x}, ${o.y})\n")
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}${buildColorCode(o.color, language)}, ")
+									.append("new ${oval(o)}, ${o.x}, ${o.y})\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(new org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
-									"new ${rect(o)}, ${o.x}, ${o.y})\n")
-						is AnText -> {
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${buildColorCode(o.color, language)}, ")
+									.append("new ${rect(o)}, ${o.x}, ${o.y})\n")
+						is AnText ->
 							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
-						is AnButton -> {
-							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
-									"${o.width}, ${o.height})\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnButton ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ")
+									.append("${o.width}, ${o.height})\n")
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnPathImageObject ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
+						is AnWebImageObject ->
+							sb.append("\t\t${o.fieldName} = new ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
 					}
 					sb.append("\t\tsuper.addObject(${o.fieldName})\n")
 				}
 				LANGUAGE_KOTLIN -> {
 					when (o) {
 						is AnOval ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
-									"${oval(o)}, ${o.x}, ${o.y})\n")
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(${buildColorCode(o.color, language)}, ")
+									.append("${oval(o)}, ${o.x}, ${o.y})\n")
 						is AnRectangle ->
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(org.frice.game.resource.graphics.ColorResource(${o.color.rgb}), ",
-									"${rect(o)}, ${o.x}, ${o.y})\n")
-						is AnText -> {
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(${buildColorCode(o.color, language)}, ")
+									.append("${rect(o)}, ${o.x}, ${o.y})\n")
+						is AnText ->
 							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y})\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
-						is AnButton -> {
-							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ",
-									"${o.width}, ${o.height})\n")
-							sb.append(buildColorCode(o.fieldName, o.color, language))
-						}
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnButton ->
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(\"${o.text}\", ${o.x}, ${o.y}, ")
+									.append("${o.width}, ${o.height})\n")
+									.append(buildColorCode(o.fieldName, o.color, language))
+						is AnPathImageObject ->
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
+						is AnWebImageObject ->
+							sb.append("\t\t${o.fieldName} = ${typeOf(o)}(${image(o)}, ${o.x}, ${o.y})\n")
 					}
 					sb.append("\t\tsuper<org.frice.game.Game>.addObject(${o.fieldName})\n")
 				}
@@ -90,10 +96,23 @@ class CodeData {
 		return sb.toString()
 	}
 
+	private fun buildColorCode(color: Color, language: Int) = when (language) {
+		LANGUAGE_KOTLIN ->
+			"org.frice.game.resource.graphics.ColorResource(${color.rgb})"
+		LANGUAGE_SCALA, LANGUAGE_GROOVY ->
+			"new org.frice.game.resource.graphics.ColorResource(${color.rgb})"
+		LANGUAGE_JAVA ->
+			"new org.frice.game.resource.graphics.ColorResource(${color.rgb})"
+		else -> throw UnknownLanguageException()
+	}
+
 	private fun buildColorCode(fieldName: String, color: Color, language: Int) = when (language) {
-		LANGUAGE_KOTLIN -> "\t\t$fieldName.colorResource = org.frice.game.resource.graphics.ColorResource(${color.rgb})\n"
-		LANGUAGE_SCALA, LANGUAGE_GROOVY -> "\t\t$fieldName.setColorResource(new org.frice.game.resource.graphics.ColorResource(${color.rgb}))\n"
-		LANGUAGE_JAVA -> "\t\t$fieldName.setColorResource(new org.frice.game.resource.graphics.ColorResource(${color.rgb}));\n"
+		LANGUAGE_KOTLIN ->
+			"\t\t$fieldName.colorResource = ${buildColorCode(color, language)}\n"
+		LANGUAGE_SCALA, LANGUAGE_GROOVY ->
+			"\t\t$fieldName.setColorResource(${buildColorCode(color, language)})\n"
+		LANGUAGE_JAVA ->
+			"\t\t$fieldName.setColorResource(${buildColorCode(color, language)});\n"
 		else -> throw UnknownLanguageException()
 	}
 
@@ -118,8 +137,8 @@ class CodeData {
 		is AnOval, is AnRectangle -> Controller.shapeObject_
 		is AnText -> Controller.simpleText
 		is AnButton -> Controller.simpleButton
-		is AnPathImageObject -> Controller.pathImageObject
-		is AnWebImageObject -> Controller.webImageObject
+		is AnPathImageObject -> Controller.imageObject
+		is AnWebImageObject -> Controller.imageObject
 		else -> Controller.fObject
 	}
 
@@ -129,7 +148,14 @@ class CodeData {
 			else
 				"org.frice.game.utils.graphics.shape.FOval(${obj.width / 2.0}, ${obj.height / 2.0})"
 
-	private fun rect(obj: AnRectangle) = "org.frice.game.utils.graphics.shape.FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
+	private fun rect(obj: AnRectangle) =
+			"org.frice.game.utils.graphics.shape.FRectangle(${obj.width.toInt()}, ${obj.height.toInt()})"
+
+	private fun image(obj: AnPathImageObject) =
+			"org.frice.game.resource.image.ImageResource.fromPath(\"${obj.path.replace("\\", "\\\\")}\")"
+
+	private fun image(obj: AnWebImageObject) =
+			"org.frice.game.resource.image.ImageResource.fromWeb(\"${obj.url.replace("\\", "\\\\")}\")"
 
 	override fun toString(): String {
 		val s = StringBuffer()
@@ -164,12 +190,12 @@ class CodeData {
 			source.split("\n").forEach { s ->
 				val o = s.split(" ")
 				when (o[0]) {
-//					Controller.pathImageObject -> data.objectList.add(AnPathImageObject(
-//							o[1].toDouble(),
-//							o[2].toDouble(),
-//							o[5],
-//							o[6]
-//					))
+					Controller.pathImageObject -> data.objectList.add(AnPathImageObject(
+							o[1].toDouble(),
+							o[2].toDouble(),
+							o[5],
+							o[6]
+					))
 					Controller.webImageObject -> data.objectList.add(AnWebImageObject(
 							o[1].toDouble(),
 							o[2].toDouble(),
@@ -265,7 +291,7 @@ public class ThisGame extends org.frice.game.Game {
  * Auto-generated by Frice engine designer
  * Kotlin
  */
-class ThisGame() : org.frice.game.Game() {
+class ThisGame : org.frice.game.Game() {
 
 %s
 	override fun onInit() {
