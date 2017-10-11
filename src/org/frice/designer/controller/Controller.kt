@@ -90,7 +90,7 @@ abstract class Controller : Drawer() {
 
 		mainView.setOnDragDetected { e ->
 			objectIndexChosen?.let {
-				isDragging = objects[objectIndexChosen!!] containsPoint e
+				isDragging = e in objects[objectIndexChosen!!]
 			}
 			mainView.startDragAndDrop(TransferMode.MOVE)
 		}
@@ -165,22 +165,21 @@ abstract class Controller : Drawer() {
 		}
 
 		boxSource.setupInput { s ->
-			when (objectChosen) {
-				is UrlOwner -> (objectChosen as UrlOwner).url = s
-				is PathOwner -> (objectChosen as PathOwner).path = s
-				is TextOwner -> (objectChosen as TextOwner).text = s
+			val obj = objectChosen
+			when (obj) {
+				is UrlOwner -> obj.url = s
+				is PathOwner -> obj.path = s
+				is TextOwner -> obj.text = s
 			}
 		}
 
-		boxFieldName.setupInput { n ->
-			objectChosen?.fieldName = n
-		}
+		boxFieldName.setupInput { n -> objectChosen?.fieldName = n }
 	}
 
 	private fun findObject(x: Double, y: Double, contains: (AnObject, Int) -> Unit) {
 		var index = 0
 		for (o in objects) {
-			if (o.containsPoint(x, y)) {
+			if (o.contains(x, y)) {
 				contains(o, index)
 				break
 			}

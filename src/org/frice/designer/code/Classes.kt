@@ -43,14 +43,14 @@ open class AnObject(
 		override var height: Double,
 		open var fieldName: String) : EdgeOwner {
 
-	fun containsPoint(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
-	fun containsPoint(px: Double, py: Double) = containsPoint(px.toInt(), py.toInt())
-	infix fun containsPoint(point: FPoint) = containsPoint(point.x, point.y)
-	infix fun containsPoint(d: DoublePair) = containsPoint(d.x, d.y)
-	infix fun containsPoint(d: MouseEvent) = containsPoint(d.x, d.y)
-	infix fun containsPoint(d: DragEvent) = containsPoint(d.x, d.y)
+	private fun contains(px: Int, py: Int) = px >= x && px <= x + width && py >= y && py <= y + height
+	fun contains(px: Double, py: Double) = contains(px.toInt(), py.toInt())
+	operator infix fun contains(point: FPoint) = contains(point.x, point.y)
+	operator infix fun contains(d: DoublePair) = contains(d.x, d.y)
+	operator infix fun contains(d: MouseEvent) = contains(d.x, d.y)
+	operator infix fun contains(d: DragEvent) = contains(d.x, d.y)
 
-	fun setLocation(x: Double, y: Double) {
+	private fun setLocation(x: Double, y: Double) {
 		this.x = x
 		this.y = y
 	}
@@ -108,13 +108,11 @@ class AnText(
 ) : AnObject(x, y, text.length * 8.0, 16.0, fieldName), TextOwner, ColorOwner {
 	override var width: Double
 		get() = text.length * 8.0
-		set(value) {
-		}
+		set(value) {}
 
 	override var height: Double
 		get() = 16.0
-		set(value) {
-		}
+		set(value) {}
 
 	override fun toString() = Controller.simpleText
 

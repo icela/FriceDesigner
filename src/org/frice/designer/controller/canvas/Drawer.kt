@@ -49,26 +49,20 @@ abstract class Drawer() {
 					g.fill = fromColor(ColorResource.DARK_GRAY.color)
 					g.fillText(o.text, o.x + 10, o.y + o.height / 2)
 				}
-				is AnPathImageObject ->
-					o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
-				is AnWebImageObject ->
-					o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
+				is AnPathImageObject -> o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
+				is AnWebImageObject -> o.image?.let { g.drawImage(it, o.x, o.y, it.width, it.height) }
 			}
 		}
 		paintObjectChosen(g)
 	}
 
-	protected infix fun paintObjectChosen(g: GraphicsContext) {
-		if (objectChosen != null) {
+	private infix fun paintObjectChosen(g: GraphicsContext) {
+		objectChosen?.let {
 			g.stroke = fromColor(Color.BLUE)
-			g.strokeRect(objectChosen?.x!!,
-					objectChosen?.y!!,
-					objectChosen?.width!!,
-					objectChosen?.height!!)
+			g.strokeRect(it.x, it.y, it.width, it.height)
 		}
 	}
 
-	companion object {
-		infix fun fromColor(c: java.awt.Color) = javafx.scene.paint.Color.rgb(c.red, c.green, c.blue)!!
-	}
 }
+
+fun fromColor(c: java.awt.Color) = javafx.scene.paint.Color.rgb(c.red, c.green, c.blue)!!

@@ -48,34 +48,34 @@ public class JavaFX extends Controller implements Initializable {
 		return widgetsList;
 	}
 
-	public void onMenuNewClicked(ActionEvent event) {
+	public void onMenuNewClicked(@NotNull ActionEvent event) {
 		super.onMenuNew();
 	}
 
-	public void onMenuOpenClicked(ActionEvent event) {
+	public void onMenuOpenClicked(@NotNull ActionEvent event) {
 		super.onMenuOpen();
 	}
 
-	public void onMenuExitClicked(ActionEvent event) {
+	public void onMenuExitClicked(@NotNull ActionEvent event) {
 		super.onMenuExit();
 	}
 
-	public void onMenuSaveClicked(ActionEvent event) {
+	public void onMenuSaveClicked(@NotNull ActionEvent event) {
 		super.onMenuSave();
 	}
 
-	public void onMenuCloseClicked(ActionEvent event) {
+	public void onMenuCloseClicked(@NotNull ActionEvent event) {
 	}
 
-	public void onMenuSaveAsClicked(ActionEvent event) {
+	public void onMenuSaveAsClicked(@NotNull ActionEvent event) {
 		super.onMenuSaveAs();
 	}
 
-	public void onMenuPreferenceClicked(ActionEvent event) {
+	public void onMenuPreferenceClicked(@NotNull ActionEvent event) {
 		super.onMenuPreference();
 	}
 
-	public void onMenuAboutClicked(ActionEvent event) {
+	public void onMenuAboutClicked(@NotNull ActionEvent event) {
 		super.onMenuAboutClicked();
 	}
 
@@ -89,19 +89,19 @@ public class JavaFX extends Controller implements Initializable {
 		projectName.setText(string);
 	}
 
-	public void onMenuJavaCodeClicked(ActionEvent event) {
+	public void onMenuJavaCodeClicked(@NotNull ActionEvent event) {
 		showCode(CodeData.LANGUAGE_JAVA);
 	}
 
-	public void onMenuKotlinCodeClicked(ActionEvent event) {
+	public void onMenuKotlinCodeClicked(@NotNull ActionEvent event) {
 		showCode(CodeData.LANGUAGE_KOTLIN);
 	}
 
-	public void onMenuScalaCodeClicked(ActionEvent event) {
+	public void onMenuScalaCodeClicked(@NotNull ActionEvent event) {
 		showCode(CodeData.LANGUAGE_SCALA);
 	}
 
-	public void onMenuToolsCompileClicked(ActionEvent event) {
+	public void onMenuToolsCompileClicked(@NotNull ActionEvent event) {
 		super.onMenuToolsCompileClicked();
 	}
 
@@ -204,26 +204,26 @@ public class JavaFX extends Controller implements Initializable {
 		return simpleButtonChoice;
 	}
 
-	public void onMenuDeleteClicked(ActionEvent event) {
+	public void onMenuDeleteClicked(@NotNull ActionEvent event) {
 		super.onMenuDeleteClicked();
 	}
 
-	public void onMenuToolsExportFileClicked(ActionEvent event) {
+	public void onMenuToolsExportFileClicked(@NotNull ActionEvent event) {
 		super.onMenuToolsExportFileClicked();
 	}
 
-	public void onMenuToolsJarClicked(ActionEvent event) {
+	public void onMenuToolsJarClicked(@NotNull ActionEvent event) {
 		super.onMenuToolsJarClicked();
 	}
 
-	public void onMenuGroovyCodeClicked(ActionEvent event) {
+	public void onMenuGroovyCodeClicked(@NotNull ActionEvent event) {
 		showCode(CodeData.LANGUAGE_GROOVY);
 	}
 
-	public void onMenuToolsTestClicked(ActionEvent event) {
+	public void onMenuToolsTestClicked(@NotNull ActionEvent event) {
 		super.compileAndRun();
 	}
 
-	public void onMenuRefreshViewClicked(ActionEvent event) {
+	public void onMenuRefreshViewClicked(@NotNull ActionEvent event) {
 	}
 }
