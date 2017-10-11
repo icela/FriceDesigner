@@ -41,25 +41,15 @@ abstract class Controller : Drawer() {
 	protected abstract val boxColor: TextField
 
 	protected abstract val messageBox: TextArea
-
 	protected abstract val menuSave: MenuItem
-
 	private lateinit var disabling: List<TextField>
-
 	private var currentSelection: AnObject? = AnObject.new()
-
 	protected abstract val mainCanvas: Canvas
 	protected abstract val mainView: ScrollPane
-
 	private var random = -1
-
 	private var workingFile: File? = null
-
-	override val width: Double
-		get() = mainCanvas.width
-
-	override val height: Double
-		get() = mainCanvas.height
+	override val width: Double get() = mainCanvas.width
+	override val height: Double get() = mainCanvas.height
 
 	private var isDragging = false
 
@@ -89,9 +79,7 @@ abstract class Controller : Drawer() {
 		}
 
 		mainView.setOnDragDetected { e ->
-			objectIndexChosen?.let {
-				isDragging = e in objects[objectIndexChosen!!]
-			}
+			objectIndexChosen?.let { isDragging = e in objects[objectIndexChosen!!] }
 			mainView.startDragAndDrop(TransferMode.MOVE)
 		}
 

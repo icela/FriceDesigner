@@ -207,7 +207,3 @@ class AnButton(
 }
 
 class UnknownLanguageException : Exception("Language given is unknown.")
-
-class UnknownObjectException : Exception("Object given is unknown.")
-
-class UnknownShapeException : Exception("Shape given is unknown")
