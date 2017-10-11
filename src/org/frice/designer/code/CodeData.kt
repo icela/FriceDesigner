@@ -1,6 +1,7 @@
 package org.frice.designer.code
 
 import org.frice.designer.controller.Controller
+import org.intellij.lang.annotations.Language
 import java.awt.Color
 import java.util.*
 
@@ -240,6 +241,7 @@ class CodeData {
 			return data
 		}
 
+		@Language("JAVA")
 		private const val javaCode = """// Generated codes
 
 /**
@@ -263,6 +265,7 @@ class ThisGame extends org.frice.game.Game {
 
 """
 
+		@Language("Groovy")
 		private const val groovyCode = """// Generated codes
 
 /**
@@ -285,6 +288,7 @@ public class ThisGame extends org.frice.game.Game {
 
 """
 
+		@Language("kotlin")
 		private const val kotlinCode = """// Generated codes
 
 /**
@@ -308,6 +312,7 @@ class ThisGame : org.frice.game.Game() {
 
 """
 
+		@Language("Scala")
 		private const val scalaCode = """// Generated codes
 
 /**
