@@ -4,4 +4,10 @@ environment:
 
 build_script:
   - gradlew check --info
+  - gradlew fatJar
+
+artifacts:
+  - path: 'build\libs\friceDesigner-all-1.0.jar'
+    name: designer
+
 #
