@@ -9,6 +9,11 @@ CodeShip|[![Codeship Status for icela/FriceDesigner](https://app.codeship.com/pr
 
 A GUI designer for Frice Engine.
 
+## Download
+
++ I've deployed the full building process on AppVeyor, and you can download the
+artifact [here](https://ci.appveyor.com/project/ice1000/fricedesigner/branch/master/artifacts).
+
 ## Screen Shots
 
 ### Editor
