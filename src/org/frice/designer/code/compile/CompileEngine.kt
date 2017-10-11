@@ -1,12 +1,8 @@
 package org.frice.designer.code.compile
 
-import org.frice.game.utils.message.log.FLog
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.OutputStream
-import java.net.URI
-import java.net.URL
-import java.net.URLClassLoader
+import org.frice.game.utils.message.FLog
+import java.io.*
+import java.net.*
 import java.util.*
 import javax.tools.*
 
@@ -78,7 +74,7 @@ object CompileEngine {
 	}
 }
 
-class CharSequenceJavaFileObject(className: String, val content: CharSequence) :
+class CharSequenceJavaFileObject(className: String, private val content: CharSequence) :
 		SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/')
 				+ JavaFileObject.Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE) {
 	override fun getCharContent(ignoreEncodingErrors: Boolean): CharSequence = content
