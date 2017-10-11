@@ -2,9 +2,7 @@ package org.frice.designer.controller
 
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
-import javafx.scene.input.ClipboardContent
-import javafx.scene.input.KeyCode
-import javafx.scene.input.TransferMode
+import javafx.scene.input.*
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import org.frice.designer.code.*
@@ -161,7 +159,7 @@ abstract class Controller : Drawer() {
 
 		boxColor.setupInput { c ->
 			(objectChosen as? ColorOwner)?.run {
-//				println("0x$c".toHexInt())
+				//				println("0x$c".toHexInt())
 				this.color = AwtColor("0x$c".toHexInt())
 			}
 		}

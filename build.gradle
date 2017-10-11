@@ -38,14 +38,19 @@ dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
 	compile 'com.github.icela:FriceEngine:v1.4.0'
-	compile 'com.github.lice-lang:lice:v2.6'
+	compile 'com.github.lice-lang:lice:v3.1.4-2'
 
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 }
 
 jar {
-	manifest {
-		attributes 'Main-Class': 'org.frice.designer.view.Main'
-	}
+	manifest { attributes 'Main-Class': 'org.frice.designer.view.Main' }
+}
+
+task fatJar(type: Jar) {
+	baseName = project.name + '-all'
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	manifest { attributes 'Main-Class': 'org.frice.designer.view.Main' }
+	with jar
 }
