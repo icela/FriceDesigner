@@ -1,6 +1,6 @@
 package org.frice.designer.code.compile
 
-import org.frice.game.utils.message.FLog
+import org.frice.utils.message.FLog
 import java.io.*
 import java.net.*
 import java.util.*

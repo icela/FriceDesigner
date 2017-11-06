@@ -2,7 +2,7 @@ package org.frice.designer.controller.canvas
 
 import javafx.scene.canvas.GraphicsContext
 import org.frice.designer.code.*
-import org.frice.game.resource.graphics.ColorResource
+import org.frice.resource.graphics.ColorResource
 import java.awt.Color
 import java.util.*
 

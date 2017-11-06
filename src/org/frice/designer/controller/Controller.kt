@@ -8,8 +8,8 @@ import javafx.stage.FileChooser
 import org.frice.designer.code.*
 import org.frice.designer.controller.canvas.Drawer
 import org.frice.designer.view.AlertStage
-import org.frice.game.utils.data.string2File
-import org.frice.game.utils.message.FDialog
+import org.frice.utils.data.string2File
+import org.frice.utils.message.FDialog
 import org.lice.compiler.parse.toHexInt
 import java.io.File
 import javax.swing.JOptionPane

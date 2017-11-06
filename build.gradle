@@ -38,7 +38,7 @@ sourceSets {
 dependencies {
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
-	compile 'com.github.icela:FriceEngine:v1.4.0'
+	compile 'com.github.icela:FriceEngine:v1.5.0-alpha5'
 	compile 'com.github.lice-lang:lice:v3.1.4-2'
 
 	testCompile group: 'junit', name: 'junit', version: '4.12'

@@ -8,11 +8,11 @@ package org.frice.designer.code
 import javafx.scene.image.Image
 import javafx.scene.input.DragEvent
 import javafx.scene.input.MouseEvent
+import org.frice.anim.move.DoublePair
 import org.frice.designer.controller.Controller
-import org.frice.game.anim.move.DoublePair
-import org.frice.game.resource.graphics.ColorResource
-import org.frice.game.utils.graphics.shape.FPoint
-import org.frice.game.utils.misc.forceRun
+import org.frice.resource.graphics.ColorResource
+import org.frice.utils.misc.forceRun
+import org.frice.utils.shape.FPoint
 import java.awt.Color
 
 interface EdgeOwner {
@@ -138,11 +138,11 @@ class AnPathImageObject(
 		}
 	override var width: Double
 		get() = image?.width ?: -1.0
-		set(value) {}
+		set(value) = Unit
 
 	override var height: Double
 		get() = image?.height ?: -1.0
-		set(value) {}
+		set(value) = Unit
 
 	init {
 		this.path = path
